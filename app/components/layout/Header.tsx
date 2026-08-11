@@ -1,0 +1,614 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X, ArrowUpRight } from "lucide-react";
+
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "UI/UX Lab", href: "/#uiux-lab" },
+  { label: "Projects", href: "/projects" },
+  { label: "Case Studies", href: "/case-studies" },
+  { label: "Careers", href: "/careers" },
+  { label: "About Us", href: "/about" },
+];
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  return (
+    <>
+      {/* ==============================
+          NAVBAR
+      ============================== */}
+
+      <motion.header
+        initial={{
+          y: -30,
+          opacity: 0,
+        }}
+        animate={{
+          y: 0,
+          opacity: 1,
+        }}
+        transition={{
+          duration: 0.7,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="
+          fixed
+          left-0
+          right-0
+          top-0
+          z-50
+          px-3
+          pt-3
+
+          sm:px-5
+          sm:pt-4
+
+          lg:px-6
+          lg:pt-5
+        "
+      >
+        <motion.nav
+          animate={{
+            y: scrolled ? -1 : 0,
+            scale: scrolled ? 0.99 : 1,
+          }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+          className={`
+            mx-auto
+            flex
+            h-[64px]
+            max-w-[1450px]
+            items-center
+            rounded-full
+            border
+            border-white/80
+            bg-white/95
+            px-4
+            shadow-[0_10px_35px_rgba(37,99,235,0.07)]
+            backdrop-blur-xl
+            transition-all
+            duration-300
+
+            sm:h-[68px]
+            sm:px-5
+
+            md:px-6
+
+            lg:h-[82px]
+            lg:px-5
+
+            xl:h-[86px]
+            xl:px-6
+
+            ${
+              scrolled
+                ? "shadow-[0_12px_40px_rgba(37,99,235,0.11)]"
+                : ""
+            }
+          `}
+        >
+          {/* ==============================
+              LOGO
+          ============================== */}
+
+          <Link
+            href="/"
+            className="
+              group
+              relative
+              flex
+              shrink-0
+              items-center
+            "
+            onClick={() => setMobileOpen(false)}
+          >
+            <motion.div
+              whileHover={{
+                scale: 1.03,
+              }}
+              transition={{
+                duration: 0.25,
+              }}
+              className="
+                relative
+                h-[28px]
+                w-[56px]
+
+                sm:h-[31px]
+                sm:w-[60px]
+
+                md:h-[34px]
+                md:w-[68px]
+
+                lg:h-[40px]
+                lg:w-[80px]
+
+                xl:h-[43px]
+                xl:w-[86px]
+              "
+            >
+              <Image
+                src="/images/logo.png"
+                alt="Neiran Tech"
+                fill
+                priority
+                className="
+                  object-contain
+                  object-left
+                "
+              />
+            </motion.div>
+          </Link>
+
+          {/* ==============================
+              DESKTOP NAVIGATION
+          ============================== */}
+
+          <div className="hidden flex-1 items-center justify-center lg:flex">
+            <div className="flex items-center gap-0.5">
+              {navItems.map((item) => (
+                <NavItem
+                  key={item.label}
+                  label={item.label}
+                  href={item.href}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* ==============================
+              RIGHT ACTION
+          ============================== */}
+
+          <div className="ml-auto flex items-center">
+            {/* Desktop blue orb */}
+
+            <motion.button
+              type="button"
+              aria-label="Contact Neiran Tech"
+              whileHover={{
+                scale: 1.08,
+              }}
+              whileTap={{
+                scale: 0.94,
+              }}
+              className="
+                group
+                relative
+                hidden
+                h-[40px]
+                w-[40px]
+                items-center
+                justify-center
+                rounded-full
+                bg-[#4387F5]
+
+                lg:flex
+
+                xl:h-[42px]
+                xl:w-[42px]
+              "
+            >
+              {/* Glow */}
+
+              <span
+                className="
+                  absolute
+                  inset-[-8px]
+                  -z-10
+                  rounded-full
+                  bg-[#4387F5]/20
+                  blur-lg
+                  transition-all
+                  duration-300
+                  group-hover:bg-[#4387F5]/35
+                "
+              />
+
+              <motion.span
+                animate={{
+                  scale: [1, 1.08, 1],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="
+                  h-[19px]
+                  w-[19px]
+                  rounded-full
+                  bg-[#4A8CF7]
+                  shadow-[0_0_20px_rgba(67,135,245,0.7)]
+
+                  xl:h-[20px]
+                  xl:w-[20px]
+                "
+              />
+            </motion.button>
+
+            {/* ==============================
+                MOBILE MENU BUTTON
+            ============================== */}
+
+            <button
+              type="button"
+              aria-label={
+                mobileOpen
+                  ? "Close navigation"
+                  : "Open navigation"
+              }
+              aria-expanded={mobileOpen}
+              onClick={() =>
+                setMobileOpen((prev) => !prev)
+              }
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                rounded-full
+                bg-[#EEF6FF]
+                text-[#26364D]
+                transition-colors
+                hover:bg-[#E4F0FF]
+
+                sm:h-11
+                sm:w-11
+
+                lg:hidden
+              "
+            >
+              {mobileOpen ? (
+                <X
+                  size={20}
+                  strokeWidth={2}
+                />
+              ) : (
+                <Menu
+                  size={20}
+                  strokeWidth={2}
+                />
+              )}
+            </button>
+          </div>
+        </motion.nav>
+      </motion.header>
+
+      {/* ==============================
+          MOBILE MENU
+      ============================== */}
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            {/* Background overlay */}
+
+            <motion.div
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              onClick={() => setMobileOpen(false)}
+              className="
+                fixed
+                inset-0
+                z-40
+                bg-[#0D1B2A]/20
+                backdrop-blur-sm
+                lg:hidden
+              "
+            />
+
+            {/* Menu panel */}
+
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: -15,
+                scale: 0.97,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                y: -15,
+                scale: 0.97,
+              }}
+              transition={{
+                duration: 0.3,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="
+                fixed
+                left-3
+                right-3
+                top-[86px]
+                z-50
+                overflow-hidden
+                rounded-[26px]
+                border
+                border-white
+                bg-white/95
+                p-2.5
+                shadow-[0_20px_60px_rgba(37,99,235,0.14)]
+                backdrop-blur-xl
+
+                sm:left-5
+                sm:right-5
+                sm:top-[92px]
+
+                md:left-6
+                md:right-6
+                md:top-[96px]
+
+                lg:hidden
+              "
+            >
+              <div className="space-y-0.5">
+                {navItems.map((item, index) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{
+                      opacity: 0,
+                      x: -12,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                    }}
+                    transition={{
+                      delay: index * 0.045,
+                      duration: 0.3,
+                    }}
+                  >
+                    <Link
+                      href={item.href}
+                      onClick={() =>
+                        setMobileOpen(false)
+                      }
+                      className="
+                        group
+                        flex
+                        items-center
+                        justify-between
+                        rounded-xl
+                        px-4
+                        py-3
+                        text-[15px]
+                        font-medium
+                        text-[#334155]
+                        transition-all
+                        duration-200
+
+                        sm:px-5
+                        sm:py-3.5
+                        sm:text-[16px]
+
+                        hover:bg-[#F1F7FF]
+                        hover:text-[#2875E8]
+                      "
+                    >
+                      <span>
+                        {item.label}
+                      </span>
+
+                      <ArrowUpRight
+                        size={16}
+                        className="
+                          opacity-0
+                          -translate-x-1
+                          transition-all
+                          duration-200
+                          group-hover:translate-x-0
+                          group-hover:opacity-100
+                        "
+                      />
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Mobile bottom action */}
+
+              <div
+                className="
+                  mt-2
+                  rounded-xl
+                  bg-[#F3F8FF]
+                  p-3
+
+                  sm:p-3.5
+                "
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p
+                      className="
+                        text-[10px]
+                        font-medium
+                        uppercase
+                        tracking-[0.18em]
+                        text-[#7B8BA1]
+
+                        sm:text-xs
+                      "
+                    >
+                      Let's build
+                    </p>
+
+                    <p
+                      className="
+                        mt-0.5
+                        text-[13px]
+                        font-semibold
+                        text-[#26364D]
+
+                        sm:text-sm
+                      "
+                    >
+                      Something amazing
+                    </p>
+                  </div>
+
+                  <div
+                    className="
+                      flex
+                      h-9
+                      w-9
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-[#4387F5]
+                      shadow-[0_7px_20px_rgba(67,135,245,0.3)]
+
+                      sm:h-10
+                      sm:w-10
+                    "
+                  >
+                    <ArrowUpRight
+                      size={16}
+                      className="text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+/* ==========================================
+   NAV ITEM
+========================================== */
+
+function NavItem({
+  label,
+  href,
+}: {
+  label: string;
+  href: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="
+        group
+        relative
+        flex
+        h-[48px]
+        items-center
+        rounded-full
+        px-3.5
+        text-[14px]
+        font-semibold
+        tracking-[-0.01em]
+        text-[#334155]
+        transition-all
+        duration-300
+
+        xl:h-[50px]
+        xl:px-4
+        xl:text-[15px]
+
+        2xl:px-5
+        2xl:text-[16px]
+      "
+    >
+      {/* Hover background */}
+
+      <span
+        className="
+          absolute
+          inset-1
+          -z-0
+          rounded-full
+          bg-[#F2F7FD]
+          opacity-0
+          scale-90
+          transition-all
+          duration-300
+          group-hover:scale-100
+          group-hover:opacity-100
+        "
+      />
+
+      {/* Hover blue line */}
+
+      <span
+        className="
+          absolute
+          bottom-1.5
+          left-1/2
+          h-[2px]
+          w-0
+          -translate-x-1/2
+          rounded-full
+          bg-[#4387F5]
+          transition-all
+          duration-300
+          group-hover:w-5
+        "
+      />
+
+      <span
+        className="
+          relative
+          z-10
+          whitespace-nowrap
+          transition-colors
+          duration-300
+          group-hover:text-[#2875E8]
+        "
+      >
+        {label}
+      </span>
+    </Link>
+  );
+}
+

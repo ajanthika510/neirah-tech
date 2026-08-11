@@ -1,0 +1,1300 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+
+import HeroBackground from "./HeroBackground";  
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Database,
+  Brain,
+  ShoppingCart,
+  Smartphone,
+  Cloud,
+} from "lucide-react";
+
+
+
+export default function Hero() {
+
+
+  const [mouse, setMouse] = useState({
+    x: 0,
+    y: 0,
+  });
+
+
+
+  /* =========================
+      Mouse Glow Effect
+  ========================= */
+
+
+  useEffect(() => {
+
+
+    const handleMouseMove = (
+      e: MouseEvent
+    ) => {
+
+      setMouse({
+        x: e.clientX,
+        y: e.clientY,
+      });
+
+    };
+
+
+    window.addEventListener(
+      "mousemove",
+      handleMouseMove
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "mousemove",
+        handleMouseMove
+      );
+
+    };
+
+
+  }, []);
+
+
+
+
+
+  const handleScroll = (
+    id:string
+  ) => {
+
+
+    const element =
+      document.getElementById(id);
+
+
+    if(element){
+
+      element.scrollIntoView({
+        behavior:"smooth",
+      });
+
+    }
+
+  };
+
+
+
+
+
+  const services = [
+
+    {
+      name:"ERP System",
+      icon:
+      <Database className="w-4 h-4 text-accent-cyan"/>,
+      angle:0
+    },
+
+
+    {
+      name:"AI Analytics",
+      icon:
+      <Brain className="w-4 h-4 text-accent-cyan"/>,
+      angle:72
+    },
+
+
+    {
+      name:"POS System",
+      icon:
+      <ShoppingCart className="w-4 h-4 text-accent-cyan"/>,
+      angle:144
+    },
+
+
+    {
+      name:"Mobile App",
+      icon:
+      <Smartphone className="w-4 h-4 text-accent-cyan"/>,
+      angle:216
+    },
+
+
+    {
+      name:"Cloud Infra",
+      icon:
+      <Cloud className="w-4 h-4 text-accent-cyan"/>,
+      angle:288
+    },
+
+  ];
+
+
+
+
+
+return (
+
+<section
+className="
+relative
+min-h-screen
+pt-32
+pb-20
+flex
+items-center
+justify-center
+bg-bg-deep
+overflow-hidden
+"
+>
+<HeroBackground />
+
+
+{/* =========================
+    Cursor Following Glow
+========================= */}
+
+
+<motion.div
+
+animate={{
+x: mouse.x - 250,
+y: mouse.y - 250,
+}}
+
+transition={{
+type:"spring",
+damping:40,
+stiffness:80,
+}}
+
+className="
+fixed
+top-0
+left-0
+w-[500px]
+h-[500px]
+rounded-full
+bg-cyan-400/10
+blur-[140px]
+pointer-events-none
+z-0
+"
+/>
+
+
+
+
+
+{/* =========================
+    Floating AI Glow Blobs
+========================= */}
+
+
+
+<motion.div
+
+animate={{
+
+x:[
+0,
+90,
+-40,
+0
+],
+
+y:[
+0,
+-70,
+50,
+0
+],
+
+scale:[
+1,
+1.15,
+0.9,
+1
+]
+
+}}
+
+transition={{
+
+duration:18,
+repeat:Infinity,
+ease:"easeInOut"
+
+}}
+
+className="
+absolute
+top-[10%]
+left-[8%]
+w-[450px]
+h-[450px]
+rounded-full
+bg-cyan-400/20
+blur-[150px]
+pointer-events-none
+"
+/>
+
+
+
+
+<motion.div
+
+animate={{
+
+x:[
+0,
+-100,
+70,
+0
+],
+
+y:[
+0,
+80,
+-50,
+0
+],
+
+scale:[
+1,
+0.85,
+1.2,
+1
+]
+
+}}
+
+transition={{
+
+duration:22,
+repeat:Infinity,
+ease:"easeInOut"
+
+}}
+
+className="
+absolute
+bottom-[5%]
+right-[5%]
+w-[520px]
+h-[520px]
+rounded-full
+bg-blue-600/20
+blur-[170px]
+pointer-events-none
+"
+/>
+
+
+
+
+
+<motion.div
+
+animate={{
+
+x:[
+-50,
+80,
+-20,
+-50
+],
+
+y:[
+40,
+-60,
+70,
+40
+],
+
+opacity:[
+0.3,
+0.8,
+0.5,
+0.3
+]
+
+}}
+
+transition={{
+
+duration:16,
+repeat:Infinity,
+ease:"easeInOut"
+
+}}
+
+className="
+absolute
+top-1/2
+left-1/2
+-translate-x-1/2
+-translate-y-1/2
+w-[350px]
+h-[350px]
+rounded-full
+bg-purple-500/20
+blur-[130px]
+pointer-events-none
+"
+/>
+
+
+
+
+
+{/* Grid Overlay */}
+
+
+<div
+
+className="
+absolute
+inset-0
+opacity-[0.03]
+pointer-events-none
+"
+
+style={{
+
+backgroundImage:
+`radial-gradient(circle at 1px 1px,#38BDF8 1px,transparent 0)`,
+
+backgroundSize:
+"24px 24px"
+
+}}
+
+/>
+
+
+
+<div
+className="
+max-w-7xl
+mx-auto
+px-6
+grid
+grid-cols-1
+lg:grid-cols-12
+gap-12
+items-center
+relative
+z-10
+w-full
+"
+>
+  {/* =========================
+      Left Content
+========================= */}
+
+<div
+className="
+lg:col-span-6
+space-y-8
+text-center
+lg:text-left
+"
+>
+
+
+{/* Badge */}
+
+<motion.div
+
+initial={{
+opacity:0,
+y:20
+}}
+
+animate={{
+opacity:1,
+y:0
+}}
+
+transition={{
+duration:0.6
+}}
+
+className="
+inline-flex
+items-center
+gap-2
+px-3
+py-1
+rounded-full
+bg-accent-cyan/10
+border
+border-accent-cyan/20
+text-accent-cyan
+text-xs
+font-display
+font-medium
+"
+
+>
+
+<span
+className="
+w-2
+h-2
+rounded-full
+bg-accent-cyan
+animate-pulse
+"
+/>
+
+Software, AI & Innovation
+
+
+</motion.div>
+
+
+
+
+
+{/* Heading + Description */}
+
+
+<div
+className="
+space-y-4
+"
+>
+
+
+<motion.h1
+
+initial={{
+opacity:0,
+y:20
+}}
+
+animate={{
+opacity:1,
+y:0
+}}
+
+transition={{
+duration:0.6,
+delay:0.1
+}}
+
+className="
+font-display
+font-extrabold
+text-4xl
+sm:text-5xl
+md:text-6xl
+text-white
+tracking-tight
+leading-[1.1]
+"
+
+>
+
+Smart Software Built for
+
+<br/>
+
+
+<span
+className="
+bg-clip-text
+text-transparent
+bg-gradient-to-r
+from-accent-cyan
+via-primary-blue
+to-accent-cyan
+bg-[length:200%_auto]
+animate-[pulse_6s_linear_infinite]
+"
+>
+
+Growing Businesses
+
+</span>
+
+
+</motion.h1>
+
+
+
+
+
+<motion.p
+
+initial={{
+opacity:0,
+y:20
+}}
+
+animate={{
+opacity:1,
+y:0
+}}
+
+transition={{
+duration:0.6,
+delay:0.2
+}}
+
+className="
+text-text-gray
+text-base
+sm:text-lg
+md:text-xl
+leading-relaxed
+max-w-xl
+mx-auto
+lg:mx-0
+"
+
+>
+
+We build ERP systems, AI solutions and business software
+that help retailers, factories and enterprises work faster
+and scale effortlessly.
+
+
+</motion.p>
+
+
+
+</div>
+
+
+
+
+
+
+{/* Buttons */}
+
+
+
+<motion.div
+
+initial={{
+opacity:0,
+y:20
+}}
+
+animate={{
+opacity:1,
+y:0
+}}
+
+transition={{
+duration:0.6,
+delay:0.3
+}}
+
+className="
+flex
+flex-col
+sm:flex-row
+items-center
+justify-center
+lg:justify-start
+gap-4
+"
+
+>
+
+
+<button
+
+onClick={() =>
+handleScroll("scheduler")
+}
+
+className="
+w-full
+sm:w-auto
+px-8
+py-4
+rounded-full
+bg-gradient-to-r
+from-primary-blue
+to-accent-cyan
+text-white
+font-display
+font-semibold
+flex
+items-center
+justify-center
+gap-2
+transition-all
+duration-300
+hover:-translate-y-1
+hover:shadow-[0_0_30px_rgba(56,189,248,.45)]
+"
+
+>
+
+Book a Demo
+
+<ArrowRight
+className="
+w-4
+h-4
+"
+/>
+
+
+</button>
+
+
+
+
+
+<button
+
+onClick={() =>
+handleScroll("solutions")
+}
+
+className="
+w-full
+sm:w-auto
+px-8
+py-4
+rounded-full
+bg-bg-secondary
+border
+border-white/10
+text-white
+font-display
+font-semibold
+flex
+items-center
+justify-center
+gap-2
+transition-all
+duration-300
+hover:-translate-y-1
+"
+
+>
+
+Explore Solutions
+
+
+<ArrowUpRight
+className="
+w-4
+h-4
+text-text-gray
+"
+/>
+
+
+</button>
+
+
+
+</motion.div>
+
+
+
+
+
+
+
+{/* Statistics */}
+
+
+<motion.div
+
+initial={{
+opacity:0
+}}
+
+animate={{
+opacity:1
+}}
+
+transition={{
+duration:0.8,
+delay:0.4
+}}
+
+className="
+pt-6
+border-t
+border-white/5
+flex
+flex-wrap
+items-center
+justify-center
+lg:justify-start
+gap-8
+"
+
+>
+
+
+<div
+className="
+text-center
+lg:text-left
+"
+>
+
+<p
+className="
+text-2xl
+font-display
+font-extrabold
+text-white
+"
+>
+
+250+
+
+</p>
+
+
+<p
+className="
+text-xs
+text-text-gray
+font-medium
+uppercase
+tracking-wider
+"
+>
+
+Projects Completed
+
+</p>
+
+
+</div>
+
+
+
+
+
+<div
+className="
+w-px
+h-8
+bg-white/15
+hidden
+sm:block
+"
+/>
+
+
+
+
+
+<div
+className="
+text-center
+lg:text-left
+"
+>
+
+<p
+className="
+text-2xl
+font-display
+font-extrabold
+text-white
+"
+>
+
+98%
+
+</p>
+
+
+<p
+className="
+text-xs
+text-text-gray
+font-medium
+uppercase
+tracking-wider
+"
+>
+
+Customer Satisfaction
+
+</p>
+
+
+</div>
+
+
+
+
+
+<div
+className="
+w-px
+h-8
+bg-white/15
+hidden
+sm:block
+"
+/>
+
+
+
+
+
+<div
+className="
+text-center
+lg:text-left
+"
+>
+
+<p
+className="
+text-2xl
+font-display
+font-extrabold
+text-white
+"
+>
+
+10+
+
+</p>
+
+
+<p
+className="
+text-xs
+text-text-gray
+font-medium
+uppercase
+tracking-wider
+"
+>
+
+Years Innovation
+
+</p>
+
+
+</div>
+
+
+
+</motion.div>
+
+
+
+</div>
+{/* =========================
+      Right Side Orbit Graphic
+========================= */}
+
+<div
+className="
+lg:col-span-6
+relative
+flex
+items-center
+justify-center
+min-h-[480px]
+lg:min-h-[560px]
+"
+>
+
+
+{/* Orbit Ring */}
+
+
+<motion.div
+
+variants={orbitVariants}
+
+animate="animate"
+
+className="
+relative
+w-80
+h-80
+sm:w-[420px]
+sm:h-[420px]
+border
+border-white/5
+rounded-full
+flex
+items-center
+justify-center
+"
+
+>
+
+
+{/* Dashed Orbit SVG */}
+
+<svg
+className="
+absolute
+inset-0
+w-full
+h-full
+-rotate-90
+opacity-20
+pointer-events-none
+"
+>
+
+<circle
+cx="50%"
+cy="50%"
+r="48%"
+fill="none"
+stroke="#38BDF8"
+strokeWidth="1"
+strokeDasharray="6 12"
+/>
+
+</svg>
+
+
+
+
+
+{/* Service Cards */}
+
+{
+services.map(
+(item,index)=>{
+
+
+const radius = 195;
+
+const radian =
+(item.angle * Math.PI) / 180;
+
+
+const x =
+Math.cos(radian) * radius;
+
+
+const y =
+Math.sin(radian) * radius;
+
+
+
+return (
+
+<div
+
+key={index}
+
+className="
+absolute
+"
+
+style={{
+
+transform:
+`translate(${x}px,${y}px)`
+
+}}
+
+>
+
+
+<motion.div
+
+variants={cardVariants}
+
+animate="animate"
+
+whileHover={{
+scale:1.1
+}}
+
+className="
+glass-panel
+rounded-xl
+border
+border-white/10
+shadow-[0_4px_20px_rgba(0,0,0,.4)]
+p-3.5
+flex
+items-center
+gap-3
+w-40
+hover:border-accent-cyan/40
+hover:shadow-[0_0_20px_rgba(56,189,248,.25)]
+transition-all
+"
+
+>
+
+
+<div
+className="
+p-2
+rounded-lg
+bg-bg-secondary
+border
+border-white/5
+"
+>
+
+{item.icon}
+
+</div>
+
+
+
+<span
+className="
+font-display
+font-bold
+text-xs
+text-white
+tracking-wide
+"
+>
+
+{item.name}
+
+</span>
+
+
+
+</motion.div>
+
+
+</div>
+
+
+)
+
+}
+
+)
+
+}
+
+
+</motion.div>
+
+
+
+
+
+
+
+{/* =========================
+      Center AI Core
+========================= */}
+
+
+
+<div
+
+className="
+absolute
+w-28
+h-28
+sm:w-36
+sm:h-36
+rounded-full
+bg-gradient-to-tr
+from-bg-secondary
+to-bg-deep
+border
+border-accent-cyan/20
+flex
+flex-col
+items-center
+justify-center
+shadow-[0_0_50px_rgba(37,99,235,.25)]
+select-none
+"
+
+>
+
+
+{/* Inner Glow */}
+
+<div
+
+className="
+absolute
+inset-2
+rounded-full
+bg-gradient-to-tr
+from-primary-blue/30
+to-accent-cyan/10
+blur-sm
+animate-pulse
+"
+
+/>
+
+
+
+
+
+<span
+
+className="
+font-display
+font-extrabold
+text-3xl
+text-white
+drop-shadow-[0_2px_8px_rgba(56,189,248,.5)]
+"
+
+>
+
+N
+
+</span>
+
+
+
+<span
+
+className="
+font-display
+font-bold
+text-[10px]
+text-accent-cyan
+tracking-widest
+uppercase
+mt-1
+"
+
+>
+
+Neirah Tech
+
+</span>
+
+
+
+
+
+{/* Inner Orbit Lines */}
+
+
+<div
+
+className="
+absolute
+-inset-4
+rounded-full
+border
+border-accent-cyan/10
+opacity-30
+animate-[spin_10s_linear_infinite]
+"
+
+/>
+
+
+
+<div
+
+className="
+absolute
+-inset-8
+rounded-full
+border
+border-accent-cyan/5
+opacity-20
+animate-[spin_20s_linear_infinite_reverse]
+"
+
+/>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+</section>
+
+);
+
+}
+
+
+
+
+
+/* =========================
+    Animations
+========================= */
+
+
+const orbitVariants = {
+
+animate: {
+
+rotate:360,
+
+transition:{
+
+duration:40,
+
+ease:"linear" as const,
+
+repeat:Infinity,
+
+}
+
+}
+
+};
+
+
+
+
+
+const cardVariants = {
+
+animate: {
+
+rotate:-360,
+
+transition:{
+
+duration:40,
+
+ease:"linear" as const,
+
+repeat:Infinity,
+
+}
+
+}
+
+};
