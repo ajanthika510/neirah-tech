@@ -247,7 +247,7 @@ export default function Projects() {
   }, [activeFilter]);
 
   return (
-    <section className="relative overflow-hidden bg-[#F7FAFF] py-20 sm:py-24 lg:py-28">
+    <section className="relative overflow-hidden bg-[#F7FAFF] pt-36 pb-20 sm:pt-40 sm:pb-24 lg:pt-44 lg:pb-28">
       {/* =====================================================
           BACKGROUND
       ===================================================== */}

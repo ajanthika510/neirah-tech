@@ -1,168 +1,520 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { MessageCircle, ArrowUp, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import Image from "next/image";
+
+import { motion } from "framer-motion";
+import {
+  ArrowUpRight,
+  Mail,
+  MapPin,
+  Phone,
+  Sparkles,
+} from "lucide-react";
+
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+} from "react-icons/fa";
+
+const footerLinks = {
+  company: [
+    { name: "About Us", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Projects", href: "/projects" },
+    { name: "Contact", href: "/contact" },
+  ],
+
+  services: [
+    { name: "Software Solutions", href: "/services" },
+    { name: "Web Development", href: "/services" },
+    { name: "Business Solutions", href: "/services" },
+    { name: "Technology Consulting", href: "/services" },
+  ],
+};
 
 export default function Footer() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
-
-  const handleNavClick = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <footer className="bg-bg-deep border-t border-white/5 pt-20 pb-8 text-xs font-normal relative select-none">
-      
-      {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3">
-        {/* WhatsApp Button */}
-        <a
-          href="https://wa.me/94771234567"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-12 h-12 rounded-full bg-[#25D366] hover:bg-[#20ba56] text-white flex items-center justify-center shadow-[0_4px_15px_rgba(37,211,102,0.4)] transition-all duration-300 hover:scale-105"
-          aria-label="Chat on WhatsApp"
-        >
-          <MessageCircle className="w-6 h-6 fill-white text-[#25D366]" />
-        </a>
+    <footer className="relative overflow-hidden border-t border-white/10 bg-[#020617] text-white">
 
-        {/* Back to Top Button */}
-        {isVisible && (
-          <button
-            onClick={scrollToTop}
-            className="w-12 h-12 rounded-full bg-bg-secondary border border-white/10 hover:border-accent-cyan/30 text-white flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
-            aria-label="Scroll to top"
-          >
-            <ArrowUp className="w-5 h-5 text-accent-cyan" />
-          </button>
-        )}
+      {/* =====================================================
+          BACKGROUND
+      ===================================================== */}
+
+      <div className="pointer-events-none absolute inset-0">
+
+        {/* Grid */}
+
+        <div
+          className="absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        {/* Glow */}
+
+        <motion.div
+          animate={{
+            x: [0, 80, 0],
+            y: [0, -30, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute -left-40 bottom-0 h-[400px] w-[400px] rounded-full bg-sky-500/10 blur-[130px]"
+        />
+
+        <motion.div
+          animate={{
+            x: [0, -70, 0],
+            y: [0, 40, 0],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute -right-40 top-20 h-[400px] w-[400px] rounded-full bg-indigo-500/10 blur-[130px]"
+        />
+
       </div>
 
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 mb-16">
-          
-          {/* Brand Info (lg:col-span-4) */}
-          <div className="lg:col-span-4 space-y-6">
-            <a href="#" className="flex items-center gap-2 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary-blue to-accent-cyan flex items-center justify-center font-display font-extrabold text-white text-lg tracking-wider">
-                N
+
+      {/* =====================================================
+          MAIN FOOTER
+      ===================================================== */}
+
+      <div className="relative mx-auto max-w-7xl px-6 pb-10 pt-20 lg:px-8">
+
+        {/* =================================================
+            TOP CTA
+        ================================================= */}
+
+        <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/[0.04] p-8 md:p-12">
+
+          {/* CTA glow */}
+
+          <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-sky-500/10 blur-[100px]" />
+
+          <div className="relative flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
+
+            <div className="max-w-2xl">
+
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-400/[0.06] px-4 py-2">
+
+                <Sparkles
+                  size={14}
+                  className="text-sky-400"
+                />
+
+                <span className="text-xs font-bold tracking-[0.2em] text-sky-300">
+                  LET'S BUILD SOMETHING
+                </span>
+
               </div>
-              <span className="font-display font-bold text-xl tracking-tight text-white">
-                Neirah<span className="text-accent-cyan">Tech</span>
-              </span>
-            </a>
-            <p className="text-text-gray text-xs leading-relaxed max-w-sm font-normal">
-              We design and engineer enterprise-grade ERP modules, POS solutions and secure custom AI software for retail owners, textile factories, and SMEs across Sri Lanka.
-            </p>
-          </div>
 
-          {/* Solutions Column (lg:col-span-3) */}
-          <div className="lg:col-span-3 space-y-4">
-            <h4 className="font-display font-bold text-sm text-white uppercase tracking-wider">Solutions</h4>
-            <ul className="space-y-2.5 font-medium text-text-gray">
-              <li>
-                <button onClick={() => handleNavClick("solutions")} className="hover:text-accent-cyan hover:underline text-left cursor-pointer">
-                  POS Counter billing
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNavClick("solutions")} className="hover:text-accent-cyan hover:underline text-left cursor-pointer">
-                  Inventory Control Systems
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNavClick("solutions")} className="hover:text-accent-cyan hover:underline text-left cursor-pointer">
-                  Accounts & Tax Modules
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNavClick("solutions")} className="hover:text-accent-cyan hover:underline text-left cursor-pointer">
-                  AI Integration Hub
-                </button>
-              </li>
-            </ul>
-          </div>
+              <h2 className="text-3xl font-black leading-tight md:text-5xl">
 
-          {/* Resources Column (lg:col-span-2) */}
-          <div className="lg:col-span-2 space-y-4">
-            <h4 className="font-display font-bold text-sm text-white uppercase tracking-wider">Navigation</h4>
-            <ul className="space-y-2.5 font-medium text-text-gray">
-              <li>
-                <button onClick={() => handleNavClick("metrics")} className="hover:text-accent-cyan hover:underline text-left cursor-pointer">
-                  Performance Metrics
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNavClick("testimonials")} className="hover:text-accent-cyan hover:underline text-left cursor-pointer">
-                  Success Testimonials
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNavClick("scheduler")} className="hover:text-accent-cyan hover:underline text-left cursor-pointer">
-                  Demo Booking Portal
-                </button>
-              </li>
-            </ul>
-          </div>
+                Have a problem?
 
-          {/* Contact Column (lg:col-span-3) */}
-          <div className="lg:col-span-3 space-y-4">
-            <h4 className="font-display font-bold text-sm text-white uppercase tracking-wider">Contact Us</h4>
-            <ul className="space-y-3 font-medium text-text-gray">
-              <li className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-accent-cyan shrink-0 mt-0.5" />
-                <span className="leading-relaxed">104 Galle Road, Colombo 03, Sri Lanka</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-accent-cyan shrink-0" />
-                <span>+94 11 234 5678</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-accent-cyan shrink-0" />
-                <a href="mailto:info@neirahtech.com" className="hover:text-accent-cyan hover:underline">
-                  info@neirahtech.com
-                </a>
-              </li>
-            </ul>
+                <span className="block bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+                  Let's start a conversation.
+                </span>
+
+              </h2>
+
+              <p className="mt-5 max-w-xl leading-7 text-slate-400">
+                Tell us what you're trying to solve. We'll help you explore
+                the right technology and turn the idea into something useful.
+              </p>
+
+            </div>
+
+
+            <motion.a
+              href="/contact"
+              whileHover={{
+                scale: 1.05,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+              className="group inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-7 py-4 font-bold shadow-[0_15px_50px_rgba(14,165,233,.18)]"
+            >
+
+              Start a Conversation
+
+              <ArrowUpRight
+                size={19}
+                className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+              />
+
+            </motion.a>
+
           </div>
 
         </div>
 
-        {/* Divider */}
-        <div className="h-px bg-white/5 mb-8" />
 
-        {/* Bottom copyright */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-text-gray font-medium">
-          <p>&copy; {new Date().getFullYear()} Neirah Tech Solutions. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-white transition-colors">Privacy Rules</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Operations</a>
+        {/* =================================================
+            FOOTER CONTENT
+        ================================================= */}
+
+        <div className="grid gap-14 py-20 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+
+          {/* =================================================
+              BRAND
+          ================================================= */}
+
+          <div>
+
+            <a
+              href="/"
+              className="group inline-flex items-center gap-3"
+            >
+
+              {/* Logo */}
+
+              <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-[0_0_35px_rgba(56,189,248,.22)]">
+              <Image
+                src="/images/logo.png"
+                alt="Neirah Tech Solutions"
+                width={48}
+                height={48}
+                priority
+                className="h-10 w-10 object-contain"
+              />
+            </div>
+
+
+              <div>
+
+                <p className="text-xl font-black tracking-tight">
+                  Neirah
+                  <span className="text-sky-400">
+                    Tech
+                  </span>
+                </p>
+
+                <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-slate-600">
+                  Solutions
+                </p>
+
+              </div>
+
+            </a>
+
+
+            <p className="mt-7 max-w-sm text-sm leading-7 text-slate-500">
+              Technology solutions built around real business problems.
+              From hardware beginnings to modern software solutions,
+              we're continuing the journey.
+            </p>
+
+
+            {/* Social */}
+
+            <div className="mt-7 flex items-center gap-3">
+
+              <SocialIcon
+  href="https://www.bing.com/ck/a?!&&p=375376f650a805c56689b35f5c5171864d69fee92a89c6867d4f098cc2f57a49JmltdHM9MTc4NjQ5MjgwMA&ptn=3&ver=2&hsh=4&fclid=0e98dcc1-51b3-634b-2ad5-cb8b50d36262&psq=neirah+tech&u=a1aHR0cHM6Ly9say5saW5rZWRpbi5jb20vY29tcGFueS9uZWlyYWgtdGVjaC1zb2x1dGlvbg"
+  label="LinkedIn"
+>
+  <FaLinkedinIn size={17} />
+</SocialIcon>
+
+<SocialIcon
+  href="https://www.bing.com/ck/a?!&&p=e3c89d34bd57e2d7e5bd0155c8cf0278a2ad22b29ebc8c7953fcdaef8b0a5203JmltdHM9MTc4NjQ5MjgwMA&ptn=3&ver=2&hsh=4&fclid=0e98dcc1-51b3-634b-2ad5-cb8b50d36262&psq=neirah+tech&u=a1aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL25laXJhaHRlY2gv"
+  label="Facebook"
+>
+  <FaFacebookF size={17} />
+</SocialIcon>
+
+<SocialIcon
+  href="https://www.bing.com/ck/a?!&&p=ebc15db7b6300c476c7bd2b2410e5b8f31828da989d6083beb79ccbd2f8be3f7JmltdHM9MTc4NjQ5MjgwMA&ptn=3&ver=2&hsh=4&fclid=0e98dcc1-51b3-634b-2ad5-cb8b50d36262&psq=neirah+tech&u=a1aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS9uZWlyYWhfdGVjaC8"
+  label="Instagram"
+>
+  <FaInstagram size={17} />
+</SocialIcon>
+            </div>
+
           </div>
+
+
+          {/* =================================================
+              COMPANY
+          ================================================= */}
+
+          <FooterColumn
+            title="Company"
+            links={footerLinks.company}
+          />
+
+
+          {/* =================================================
+              SERVICES
+          ================================================= */}
+
+          <FooterColumn
+            title="Solutions"
+            links={footerLinks.services}
+          />
+
+
+          {/* =================================================
+              CONTACT
+          ================================================= */}
+
+          <div>
+
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
+              Get in touch
+            </h3>
+
+
+            <div className="mt-7 space-y-5">
+
+              <ContactItem
+                icon={<Mail size={17} />}
+                text="hello@neirahtech.com"
+                href="mailto:hello@neirahtech.com"
+              />
+
+              <ContactItem
+                icon={<Phone size={17} />}
+                text="+94 XX XXX XXXX"
+                href="tel:+94XXXXXXXXX"
+              />
+
+              <ContactItem
+                icon={<MapPin size={17} />}
+                text="Sri Lanka"
+                href="#"
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        {/* =================================================
+            GLOBAL PROOF
+        ================================================= */}
+
+        <div className="border-y border-white/[0.06] py-7">
+
+          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+            <p className="text-sm text-slate-500">
+              Building technology across borders.
+            </p>
+
+
+            <div className="flex items-center gap-7">
+
+              <Proof
+                value="10+"
+                label="Years"
+              />
+
+              <div className="h-8 w-px bg-white/10" />
+
+              <Proof
+                value="11+"
+                label="Countries"
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        {/* =================================================
+            BOTTOM
+        ================================================= */}
+
+        <div className="flex flex-col gap-5 pt-7 text-xs text-slate-600 md:flex-row md:items-center md:justify-between">
+
+          <p>
+            © {new Date().getFullYear()} Neirah Tech Solutions. All rights reserved.
+          </p>
+
+
+          <div className="flex items-center gap-6">
+
+            <a
+              href="/privacy"
+              className="transition-colors hover:text-slate-300"
+            >
+              Privacy Policy
+            </a>
+
+            <a
+              href="/terms"
+              className="transition-colors hover:text-slate-300"
+            >
+              Terms
+            </a>
+
+          </div>
+
         </div>
 
       </div>
+
     </footer>
+  );
+}
+
+
+/* =========================================================
+   FOOTER COLUMN
+========================================================= */
+
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: {
+    name: string;
+    href: string;
+  }[];
+}) {
+  return (
+    <div>
+
+      <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
+        {title}
+      </h3>
+
+      <ul className="mt-7 space-y-4">
+
+        {links.map((link) => (
+          <li key={link.name}>
+
+            <a
+              href={link.href}
+              className="group inline-flex items-center gap-2 text-sm text-slate-500 transition-colors duration-300 hover:text-white"
+            >
+
+              <span>
+                {link.name}
+              </span>
+
+              <ArrowUpRight
+                size={13}
+                className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
+              />
+
+            </a>
+
+          </li>
+        ))}
+
+      </ul>
+
+    </div>
+  );
+}
+
+
+/* =========================================================
+   SOCIAL ICON
+========================================================= */
+
+function SocialIcon({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <motion.a
+      href={href}
+      aria-label={label}
+      whileHover={{
+        y: -4,
+      }}
+      whileTap={{
+        scale: 0.95,
+      }}
+      className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-500 transition-colors hover:border-sky-400/30 hover:bg-sky-400/10 hover:text-sky-400"
+    >
+      {children}
+    </motion.a>
+  );
+}
+
+
+/* =========================================================
+   CONTACT ITEM
+========================================================= */
+
+function ContactItem({
+  icon,
+  text,
+  href,
+}: {
+  icon: React.ReactNode;
+  text: string;
+  href: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="group flex items-start gap-4"
+    >
+
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.05] text-slate-500 transition-colors group-hover:bg-sky-400/10 group-hover:text-sky-400">
+        {icon}
+      </div>
+
+      <span className="pt-1 text-sm text-slate-500 transition-colors group-hover:text-white">
+        {text}
+      </span>
+
+    </a>
+  );
+}
+
+
+/* =========================================================
+   PROOF
+========================================================= */
+
+function Proof({
+  value,
+  label,
+}: {
+  value: string;
+  label: string;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+
+      <span className="text-xl font-black text-white">
+        {value}
+      </span>
+
+      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600">
+        {label}
+      </span>
+
+    </div>
   );
 }

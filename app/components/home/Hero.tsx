@@ -977,156 +977,78 @@ strokeDasharray="6,12"
 {/* SERVICE CARDS */}
 
 
-{
-services.map((item,idx)=>{
-
-
-const radius=195;
-
-
-const radian=
-(item.angle*Math.PI)/180;
-
-
-const x=Math.cos(radian)*radius;
-
-const y=Math.sin(radian)*radius;
-
-
-
-return (
-
-
-<div
-
-key={idx}
-
-className="absolute"
-
-style={{
-transform:`translate(${x}px,${y}px)`
-}}
-
->
-
-
-<motion.div
-
-variants={cardVariants}
-
-animate="animate"
-
-
-whileHover={{
-scale:1.1
-}}
-
-
-className="
-p-3.5
-
-
-rounded-xl
-
-
-bg-white/90
-
-
-backdrop-blur-xl
-
-
-border
-
-border-slate-200
-
-
-shadow-[0_10px_30px_rgba(15,23,42,.08)]
-
-
-flex
-
-items-center
-
-
-gap-3
-
-
-w-40
-
-
-hover:border-sky-300
-
-
-hover:shadow-[0_0_25px_rgba(14,165,233,.25)]
-
-
-transition-all
-
-duration-300
-"
-
->
-
-
-
-<div
-
-className="
-p-2
-
-rounded-lg
-
-
-bg-sky-50
-
-
-border
-
-border-sky-100
-"
-
->
-
-{item.icon}
-
-</div>
-
-
-
-
-
-<span
-
-className="
-font-semibold
-
-text-xs
-
-text-slate-800
-
-tracking-wide
-"
-
->
-
-{item.name}
-
-</span>
-
-
-
-</motion.div>
-
-
-</div>
-
-
-)
-
-
-})
-
-}
+{services.map((item, idx) => {
+  const radius = 195;
+
+  const radian =
+    (item.angle * Math.PI) / 180;
+
+  const x = Math.round(
+    Math.cos(radian) * radius
+  );
+
+  const y = Math.round(
+    Math.sin(radian) * radius
+  );
+
+  return (
+    <div
+      key={item.name}
+      className="absolute left-1/2 top-1/2"
+      style={{
+        transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+      }}
+    >
+      <motion.div
+        variants={cardVariants}
+        animate="animate"
+        whileHover={{
+          scale: 1.1,
+        }}
+        className="
+          flex
+          w-40
+          items-center
+          gap-3
+          rounded-xl
+          border
+          border-slate-200
+          bg-white/90
+          p-3.5
+          shadow-[0_10px_30px_rgba(15,23,42,.08)]
+          backdrop-blur-xl
+          transition-all
+          duration-300
+          hover:border-sky-300
+          hover:shadow-[0_0_25px_rgba(14,165,233,.25)]
+        "
+      >
+        <div
+          className="
+            rounded-lg
+            border
+            border-sky-100
+            bg-sky-50
+            p-2
+          "
+        >
+          {item.icon}
+        </div>
+
+        <span
+          className="
+            text-xs
+            font-semibold
+            tracking-wide
+            text-slate-800
+          "
+        >
+          {item.name}
+        </span>
+      </motion.div>
+    </div>
+  );
+})}
 
 
 </motion.div>

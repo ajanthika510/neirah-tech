@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import Header from "./components/layout/Header";
 import Hero from "./components/home/Hero";
 import Footer from "./components/layout/Footer";
@@ -8,26 +10,42 @@ import FeaturedProjects from "./components/home/FeaturedProjects";
 import ProjectCTA from "./components/home/ProjectCTA";
 import UIUXLab from "./components/home/UIUXLab";
 import Testimonials from "./components/home/Testimonials";
+import SplashScreen from "./components/splash/SplashScreen";
 
 export default function Home() {
+  const [showSplash, setShowSplash] = useState(true);
+
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden bg-bg-deep text-text-white antialiased">
-      {/* Navigation */}
-      <Header />
+    <>
+      {showSplash && (
+        <SplashScreen
+          onComplete={() => setShowSplash(false)}
+        />
+      )}
 
-      {/* Main Page Layout */}
-      <main className="flex-grow">
-        <Hero />
-        <ServiceSection />
-        <UIUXLab />
-        <FeaturedProjects />
-        <ProjectCTA />
-        <Testimonials />
-      </main>
+      {/* Main Website */}
+      <div className="flex min-h-screen flex-col overflow-x-hidden bg-bg-deep text-text-white antialiased">
+        {/* Navigation */}
+        <Header />
 
-      {/* Footer */}
-      <Footer />
-    </div>
+        {/* Main Page Layout */}
+        <main className="flex-grow">
+          <Hero />
+
+          <ServiceSection />
+
+          <UIUXLab />
+
+          <FeaturedProjects />
+
+          <ProjectCTA />
+
+          <Testimonials />
+        </main>
+
+        {/* Footer */}
+        <Footer />
+      </div>
+    </>
   );
 }
-
