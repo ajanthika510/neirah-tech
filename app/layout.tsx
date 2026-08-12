@@ -16,7 +16,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "Neirah Tech Solutions | Intelligent Software Built for Growing Businesses",
-  description: "Neirah Tech builds high-performance ERP systems, custom AI solutions, POS systems, and cloud infrastructure for retailers, factories, and SMEs.",
+  description:
+    "Neirah Tech builds high-performance ERP systems, custom AI solutions, POS systems, and cloud infrastructure for retailers, factories, and SMEs.",
 };
 
 export default function RootLayout({
@@ -35,4 +36,3 @@ export default function RootLayout({
     </html>
   );
 }
-

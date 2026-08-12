@@ -1,6 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  type Variants,
+} from "framer-motion";
+
 import { useState } from "react";
 
 import {
@@ -19,10 +24,60 @@ import {
 } from "lucide-react";
 
 /* =========================================================
+   TYPES
+========================================================= */
+
+type StoryItem = {
+  id: number;
+  year: string;
+  title: string;
+  text: string;
+  icon: typeof Users;
+};
+
+type ValueItem = {
+  number: string;
+  title: string;
+  text: string;
+  icon: typeof MessageCircle;
+};
+
+/* =========================================================
+   HERO ANIMATIONS
+========================================================= */
+
+const heroContainer: Variants = {
+  hidden: {},
+
+  visible: {
+    transition: {
+      staggerChildren: 0.14,
+    },
+  },
+};
+
+const fadeUp: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 40,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+};
+
+/* =========================================================
    STORY DATA
 ========================================================= */
 
-const story = [
+const story: StoryItem[] = [
   {
     id: 1,
     year: "THE BEGINNING",
@@ -73,7 +128,7 @@ const story = [
    VALUES
 ========================================================= */
 
-const values = [
+const values: ValueItem[] = [
   {
     number: "01",
     title: "Understand First",
@@ -157,9 +212,7 @@ export default function About() {
           }}
           className="absolute right-[-200px] top-[45%] h-[600px] w-[600px] rounded-full bg-indigo-600/20 blur-[160px]"
         />
-
       </div>
-
 
       {/* =====================================================
           HERO
@@ -178,15 +231,7 @@ export default function About() {
             <motion.div
               initial="hidden"
               animate="visible"
-              variants={{
-                hidden: {},
-
-                visible: {
-                  transition: {
-                    staggerChildren: 0.14,
-                  },
-                },
-              }}
+              variants={heroContainer}
               className="relative z-20"
             >
 
@@ -212,22 +257,18 @@ export default function About() {
 
               </motion.div>
 
-
               {/* Heading */}
 
               <motion.h1
                 variants={fadeUp}
                 className="mt-8 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.04em] sm:text-6xl md:text-7xl xl:text-[84px]"
               >
-
                 It started with
 
                 <span className="mt-2 block bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent">
                   two friends.
                 </span>
-
               </motion.h1>
-
 
               {/* Description */}
 
@@ -239,7 +280,6 @@ export default function About() {
                 technology and real-world problems. And eventually, a
                 decision to build something together.
               </motion.p>
-
 
               {/* Small line */}
 
@@ -255,7 +295,6 @@ export default function About() {
                 </span>
 
               </motion.div>
-
 
               {/* Scroll */}
 
@@ -275,12 +314,10 @@ export default function About() {
                   }}
                   className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03]"
                 >
-
                   <ArrowDown
                     size={17}
                     className="text-sky-400"
                   />
-
                 </motion.div>
 
                 <span className="text-xs font-medium tracking-wide text-slate-600">
@@ -291,9 +328,8 @@ export default function About() {
 
             </motion.div>
 
-
             {/* =================================================
-                HERO RIGHT — ANIMATED STORY
+                HERO RIGHT
             ================================================= */}
 
             <div className="relative mx-auto h-[520px] w-full max-w-[580px] sm:h-[560px] lg:h-[600px]">
@@ -313,7 +349,6 @@ export default function About() {
                 className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500 blur-[120px]"
               />
 
-
               {/* Orbit 1 */}
 
               <motion.div
@@ -327,7 +362,6 @@ export default function About() {
                 }}
                 className="absolute left-1/2 top-1/2 h-[430px] w-[430px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-sky-400/[0.08]"
               />
-
 
               {/* Orbit 2 */}
 
@@ -343,11 +377,9 @@ export default function About() {
                 className="absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-indigo-400/[0.10]"
               />
 
-
               {/* Vertical connection */}
 
               <div className="absolute left-1/2 top-1/2 hidden h-[290px] w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-sky-400/40 to-transparent sm:block" />
-
 
               {/* Moving connection particle */}
 
@@ -363,7 +395,6 @@ export default function About() {
                 }}
                 className="absolute left-1/2 top-1/2 z-10 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300 shadow-[0_0_25px_rgba(103,232,249,1)]"
               />
-
 
               {/* =================================================
                   FRIEND CARD
@@ -432,7 +463,6 @@ export default function About() {
 
               </motion.div>
 
-
               {/* =================================================
                   IDEA CARD
               ================================================= */}
@@ -486,7 +516,6 @@ export default function About() {
 
               </motion.div>
 
-
               {/* =================================================
                   HARDWARE → SOFTWARE CARD
               ================================================= */}
@@ -503,6 +532,7 @@ export default function About() {
                 transition={{
                   delay: 0.8,
                   duration: 0.8,
+                  ease: "easeOut",
                 }}
                 className="absolute bottom-[95px] left-1/2 z-30 w-[290px] -translate-x-1/2"
               >
@@ -530,7 +560,6 @@ export default function About() {
 
                     </div>
 
-
                     {/* Arrow */}
 
                     <motion.div
@@ -540,6 +569,7 @@ export default function About() {
                       transition={{
                         duration: 1.5,
                         repeat: Infinity,
+                        ease: "easeInOut",
                       }}
                     >
 
@@ -549,7 +579,6 @@ export default function About() {
                       />
 
                     </motion.div>
-
 
                     {/* Software */}
 
@@ -584,9 +613,8 @@ export default function About() {
 
               </motion.div>
 
-
               {/* =================================================
-                  STATS
+                  HERO STATS
               ================================================= */}
 
               <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-3 whitespace-nowrap">
@@ -608,9 +636,7 @@ export default function About() {
 
                 </motion.div>
 
-
                 <div className="h-8 w-px bg-white/10" />
-
 
                 <motion.div
                   whileHover={{
@@ -639,7 +665,6 @@ export default function About() {
 
       </section>
 
-
       {/* =====================================================
           CONVERSATION SECTION
       ===================================================== */}
@@ -662,6 +687,10 @@ export default function About() {
               viewport={{
                 once: true,
               }}
+              transition={{
+                duration: 0.7,
+                ease: "easeOut",
+              }}
             >
 
               <span className="text-sm font-bold tracking-[0.3em] text-sky-400">
@@ -674,7 +703,6 @@ export default function About() {
 
             </motion.div>
 
-
             <motion.div
               initial={{
                 opacity: 0,
@@ -686,6 +714,10 @@ export default function About() {
               }}
               viewport={{
                 once: true,
+              }}
+              transition={{
+                duration: 0.7,
+                ease: "easeOut",
               }}
               className="relative"
             >
@@ -732,7 +764,6 @@ export default function About() {
 
       </section>
 
-
       {/* =====================================================
           INTERACTIVE JOURNEY
       ===================================================== */}
@@ -757,7 +788,6 @@ export default function About() {
 
           </div>
 
-
           <div className="grid gap-10 lg:grid-cols-[280px_1fr]">
 
             {/* Navigation */}
@@ -771,7 +801,10 @@ export default function About() {
                 return (
                   <motion.button
                     key={item.id}
-                    onClick={() => setActiveStory(index)}
+                    type="button"
+                    onClick={() =>
+                      setActiveStory(index)
+                    }
                     whileHover={{
                       x: 6,
                     }}
@@ -831,7 +864,6 @@ export default function About() {
 
             </div>
 
-
             {/* Story content */}
 
             <AnimatePresence mode="wait">
@@ -852,6 +884,7 @@ export default function About() {
                 }}
                 transition={{
                   duration: 0.45,
+                  ease: "easeOut",
                 }}
                 className="relative min-h-[470px] overflow-hidden rounded-[40px] border border-white/10 bg-white/[0.04]"
               >
@@ -884,7 +917,6 @@ export default function About() {
 
                   </div>
 
-
                   <div className="mt-12 flex items-center justify-between">
 
                     <div className="flex items-center gap-3">
@@ -892,8 +924,13 @@ export default function About() {
                       {story.map((_, index) => (
                         <button
                           key={index}
-                          onClick={() => setActiveStory(index)}
-                          aria-label={`Go to chapter ${index + 1}`}
+                          type="button"
+                          onClick={() =>
+                            setActiveStory(index)
+                          }
+                          aria-label={`Go to chapter ${
+                            index + 1
+                          }`}
                           className={`h-2 rounded-full transition-all ${
                             activeStory === index
                               ? "w-10 bg-sky-400"
@@ -904,11 +941,12 @@ export default function About() {
 
                     </div>
 
-
                     <button
+                      type="button"
                       onClick={() =>
                         setActiveStory(
-                          activeStory === story.length - 1
+                          activeStory ===
+                            story.length - 1
                             ? 0
                             : activeStory + 1
                         )
@@ -932,7 +970,6 @@ export default function About() {
         </div>
 
       </section>
-
 
       {/* =====================================================
           HARDWARE → SOFTWARE
@@ -960,10 +997,7 @@ export default function About() {
 
           </div>
 
-
           <div className="relative overflow-hidden rounded-[44px] border border-white/10 bg-white/[0.04] p-6 md:p-12">
-
-            {/* Center glow */}
 
             <motion.div
               animate={{
@@ -973,10 +1007,10 @@ export default function About() {
               transition={{
                 duration: 6,
                 repeat: Infinity,
+                ease: "easeInOut",
               }}
               className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500 blur-[120px]"
             />
-
 
             <div className="relative grid items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
 
@@ -1021,7 +1055,6 @@ export default function About() {
 
               </motion.div>
 
-
               {/* Transformation */}
 
               <div className="flex flex-col items-center">
@@ -1033,6 +1066,7 @@ export default function About() {
                   transition={{
                     duration: 2,
                     repeat: Infinity,
+                    ease: "easeInOut",
                   }}
                   className="flex h-16 w-16 items-center justify-center rounded-full border border-cyan-400/30 bg-cyan-400/10"
                 >
@@ -1051,6 +1085,7 @@ export default function About() {
                   transition={{
                     duration: 2,
                     repeat: Infinity,
+                    ease: "easeInOut",
                   }}
                   className="mt-4 text-xs font-bold uppercase tracking-widest text-cyan-400"
                 >
@@ -1058,7 +1093,6 @@ export default function About() {
                 </motion.div>
 
               </div>
-
 
               {/* Software */}
 
@@ -1103,7 +1137,6 @@ export default function About() {
 
             </div>
 
-
             {/* Bottom statement */}
 
             <div className="relative mt-12 border-t border-white/10 pt-10 text-center">
@@ -1126,7 +1159,6 @@ export default function About() {
         </div>
 
       </section>
-
 
       {/* =====================================================
           STATS
@@ -1162,7 +1194,6 @@ export default function About() {
 
       </section>
 
-
       {/* =====================================================
           VALUES
       ===================================================== */}
@@ -1189,7 +1220,6 @@ export default function About() {
 
           </div>
 
-
           <div className="mt-16 grid gap-6 md:grid-cols-3">
 
             {values.map((value, index) => {
@@ -1212,6 +1242,8 @@ export default function About() {
                   }}
                   transition={{
                     delay: index * 0.12,
+                    duration: 0.6,
+                    ease: "easeOut",
                   }}
                   whileHover={{
                     y: -10,
@@ -1250,7 +1282,6 @@ export default function About() {
 
       </section>
 
-
       {/* =====================================================
           GLOBAL REACH
       ===================================================== */}
@@ -1271,6 +1302,10 @@ export default function About() {
             viewport={{
               once: true,
             }}
+            transition={{
+              duration: 0.7,
+              ease: "easeOut",
+            }}
             className="relative overflow-hidden rounded-[44px] border border-white/10 bg-gradient-to-br from-sky-500/10 via-white/[0.03] to-indigo-500/10 p-10 text-center md:p-20"
           >
 
@@ -1287,7 +1322,6 @@ export default function About() {
               }}
               className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-sky-400/10"
             />
-
 
             <div className="relative">
 
@@ -1322,7 +1356,6 @@ export default function About() {
 
       </section>
 
-
       {/* =====================================================
           FINAL CTA
       ===================================================== */}
@@ -1342,6 +1375,10 @@ export default function About() {
             }}
             viewport={{
               once: true,
+            }}
+            transition={{
+              duration: 0.7,
+              ease: "easeOut",
             }}
           >
 
@@ -1393,7 +1430,6 @@ export default function About() {
   );
 }
 
-
 /* =========================================================
    STAT CARD
 ========================================================= */
@@ -1430,25 +1466,3 @@ function StatCard({
     </motion.div>
   );
 }
-
-
-/* =========================================================
-   HERO ANIMATION
-========================================================= */
-
-const fadeUp = {
-  hidden: {
-    opacity: 0,
-    y: 40,
-  },
-
-  visible: {
-    opacity: 1,
-    y: 0,
-
-    transition: {
-      duration: 0.7,
-      ease: "easeOut",
-    },
-  },
-};
