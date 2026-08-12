@@ -17,6 +17,7 @@ import {
   Layers3,
   Sparkles,
   Eye,
+  type LucideIcon,
 } from "lucide-react";
 
 import { useRef } from "react";
@@ -112,7 +113,8 @@ export default function UIUXLab() {
   function handleMouseMove(
     e: React.MouseEvent<HTMLDivElement>
   ) {
-    const rect = sectionRef.current?.getBoundingClientRect();
+    const rect =
+      sectionRef.current?.getBoundingClientRect();
 
     if (!rect) return;
 
@@ -132,7 +134,7 @@ export default function UIUXLab() {
 
   return (
     <section
-    id="uiux-lab"
+      id="uiux-lab"
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -313,6 +315,7 @@ export default function UIUXLab() {
             >
 
               We don't just
+
               <span className="block">
                 design screens.
               </span>
@@ -378,7 +381,6 @@ export default function UIUXLab() {
                   shadow-[0_10px_30px_rgba(14,165,233,.2)]
                 "
               >
-
                 Explore Our Work
 
                 <ArrowUpRight
@@ -390,7 +392,6 @@ export default function UIUXLab() {
                     group-hover:-translate-y-1
                   "
                 />
-
               </motion.button>
 
               <motion.button
@@ -823,6 +824,7 @@ export default function UIUXLab() {
               "
             >
               Beautiful is only
+
               <span
                 className="
                   ml-2
@@ -910,6 +912,7 @@ export default function UIUXLab() {
                 "
               >
                 From idea
+
                 <span className="text-[#2563EB]">
                   {" "}to interface.
                 </span>
@@ -1133,7 +1136,7 @@ function FloatingTag({
   className,
   delay,
 }: {
-  icon: React.ElementType;
+  icon: LucideIcon;
   text: string;
   className: string;
   delay: number;
@@ -1147,6 +1150,7 @@ function FloatingTag({
         duration: 3,
         delay,
         repeat: Infinity,
+        ease: "easeInOut",
       }}
       className={`
         absolute

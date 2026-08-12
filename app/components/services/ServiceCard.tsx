@@ -3,10 +3,11 @@
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
 import { useRef } from "react";
+import type { ComponentType } from "react";
 
 interface Service {
   title: string;
-  icon: React.ElementType;
+  icon: ComponentType<{ size?: number; className?: string }>;
   description: string;
   items: string[];
   size: "small" | "medium" | "large";
@@ -39,7 +40,8 @@ export default function ServiceCard({
   function handleMove(
     e: React.MouseEvent<HTMLDivElement>
   ) {
-    const rect = cardRef.current?.getBoundingClientRect();
+    const rect =
+      cardRef.current?.getBoundingClientRect();
 
     if (!rect) return;
 
@@ -76,10 +78,14 @@ export default function ServiceCard({
         duration: 0.6,
         delay: index * 0.1,
       }}
-      viewport={{ once: true }}
-      className={`group relative overflow-hidden rounded-[32px] border border-white/60 bg-white/70 backdrop-blur-xl shadow-xl ${sizeClass}`}
+      viewport={{
+        once: true,
+      }}
+      className={`group relative overflow-hidden rounded-[32px] border border-white/60 bg-white/70 shadow-xl backdrop-blur-xl ${sizeClass}`}
     >
-      {/* Mouse Spotlight */}
+      {/* =====================================================
+          MOUSE SPOTLIGHT
+      ===================================================== */}
 
       <motion.div
         className="pointer-events-none absolute h-72 w-72 rounded-full bg-sky-400/20 blur-3xl"
@@ -91,7 +97,9 @@ export default function ServiceCard({
         }}
       />
 
-      {/* Animated Border */}
+      {/* =====================================================
+          ANIMATED BORDER
+      ===================================================== */}
 
       <motion.div
         animate={{
@@ -116,9 +124,13 @@ export default function ServiceCard({
         <div className="h-full w-full rounded-[31px] bg-white/80 backdrop-blur-xl" />
       </motion.div>
 
-      {/* Content */}
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
 
       <div className="relative z-10 flex h-full flex-col p-8">
+        {/* ICON */}
+
         <motion.div
           whileHover={{
             rotate: 8,
@@ -133,22 +145,30 @@ export default function ServiceCard({
           <Icon size={30} />
         </motion.div>
 
+        {/* TITLE */}
+
         <h3 className="mt-7 text-2xl font-bold text-slate-900">
           {service.title}
         </h3>
+
+        {/* DESCRIPTION */}
 
         <p className="mt-4 leading-7 text-slate-600">
           {service.description}
         </p>
 
+        {/* FEATURES */}
+
         <div className="mt-8 space-y-3">
           {service.items.map((item) => (
             <motion.div
               key={item}
-              whileHover={{ x: 5 }}
+              whileHover={{
+                x: 5,
+              }}
               className="flex items-center gap-3"
             >
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-sky-100">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sky-100">
                 <Check
                   size={14}
                   className="text-sky-600"
@@ -162,7 +182,10 @@ export default function ServiceCard({
           ))}
         </div>
 
+        {/* LEARN MORE */}
+
         <motion.button
+          type="button"
           whileHover={{
             x: 6,
           }}
@@ -177,7 +200,9 @@ export default function ServiceCard({
         </motion.button>
       </div>
 
-      {/* Shine */}
+      {/* =====================================================
+          SHINE EFFECT
+      ===================================================== */}
 
       <motion.div
         initial={{
@@ -189,7 +214,7 @@ export default function ServiceCard({
         transition={{
           duration: 1,
         }}
-        className="absolute inset-y-0 w-24 rotate-12 bg-white/40 blur-xl"
+        className="pointer-events-none absolute inset-y-0 w-24 rotate-12 bg-white/40 blur-xl"
       />
     </motion.div>
   );
