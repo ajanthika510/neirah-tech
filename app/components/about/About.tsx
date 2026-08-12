@@ -48,7 +48,6 @@ type ValueItem = {
 
 const heroContainer: Variants = {
   hidden: {},
-
   visible: {
     transition: {
       staggerChildren: 0.14,
@@ -61,11 +60,9 @@ const fadeUp: Variants = {
     opacity: 0,
     y: 40,
   },
-
   visible: {
     opacity: 1,
     y: 0,
-
     transition: {
       duration: 0.7,
       ease: "easeOut",
@@ -86,7 +83,6 @@ const story: StoryItem[] = [
       "After years apart, two friends met again. What started as a simple conversation became a discussion about business, technology, ideas and the problems people face every day.",
     icon: Users,
   },
-
   {
     id: 2,
     year: "THE IDEA",
@@ -95,7 +91,6 @@ const story: StoryItem[] = [
       "The conversation slowly became an idea. Instead of only talking about problems, they wanted to build practical solutions that could make a real difference.",
     icon: Lightbulb,
   },
-
   {
     id: 3,
     year: "THE FIRST CHAPTER",
@@ -104,7 +99,6 @@ const story: StoryItem[] = [
       "The company started its journey by building hardware-focused solutions. It was the first step toward turning ideas into useful technology.",
     icon: Cpu,
   },
-
   {
     id: 4,
     year: "THE TURNING POINT",
@@ -113,7 +107,6 @@ const story: StoryItem[] = [
       "Hardware could solve one part of a problem. But businesses were also struggling with communication, data, automation, customers and everyday digital work.",
     icon: Sparkles,
   },
-
   {
     id: 5,
     year: "THE NEXT CHAPTER",
@@ -136,7 +129,6 @@ const values: ValueItem[] = [
       "We don't start with technology. We start by understanding the problem.",
     icon: MessageCircle,
   },
-
   {
     number: "02",
     title: "Build With Purpose",
@@ -144,7 +136,6 @@ const values: ValueItem[] = [
       "Every solution should have a reason to exist and a measurable purpose.",
     icon: Lightbulb,
   },
-
   {
     number: "03",
     title: "Keep Evolving",
@@ -162,7 +153,7 @@ export default function About() {
   const [activeStory, setActiveStory] = useState(0);
 
   return (
-    <main className="relative overflow-hidden bg-[#020617] text-white">
+    <main className="relative overflow-hidden bg-[#F7FAFF] text-[#172033]">
 
       {/* =====================================================
           GLOBAL BACKGROUND
@@ -173,15 +164,15 @@ export default function About() {
         {/* Grid */}
 
         <div
-          className="absolute inset-0 opacity-[0.045]"
+          className="absolute inset-0 opacity-[0.035]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
+              "linear-gradient(rgba(14,165,233,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(14,165,233,.7) 1px, transparent 1px)",
             backgroundSize: "70px 70px",
           }}
         />
 
-        {/* Left glow */}
+        {/* Blue glow */}
 
         <motion.div
           animate={{
@@ -194,10 +185,10 @@ export default function About() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute -left-60 top-20 h-[550px] w-[550px] rounded-full bg-sky-500/20 blur-[150px]"
+          className="absolute -left-60 top-20 h-[550px] w-[550px] rounded-full bg-[#0EA5E9]/10 blur-[150px]"
         />
 
-        {/* Right glow */}
+        {/* Indigo glow */}
 
         <motion.div
           animate={{
@@ -210,7 +201,7 @@ export default function About() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute right-[-200px] top-[45%] h-[600px] w-[600px] rounded-full bg-indigo-600/20 blur-[160px]"
+          className="absolute right-[-200px] top-[45%] h-[600px] w-[600px] rounded-full bg-[#4F46E5]/10 blur-[160px]"
         />
       </div>
 
@@ -239,17 +230,17 @@ export default function About() {
 
               <motion.div variants={fadeUp}>
 
-                <div className="inline-flex items-center gap-3 rounded-full border border-sky-400/20 bg-sky-400/[0.06] px-5 py-2.5 backdrop-blur-xl">
+                <div className="inline-flex items-center gap-3 rounded-full border border-[#0EA5E9]/20 bg-[#E0F2FE]/70 px-5 py-2.5 backdrop-blur-xl">
 
                   <span className="relative flex h-2.5 w-2.5">
 
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-60" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0EA5E9] opacity-60" />
 
-                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sky-400" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#0EA5E9]" />
 
                   </span>
 
-                  <span className="text-xs font-bold tracking-[0.25em] text-sky-300">
+                  <span className="text-xs font-bold tracking-[0.25em] text-[#2563EB]">
                     THE NEIRAH TECH STORY
                   </span>
 
@@ -261,20 +252,22 @@ export default function About() {
 
               <motion.h1
                 variants={fadeUp}
-                className="mt-8 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.04em] sm:text-6xl md:text-7xl xl:text-[84px]"
+                className="mt-8 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.04em] text-[#172033] sm:text-6xl md:text-7xl xl:text-[84px]"
               >
+
                 It started with
 
-                <span className="mt-2 block bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent">
+                <span className="mt-2 block bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] bg-clip-text text-transparent">
                   two friends.
                 </span>
+
               </motion.h1>
 
               {/* Description */}
 
               <motion.p
                 variants={fadeUp}
-                className="mt-8 max-w-xl text-base leading-8 text-slate-400 sm:text-lg"
+                className="mt-8 max-w-xl text-base leading-8 text-[#64748B] sm:text-lg"
               >
                 A meeting after years apart. A conversation about ideas,
                 technology and real-world problems. And eventually, a
@@ -288,9 +281,9 @@ export default function About() {
                 className="mt-10 flex items-center gap-4"
               >
 
-                <div className="h-px w-16 bg-gradient-to-r from-sky-400 to-transparent" />
+                <div className="h-px w-16 bg-gradient-to-r from-[#0EA5E9] to-transparent" />
 
-                <span className="text-sm font-medium text-slate-500">
+                <span className="text-sm font-medium text-[#64748B]">
                   Every journey starts somewhere.
                 </span>
 
@@ -312,15 +305,17 @@ export default function About() {
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03]"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E2E8F0] bg-white shadow-sm"
                 >
+
                   <ArrowDown
                     size={17}
-                    className="text-sky-400"
+                    className="text-[#0EA5E9]"
                   />
+
                 </motion.div>
 
-                <span className="text-xs font-medium tracking-wide text-slate-600">
+                <span className="text-xs font-medium tracking-wide text-[#64748B]">
                   Discover our journey
                 </span>
 
@@ -346,7 +341,7 @@ export default function About() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500 blur-[120px]"
+                className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0EA5E9] blur-[120px]"
               />
 
               {/* Orbit 1 */}
@@ -360,7 +355,7 @@ export default function About() {
                   repeat: Infinity,
                   ease: "linear",
                 }}
-                className="absolute left-1/2 top-1/2 h-[430px] w-[430px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-sky-400/[0.08]"
+                className="absolute left-1/2 top-1/2 h-[430px] w-[430px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#0EA5E9]/15"
               />
 
               {/* Orbit 2 */}
@@ -374,14 +369,14 @@ export default function About() {
                   repeat: Infinity,
                   ease: "linear",
                 }}
-                className="absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-indigo-400/[0.10]"
+                className="absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#4F46E5]/15"
               />
 
               {/* Vertical connection */}
 
-              <div className="absolute left-1/2 top-1/2 hidden h-[290px] w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-sky-400/40 to-transparent sm:block" />
+              <div className="absolute left-1/2 top-1/2 hidden h-[290px] w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-[#0EA5E9]/40 to-transparent sm:block" />
 
-              {/* Moving connection particle */}
+              {/* Moving particle */}
 
               <motion.div
                 animate={{
@@ -393,12 +388,10 @@ export default function About() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute left-1/2 top-1/2 z-10 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300 shadow-[0_0_25px_rgba(103,232,249,1)]"
+                className="absolute left-1/2 top-1/2 z-10 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#06B6D4] shadow-[0_0_25px_rgba(6,182,212,.8)]"
               />
 
-              {/* =================================================
-                  FRIEND CARD
-              ================================================= */}
+              {/* FRIEND CARD */}
 
               <motion.div
                 animate={{
@@ -410,29 +403,29 @@ export default function About() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute left-0 top-[55px] z-20 w-[230px] rounded-[28px] border border-white/10 bg-white/[0.06] p-5 shadow-2xl backdrop-blur-2xl sm:left-4 sm:w-[245px]"
+                className="absolute left-0 top-[55px] z-20 w-[230px] rounded-[28px] border border-[#E2E8F0] bg-white/90 p-5 shadow-[0_20px_60px_rgba(15,23,42,.10)] backdrop-blur-2xl sm:left-4 sm:w-[245px]"
               >
 
                 <div className="flex items-center gap-4">
 
-                  <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 to-cyan-500">
+                  <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#0EA5E9] to-[#4F46E5]">
 
                     <Users
                       size={23}
                       className="text-white"
                     />
 
-                    <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-[#020617] bg-emerald-400" />
+                    <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-white bg-emerald-400" />
 
                   </div>
 
                   <div>
 
-                    <p className="text-sm font-bold text-white">
+                    <p className="text-sm font-bold text-[#172033]">
                       Two friends
                     </p>
 
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-[#64748B]">
                       After years apart
                     </p>
 
@@ -440,9 +433,9 @@ export default function About() {
 
                 </div>
 
-                <div className="mt-5 rounded-2xl bg-white/[0.05] p-4">
+                <div className="mt-5 rounded-2xl bg-[#F7FAFF] p-4">
 
-                  <p className="text-sm leading-6 text-slate-300">
+                  <p className="text-sm leading-6 text-[#64748B]">
                     “What if we built something useful?”
                   </p>
 
@@ -452,10 +445,10 @@ export default function About() {
 
                   <MessageCircle
                     size={13}
-                    className="text-sky-400"
+                    className="text-[#0EA5E9]"
                   />
 
-                  <span className="text-[11px] text-slate-600">
+                  <span className="text-[11px] text-[#64748B]">
                     One conversation
                   </span>
 
@@ -463,9 +456,7 @@ export default function About() {
 
               </motion.div>
 
-              {/* =================================================
-                  IDEA CARD
-              ================================================= */}
+              {/* IDEA CARD */}
 
               <motion.div
                 animate={{
@@ -478,37 +469,37 @@ export default function About() {
                   ease: "easeInOut",
                   delay: 0.5,
                 }}
-                className="absolute right-0 top-[175px] z-20 w-[235px] rounded-[28px] border border-cyan-400/15 bg-slate-900/70 p-5 shadow-2xl backdrop-blur-2xl sm:right-2 sm:w-[250px]"
+                className="absolute right-0 top-[175px] z-20 w-[235px] rounded-[28px] border border-[#06B6D4]/20 bg-white/95 p-5 shadow-[0_20px_60px_rgba(15,23,42,.10)] backdrop-blur-2xl sm:right-2 sm:w-[250px]"
               >
 
                 <div className="flex items-center justify-between">
 
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-400/10">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#E0F2FE]">
 
                     <Lightbulb
                       size={24}
-                      className="text-cyan-300"
+                      className="text-[#0EA5E9]"
                     />
 
                   </div>
 
-                  <span className="rounded-full bg-cyan-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-cyan-300">
+                  <span className="rounded-full bg-[#E0F2FE] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#2563EB]">
                     Idea
                   </span>
 
                 </div>
 
-                <h3 className="mt-5 text-lg font-bold">
+                <h3 className="mt-5 text-lg font-bold text-[#172033]">
                   Let's solve real problems.
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-slate-500">
+                <p className="mt-2 text-sm leading-6 text-[#64748B]">
                   And that's where the journey began.
                 </p>
 
-                <div className="mt-5 flex items-center gap-2 text-xs text-slate-600">
+                <div className="mt-5 flex items-center gap-2 text-xs text-[#64748B]">
 
-                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#06B6D4]" />
 
                   Turning conversations into ideas
 
@@ -516,9 +507,7 @@ export default function About() {
 
               </motion.div>
 
-              {/* =================================================
-                  HARDWARE → SOFTWARE CARD
-              ================================================= */}
+              {/* HARDWARE → SOFTWARE */}
 
               <motion.div
                 initial={{
@@ -537,7 +526,7 @@ export default function About() {
                 className="absolute bottom-[95px] left-1/2 z-30 w-[290px] -translate-x-1/2"
               >
 
-                <div className="rounded-[28px] border border-white/10 bg-slate-900/80 p-5 shadow-2xl backdrop-blur-2xl">
+                <div className="rounded-[28px] border border-[#E2E8F0] bg-white/95 p-5 shadow-[0_20px_60px_rgba(15,23,42,.10)] backdrop-blur-2xl">
 
                   <div className="flex items-center justify-between">
 
@@ -545,16 +534,16 @@ export default function About() {
 
                     <div className="flex items-center gap-2">
 
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-400/10">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E0F2FE]">
 
                         <Cpu
                           size={17}
-                          className="text-sky-400"
+                          className="text-[#0EA5E9]"
                         />
 
                       </div>
 
-                      <span className="text-xs font-semibold text-slate-300">
+                      <span className="text-xs font-semibold text-[#172033]">
                         Hardware
                       </span>
 
@@ -575,7 +564,7 @@ export default function About() {
 
                       <ArrowRight
                         size={17}
-                        className="text-cyan-400"
+                        className="text-[#06B6D4]"
                       />
 
                     </motion.div>
@@ -584,16 +573,16 @@ export default function About() {
 
                     <div className="flex items-center gap-2">
 
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-400/10">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50">
 
                         <Code2
                           size={17}
-                          className="text-indigo-400"
+                          className="text-[#4F46E5]"
                         />
 
                       </div>
 
-                      <span className="text-xs font-semibold text-slate-300">
+                      <span className="text-xs font-semibold text-[#172033]">
                         Software
                       </span>
 
@@ -601,9 +590,9 @@ export default function About() {
 
                   </div>
 
-                  <div className="mt-4 border-t border-white/[0.06] pt-3 text-center">
+                  <div className="mt-4 border-t border-[#E2E8F0] pt-3 text-center">
 
-                    <p className="text-[11px] tracking-wide text-slate-500">
+                    <p className="text-[11px] tracking-wide text-[#64748B]">
                       From physical solutions to digital possibilities
                     </p>
 
@@ -613,9 +602,7 @@ export default function About() {
 
               </motion.div>
 
-              {/* =================================================
-                  HERO STATS
-              ================================================= */}
+              {/* HERO STATS */}
 
               <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-3 whitespace-nowrap">
 
@@ -623,33 +610,33 @@ export default function About() {
                   whileHover={{
                     y: -5,
                   }}
-                  className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 backdrop-blur-xl"
+                  className="rounded-2xl border border-[#E2E8F0] bg-white px-5 py-3 shadow-sm"
                 >
 
-                  <p className="text-xl font-black text-white">
-                    10<span className="text-sky-400">+</span>
+                  <p className="text-xl font-black text-[#172033]">
+                    10<span className="text-[#0EA5E9]">+</span>
                   </p>
 
-                  <p className="mt-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-600">
+                  <p className="mt-0.5 text-[9px] font-bold uppercase tracking-widest text-[#64748B]">
                     Years
                   </p>
 
                 </motion.div>
 
-                <div className="h-8 w-px bg-white/10" />
+                <div className="h-8 w-px bg-[#E2E8F0]" />
 
                 <motion.div
                   whileHover={{
                     y: -5,
                   }}
-                  className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 backdrop-blur-xl"
+                  className="rounded-2xl border border-[#E2E8F0] bg-white px-5 py-3 shadow-sm"
                 >
 
-                  <p className="text-xl font-black text-white">
-                    11<span className="text-cyan-400">+</span>
+                  <p className="text-xl font-black text-[#172033]">
+                    11<span className="text-[#06B6D4]">+</span>
                   </p>
 
-                  <p className="mt-0.5 text-[9px] font-bold uppercase tracking-widest text-slate-600">
+                  <p className="mt-0.5 text-[9px] font-bold uppercase tracking-widest text-[#64748B]">
                     Countries
                   </p>
 
@@ -693,11 +680,11 @@ export default function About() {
               }}
             >
 
-              <span className="text-sm font-bold tracking-[0.3em] text-sky-400">
+              <span className="text-sm font-bold tracking-[0.3em] text-[#0EA5E9]">
                 ONE CONVERSATION
               </span>
 
-              <h2 className="mt-6 text-4xl font-black leading-tight md:text-6xl">
+              <h2 className="mt-6 text-4xl font-black leading-tight text-[#172033] md:text-6xl">
                 Sometimes the biggest ideas begin with a simple question.
               </h2>
 
@@ -722,31 +709,31 @@ export default function About() {
               className="relative"
             >
 
-              <div className="absolute -inset-10 rounded-full bg-sky-500/10 blur-[100px]" />
+              <div className="absolute -inset-10 rounded-full bg-[#0EA5E9]/10 blur-[100px]" />
 
-              <div className="relative rounded-[36px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl md:p-10">
+              <div className="relative rounded-[36px] border border-[#E2E8F0] bg-white p-8 shadow-[0_25px_80px_rgba(15,23,42,.08)] backdrop-blur-xl md:p-10">
 
                 <MessageCircle
-                  className="text-sky-400"
+                  className="text-[#0EA5E9]"
                   size={36}
                 />
 
-                <p className="mt-8 text-xl leading-9 text-slate-300">
+                <p className="mt-8 text-xl leading-9 text-[#64748B]">
                   “What if we could build something that actually solves
                   people's problems?”
                 </p>
 
                 <div className="mt-8 flex items-center gap-3">
 
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500" />
+                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#0EA5E9] to-[#4F46E5]" />
 
                   <div>
 
-                    <p className="font-semibold">
+                    <p className="font-semibold text-[#172033]">
                       Two friends
                     </p>
 
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-[#64748B]">
                       One unexpected idea
                     </p>
 
@@ -774,15 +761,15 @@ export default function About() {
 
           <div className="mb-16">
 
-            <span className="text-sm font-bold tracking-[0.3em] text-sky-400">
+            <span className="text-sm font-bold tracking-[0.3em] text-[#0EA5E9]">
               OUR JOURNEY
             </span>
 
-            <h2 className="mt-5 text-4xl font-black md:text-6xl">
+            <h2 className="mt-5 text-4xl font-black text-[#172033] md:text-6xl">
               One chapter at a time.
             </h2>
 
-            <p className="mt-5 max-w-2xl text-lg text-slate-400">
+            <p className="mt-5 max-w-2xl text-lg text-[#64748B]">
               Our story changed as we discovered new problems worth solving.
             </p>
 
@@ -802,31 +789,29 @@ export default function About() {
                   <motion.button
                     key={item.id}
                     type="button"
-                    onClick={() =>
-                      setActiveStory(index)
-                    }
+                    onClick={() => setActiveStory(index)}
                     whileHover={{
                       x: 6,
                     }}
-                    className={`relative flex w-full items-center gap-4 rounded-2xl p-4 text-left transition-all ${
+                    className={`relative flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all ${
                       activeStory === index
-                        ? "bg-white/[0.08]"
-                        : "bg-transparent hover:bg-white/[0.04]"
+                        ? "border-[#0EA5E9]/20 bg-[#E0F2FE]/70 shadow-sm"
+                        : "border-transparent bg-transparent hover:border-[#E2E8F0] hover:bg-white"
                     }`}
                   >
 
                     {activeStory === index && (
                       <motion.div
                         layoutId="activeStory"
-                        className="absolute left-0 top-0 h-full w-1 rounded-full bg-sky-400"
+                        className="absolute left-0 top-0 h-full w-1 rounded-full bg-gradient-to-b from-[#0EA5E9] to-[#4F46E5]"
                       />
                     )}
 
                     <div
                       className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
                         activeStory === index
-                          ? "bg-sky-500/20 text-sky-400"
-                          : "bg-white/[0.05] text-slate-500"
+                          ? "bg-gradient-to-br from-[#0EA5E9] to-[#4F46E5] text-white"
+                          : "bg-[#F7FAFF] text-[#64748B]"
                       }`}
                     >
 
@@ -839,8 +824,8 @@ export default function About() {
                       <p
                         className={`text-xs font-bold tracking-widest ${
                           activeStory === index
-                            ? "text-sky-400"
-                            : "text-slate-600"
+                            ? "text-[#0EA5E9]"
+                            : "text-[#64748B]"
                         }`}
                       >
                         {item.year}
@@ -849,8 +834,8 @@ export default function About() {
                       <p
                         className={`mt-1 text-sm font-semibold ${
                           activeStory === index
-                            ? "text-white"
-                            : "text-slate-500"
+                            ? "text-[#172033]"
+                            : "text-[#64748B]"
                         }`}
                       >
                         {item.title}
@@ -886,10 +871,10 @@ export default function About() {
                   duration: 0.45,
                   ease: "easeOut",
                 }}
-                className="relative min-h-[470px] overflow-hidden rounded-[40px] border border-white/10 bg-white/[0.04]"
+                className="relative min-h-[470px] overflow-hidden rounded-[40px] border border-[#E2E8F0] bg-white shadow-[0_25px_80px_rgba(15,23,42,.07)]"
               >
 
-                <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-sky-500/10 blur-[100px]" />
+                <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-[#0EA5E9]/10 blur-[100px]" />
 
                 <div className="relative flex h-full flex-col justify-between p-8 md:p-14">
 
@@ -897,21 +882,21 @@ export default function About() {
 
                     <div className="flex items-center justify-between">
 
-                      <span className="text-sm font-bold tracking-[0.3em] text-sky-400">
+                      <span className="text-sm font-bold tracking-[0.3em] text-[#0EA5E9]">
                         {story[activeStory].year}
                       </span>
 
-                      <span className="text-6xl font-black text-white/[0.04] md:text-8xl">
+                      <span className="text-6xl font-black text-[#0EA5E9]/10 md:text-8xl">
                         0{story[activeStory].id}
                       </span>
 
                     </div>
 
-                    <h3 className="mt-10 max-w-3xl text-4xl font-black leading-tight md:text-6xl">
+                    <h3 className="mt-10 max-w-3xl text-4xl font-black leading-tight text-[#172033] md:text-6xl">
                       {story[activeStory].title}
                     </h3>
 
-                    <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-400">
+                    <p className="mt-8 max-w-2xl text-lg leading-8 text-[#64748B]">
                       {story[activeStory].text}
                     </p>
 
@@ -925,16 +910,12 @@ export default function About() {
                         <button
                           key={index}
                           type="button"
-                          onClick={() =>
-                            setActiveStory(index)
-                          }
-                          aria-label={`Go to chapter ${
-                            index + 1
-                          }`}
+                          onClick={() => setActiveStory(index)}
+                          aria-label={`Go to chapter ${index + 1}`}
                           className={`h-2 rounded-full transition-all ${
                             activeStory === index
-                              ? "w-10 bg-sky-400"
-                              : "w-2 bg-white/20"
+                              ? "w-10 bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5]"
+                              : "w-2 bg-[#E2E8F0]"
                           }`}
                         />
                       ))}
@@ -945,13 +926,12 @@ export default function About() {
                       type="button"
                       onClick={() =>
                         setActiveStory(
-                          activeStory ===
-                            story.length - 1
+                          activeStory === story.length - 1
                             ? 0
                             : activeStory + 1
                         )
                       }
-                      className="flex items-center gap-2 text-sm font-semibold text-sky-400"
+                      className="flex items-center gap-2 text-sm font-semibold text-[#0EA5E9] transition-colors hover:text-[#4F46E5]"
                     >
                       Next chapter
                       <ArrowRight size={17} />
@@ -981,15 +961,15 @@ export default function About() {
 
           <div className="mb-16 text-center">
 
-            <span className="text-sm font-bold tracking-[0.3em] text-sky-400">
+            <span className="text-sm font-bold tracking-[0.3em] text-[#0EA5E9]">
               THE TURNING POINT
             </span>
 
-            <h2 className="mt-6 text-4xl font-black md:text-6xl">
+            <h2 className="mt-6 text-4xl font-black text-[#172033] md:text-6xl">
 
               Hardware was the beginning.
 
-              <span className="block text-slate-500">
+              <span className="block bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] bg-clip-text text-transparent">
                 Software became the next possibility.
               </span>
 
@@ -997,7 +977,7 @@ export default function About() {
 
           </div>
 
-          <div className="relative overflow-hidden rounded-[44px] border border-white/10 bg-white/[0.04] p-6 md:p-12">
+          <div className="relative overflow-hidden rounded-[44px] border border-[#E2E8F0] bg-white p-6 shadow-[0_25px_80px_rgba(15,23,42,.07)] md:p-12">
 
             <motion.div
               animate={{
@@ -1009,7 +989,7 @@ export default function About() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500 blur-[120px]"
+              className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0EA5E9] blur-[120px]"
             />
 
             <div className="relative grid items-center gap-8 md:grid-cols-[1fr_auto_1fr]">
@@ -1020,32 +1000,32 @@ export default function About() {
                 whileHover={{
                   y: -8,
                 }}
-                className="rounded-[32px] border border-sky-400/20 bg-sky-400/[0.05] p-8 md:p-10"
+                className="rounded-[32px] border border-[#0EA5E9]/20 bg-[#E0F2FE]/50 p-8 md:p-10"
               >
 
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sky-500/15">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm">
 
                   <Cpu
                     size={30}
-                    className="text-sky-400"
+                    className="text-[#0EA5E9]"
                   />
 
                 </div>
 
-                <p className="mt-8 text-sm font-bold tracking-[0.25em] text-sky-400">
+                <p className="mt-8 text-sm font-bold tracking-[0.25em] text-[#0EA5E9]">
                   CHAPTER ONE
                 </p>
 
-                <h3 className="mt-3 text-3xl font-black">
+                <h3 className="mt-3 text-3xl font-black text-[#172033]">
                   Hardware
                 </h3>
 
-                <p className="mt-5 leading-8 text-slate-400">
+                <p className="mt-5 leading-8 text-[#64748B]">
                   We began by creating physical technology designed to solve
                   practical problems.
                 </p>
 
-                <div className="mt-8 flex items-center gap-2 text-sm text-slate-500">
+                <div className="mt-8 flex items-center gap-2 text-sm text-[#64748B]">
 
                   <Zap size={15} />
 
@@ -1068,12 +1048,11 @@ export default function About() {
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="flex h-16 w-16 items-center justify-center rounded-full border border-cyan-400/30 bg-cyan-400/10"
+                  className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#0EA5E9] to-[#4F46E5] text-white shadow-lg shadow-[#0EA5E9]/20"
                 >
 
                   <ArrowRight
                     size={28}
-                    className="text-cyan-300"
                   />
 
                 </motion.div>
@@ -1087,7 +1066,7 @@ export default function About() {
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="mt-4 text-xs font-bold uppercase tracking-widest text-cyan-400"
+                  className="mt-4 text-xs font-bold uppercase tracking-widest text-[#06B6D4]"
                 >
                   We evolved
                 </motion.div>
@@ -1100,32 +1079,32 @@ export default function About() {
                 whileHover={{
                   y: -8,
                 }}
-                className="rounded-[32px] border border-indigo-400/20 bg-indigo-400/[0.05] p-8 md:p-10"
+                className="rounded-[32px] border border-[#4F46E5]/20 bg-indigo-50/70 p-8 md:p-10"
               >
 
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/15">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm">
 
                   <Code2
                     size={30}
-                    className="text-indigo-400"
+                    className="text-[#4F46E5]"
                   />
 
                 </div>
 
-                <p className="mt-8 text-sm font-bold tracking-[0.25em] text-indigo-400">
+                <p className="mt-8 text-sm font-bold tracking-[0.25em] text-[#4F46E5]">
                   CHAPTER TWO
                 </p>
 
-                <h3 className="mt-3 text-3xl font-black">
+                <h3 className="mt-3 text-3xl font-black text-[#172033]">
                   Software
                 </h3>
 
-                <p className="mt-5 leading-8 text-slate-400">
+                <p className="mt-5 leading-8 text-[#64748B]">
                   We expanded into digital solutions to help businesses solve
                   bigger and more connected problems.
                 </p>
 
-                <div className="mt-8 flex items-center gap-2 text-sm text-slate-500">
+                <div className="mt-8 flex items-center gap-2 text-sm text-[#64748B]">
 
                   <Rocket size={15} />
 
@@ -1139,13 +1118,13 @@ export default function About() {
 
             {/* Bottom statement */}
 
-            <div className="relative mt-12 border-t border-white/10 pt-10 text-center">
+            <div className="relative mt-12 border-t border-[#E2E8F0] pt-10 text-center">
 
-              <p className="mx-auto max-w-3xl text-xl leading-9 text-slate-300 md:text-2xl">
+              <p className="mx-auto max-w-3xl text-xl leading-9 text-[#64748B] md:text-2xl">
 
                 We didn't leave hardware behind.
 
-                <span className="text-sky-400">
+                <span className="bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] bg-clip-text font-bold text-transparent">
                   {" "}
                   We simply realized there were more problems we could solve.
                 </span>
@@ -1204,15 +1183,15 @@ export default function About() {
 
           <div className="max-w-3xl">
 
-            <span className="text-sm font-bold tracking-[0.3em] text-sky-400">
+            <span className="text-sm font-bold tracking-[0.3em] text-[#0EA5E9]">
               WHAT GUIDES US
             </span>
 
-            <h2 className="mt-6 text-4xl font-black md:text-6xl">
+            <h2 className="mt-6 text-4xl font-black text-[#172033] md:text-6xl">
 
               Technology is only useful
 
-              <span className="block text-slate-500">
+              <span className="block bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] bg-clip-text text-transparent">
                 when it solves something.
               </span>
 
@@ -1248,32 +1227,33 @@ export default function About() {
                   whileHover={{
                     y: -10,
                   }}
-                  className="group rounded-[32px] border border-white/10 bg-white/[0.04] p-8"
+                  className="group rounded-[32px] border border-[#E2E8F0] bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,.06)]"
                 >
 
                   <div className="flex items-center justify-between">
 
-                    <span className="text-sm font-black text-sky-400">
+                    <span className="text-sm font-black text-[#0EA5E9]">
                       {value.number}
                     </span>
 
                     <Icon
                       size={24}
-                      className="text-slate-600 transition-colors group-hover:text-sky-400"
+                      className="text-[#94A3B8] transition-colors group-hover:text-[#0EA5E9]"
                     />
 
                   </div>
 
-                  <h3 className="mt-12 text-2xl font-bold">
+                  <h3 className="mt-12 text-2xl font-bold text-[#172033]">
                     {value.title}
                   </h3>
 
-                  <p className="mt-4 leading-7 text-slate-400">
+                  <p className="mt-4 leading-7 text-[#64748B]">
                     {value.text}
                   </p>
 
                 </motion.div>
               );
+
             })}
 
           </div>
@@ -1306,7 +1286,7 @@ export default function About() {
               duration: 0.7,
               ease: "easeOut",
             }}
-            className="relative overflow-hidden rounded-[44px] border border-white/10 bg-gradient-to-br from-sky-500/10 via-white/[0.03] to-indigo-500/10 p-10 text-center md:p-20"
+            className="relative overflow-hidden rounded-[44px] border border-[#E2E8F0] bg-gradient-to-br from-[#E0F2FE] via-white to-indigo-50 p-10 text-center shadow-[0_25px_80px_rgba(15,23,42,.08)] md:p-20"
           >
 
             {/* Orbit */}
@@ -1320,30 +1300,30 @@ export default function About() {
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-sky-400/10"
+              className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-[#0EA5E9]/15"
             />
 
             <div className="relative">
 
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-sky-500 to-indigo-600 shadow-[0_0_60px_rgba(56,189,248,.3)]">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-[#0EA5E9] to-[#4F46E5] text-white shadow-[0_0_60px_rgba(56,189,248,.3)]">
 
                 <Globe2 size={38} />
 
               </div>
 
-              <p className="mt-10 text-sm font-bold tracking-[0.3em] text-sky-400">
+              <p className="mt-10 text-sm font-bold tracking-[0.3em] text-[#0EA5E9]">
                 BEYOND BORDERS
               </p>
 
-              <h2 className="mt-6 text-5xl font-black md:text-7xl">
+              <h2 className="mt-6 text-5xl font-black text-[#172033] md:text-7xl">
                 11+
               </h2>
 
-              <p className="mt-3 text-2xl font-bold">
+              <p className="mt-3 text-2xl font-bold text-[#172033]">
                 Countries Served
               </p>
 
-              <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-slate-400">
+              <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-[#64748B]">
                 What began as a conversation between two friends has grown
                 into a journey reaching businesses across borders.
               </p>
@@ -1382,21 +1362,21 @@ export default function About() {
             }}
           >
 
-            <p className="text-sm font-bold tracking-[0.3em] text-sky-400">
+            <p className="text-sm font-bold tracking-[0.3em] text-[#0EA5E9]">
               THE STORY CONTINUES
             </p>
 
-            <h2 className="mt-6 text-4xl font-black md:text-7xl">
+            <h2 className="mt-6 text-4xl font-black text-[#172033] md:text-7xl">
 
               Your problem could be
 
-              <span className="block bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] bg-clip-text text-transparent">
                 our next conversation.
               </span>
 
             </h2>
 
-            <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-slate-400">
+            <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#64748B]">
               We started by talking about problems. We still do.
               The difference is that today, we have the experience,
               technology and team to help turn those conversations into
@@ -1411,7 +1391,7 @@ export default function About() {
               whileTap={{
                 scale: 0.97,
               }}
-              className="mt-10 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 font-bold shadow-[0_15px_50px_rgba(14,165,233,.2)]"
+              className="mt-10 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] px-8 py-4 font-bold text-white shadow-[0_15px_50px_rgba(14,165,233,.2)]"
             >
 
               Start a Conversation
@@ -1448,18 +1428,18 @@ function StatCard({
       whileHover={{
         y: -8,
       }}
-      className="rounded-[32px] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl md:p-10"
+      className="rounded-[32px] border border-[#E2E8F0] bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,.06)] backdrop-blur-xl md:p-10"
     >
 
-      <p className="text-6xl font-black text-white md:text-7xl">
+      <p className="bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] bg-clip-text text-6xl font-black text-transparent md:text-7xl">
         {value}
       </p>
 
-      <p className="mt-3 text-xl font-bold">
+      <p className="mt-3 text-xl font-bold text-[#172033]">
         {label}
       </p>
 
-      <p className="mt-3 leading-7 text-slate-500">
+      <p className="mt-3 leading-7 text-[#64748B]">
         {text}
       </p>
 
