@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Brain,
   Database,
+  Link,
   ShoppingCart,
   Smartphone,
 } from "lucide-react";
@@ -928,38 +929,6 @@ function ProjectCard({
             </span>
           ))}
         </div>
-
-
-        {/* ==================================================
-            EXPLORE
-        ================================================== */}
-
-        <button
-          type="button"
-          className="
-            group/explore
-            mt-7
-            inline-flex
-            items-center
-            gap-2
-            text-sm
-            font-bold
-            text-sky-600
-            transition-colors
-            hover:text-indigo-600
-          "
-        >
-          Explore Project
-
-          <ArrowRight
-            size={18}
-            className="
-              transition-transform
-              duration-300
-              group-hover/explore:translate-x-1
-            "
-          />
-        </button>
 
       </motion.div>
     </motion.div>

@@ -1,12 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  BriefcaseBusiness,
-  MapPin,
-  Search,
-} from "lucide-react";
+import ApplyModal from "./ApplyModal";
+import { ArrowRight, BriefcaseBusiness, MapPin, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 
 const jobs = [
@@ -57,6 +53,8 @@ const jobs = [
 const filters = ["All", "Engineering", "AI", "Marketing"];
 
 export default function OpenPositions() {
+  const [applyOpen, setApplyOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("");
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
 
@@ -73,7 +71,8 @@ export default function OpenPositions() {
     });
   }, [filter, search]);
 
-  return (
+  return ( <>
+
     <section
       id="open-positions"
       className="relative bg-[#F7FAFF] px-6 py-24 sm:px-8 lg:px-10"
@@ -182,17 +181,18 @@ export default function OpenPositions() {
                 </div>
               </div>
 
-              <a
-                href={`/careers/apply?role=${encodeURIComponent(job.title)}`}
-                className="group/button inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)] transition-all hover:bg-blue-700 hover:shadow-[0_12px_28px_rgba(37,99,235,0.3)]"
-              >
-                Apply Now
+                <button
+                  type="button"
+                  onClick={() => { setSelectedRole(job.title); setApplyOpen(true); }}
+                  className="group/button inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(37,99,235,.22)] transition-all hover:bg-blue-700 hover:shadow-[0_12px_28px_rgba(37,99,235,.3)]"
+                >
+                  Apply Now
 
-                <ArrowRight
-                  size={15}
-                  className="transition-transform group-hover/button:translate-x-1"
-                />
-              </a>
+                  <ArrowRight
+                    size={15}
+                    className="transition-transform group-hover/button:translate-x-1"
+                  />
+                </button>
             </motion.article>
           ))}
 
@@ -210,5 +210,7 @@ export default function OpenPositions() {
         </div>
       </div>
     </section>
+        <ApplyModal isOpen={applyOpen} onClose={() => { setApplyOpen(false); setSelectedRole(""); }} role={selectedRole} />
+</>
   );
 }

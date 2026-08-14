@@ -6,7 +6,7 @@ import {
   Sparkles,
   Check,
 } from "lucide-react";
-
+import Link from "next/link";
 
 
 const benefits = [
@@ -712,7 +712,7 @@ gap-5
 >
 
 
-
+<Link href="/services">
 <button
 
 className="
@@ -774,13 +774,11 @@ transition
 
 </button>
 
+</Link>
 
 
 
-
-
-
-
+<Link href="#hero">
 <button
 
 className="
@@ -802,8 +800,7 @@ transition
 Book Consultation
 
 </button>
-
-
+</Link>
 
 </motion.div>
 

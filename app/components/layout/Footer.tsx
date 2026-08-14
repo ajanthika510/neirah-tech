@@ -139,7 +139,9 @@ export default function Footer() {
 
 
             <motion.a
-              href="/contact"
+              href="https://wa.me/94760041594?text=Hello%2C%20I%20would%20like%20to%20start%20a%20conversation"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{
                 scale: 1.05,
               }}
@@ -283,14 +285,14 @@ export default function Footer() {
 
               <ContactItem
                 icon={<Mail size={17} />}
-                text="hello@neirahtech.com"
-                href="mailto:hello@neirahtech.com"
+                text="info@neirahtech.com"
+                href="mailto:info@neirahtech.com"
               />
 
               <ContactItem
                 icon={<Phone size={17} />}
-                text="+94 XX XXX XXXX"
-                href="tel:+94XXXXXXXXX"
+                text="+94 76 004 1594"
+                href="tel:+94760041594"
               />
 
               <ContactItem

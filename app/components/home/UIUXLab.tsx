@@ -7,6 +7,8 @@ import {
   useTransform,
 } from "framer-motion";
 
+import Link from "next/link";
+
 import {
   ArrowUpRight,
   Palette,
@@ -18,6 +20,7 @@ import {
   Sparkles,
   Eye,
   type LucideIcon,
+  
 } from "lucide-react";
 
 import { useRef } from "react";
@@ -358,6 +361,7 @@ export default function UIUXLab() {
 
             <div className="mt-9 flex flex-wrap gap-4">
 
+              <Link href = "/projects">
               <motion.button
                 whileHover={{
                   scale: 1.04,
@@ -393,6 +397,7 @@ export default function UIUXLab() {
                   "
                 />
               </motion.button>
+              </Link>
 
               <motion.button
                 whileHover={{
@@ -920,6 +925,8 @@ export default function UIUXLab() {
 
             </div>
 
+          <Link
+              href="/projects">
             <button
               className="
                 flex
@@ -935,6 +942,7 @@ export default function UIUXLab() {
               View all projects
               <ArrowUpRight size={17} />
             </button>
+            </Link>
 
           </div>
 

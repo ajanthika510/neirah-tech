@@ -1383,16 +1383,18 @@ export default function About() {
               solutions.
             </p>
 
-            <motion.a
-              href="/contact"
-              whileHover={{
-                scale: 1.05,
-              }}
-              whileTap={{
-                scale: 0.97,
-              }}
-              className="mt-10 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] px-8 py-4 font-bold text-white shadow-[0_15px_50px_rgba(14,165,233,.2)]"
-            >
+              <motion.a
+                href="https://wa.me/94760041594?text=Hello%2C%20I%20would%20like%20to%20start%20a%20conversation"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{
+                  scale: 1.05,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
+                className="mt-10 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] px-8 py-4 font-bold text-white shadow-[0_15px_50px_rgba(14,165,233,.2)]"
+              >
 
               Start a Conversation
 

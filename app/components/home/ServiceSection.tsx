@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   Globe,
   Bot,
@@ -10,6 +11,7 @@ import {
   Lightbulb,
   ArrowRight,
   CheckCircle2,
+  
 } from "lucide-react";
 
 const services = [
@@ -186,11 +188,28 @@ export default function Services() {
                   ))}
                 </div>
 
-                <button className="relative mt-10 flex items-center gap-2 font-semibold text-sky-600 transition-all group-hover:gap-4">
-                  Learn More
-                  <ArrowRight size={18} />
-                </button>
 
+                <Link
+  href="/services"
+  className="
+    relative
+    mt-10
+    flex
+    items-center
+    gap-2
+    font-semibold
+    text-sky-600
+    transition-all
+    duration-300
+    group-hover:gap-4
+  "
+>
+  Learn More
+  <ArrowRight
+    size={18}
+    className="transition-transform duration-300 group-hover:translate-x-1"
+  />
+</Link>
               </motion.div>
             );
           })}
@@ -221,13 +240,18 @@ export default function Services() {
 
             <div className="mt-10 flex flex-wrap justify-center gap-5">
 
+              <Link href="#hero" >
               <button className="rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 font-semibold text-white shadow-[0_0_50px_rgba(14,165,233,.35)] transition hover:scale-105">
                 Free Consultation
               </button>
+              </Link>
 
-              <button className="rounded-full border-2 border-sky-500 px-8 py-4 font-semibold text-sky-600 transition hover:bg-sky-500 hover:text-white">
-                View Portfolio
-              </button>
+              <Link
+              href="/projects"
+              className="rounded-full border-2 border-sky-500 px-8 py-4 font-semibold text-sky-600 transition hover:bg-sky-500 hover:text-white"
+            >
+              View Portfolio
+            </Link>
 
             </div>
 

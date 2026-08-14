@@ -4,21 +4,32 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import {
+  Menu,
+  X,
+  ArrowUpRight,
+  CalendarDays,
+} from "lucide-react";
 
+import SchedulerModal from "../home/SchedulerModal";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
-  { label: "UI/UX Lab", href: "/#uiux-lab" },
   { label: "Projects", href: "/projects" },
   { label: "Case Studies", href: "/case-studies" },
   { label: "Careers", href: "/careers" },
   { label: "About Us", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [schedulerOpen, setSchedulerOpen] = useState(false);
+
+  /* =====================================================
+     SCROLL
+  ===================================================== */
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,19 +45,42 @@ export default function Navbar() {
     };
   }, []);
 
+  /* =====================================================
+     MOBILE SCROLL LOCK
+  ===================================================== */
+
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    document.body.style.overflow = mobileOpen
+      ? "hidden"
+      : "";
 
     return () => {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
 
+  /* =====================================================
+     OPEN SCHEDULER
+  ===================================================== */
+
+  const openScheduler = () => {
+    setMobileOpen(false);
+    setSchedulerOpen(true);
+  };
+
+  /* =====================================================
+     CLOSE SCHEDULER
+  ===================================================== */
+
+  const closeScheduler = () => {
+    setSchedulerOpen(false);
+  };
+
   return (
     <>
-      {/* ==============================
+      {/* ==================================================
           NAVBAR
-      ============================== */}
+      ================================================== */}
 
       <motion.header
         initial={{
@@ -120,9 +154,9 @@ export default function Navbar() {
             }
           `}
         >
-          {/* ==============================
+          {/* ==================================================
               LOGO
-          ============================== */}
+          ================================================== */}
 
           <Link
             href="/"
@@ -173,9 +207,9 @@ export default function Navbar() {
             </motion.div>
           </Link>
 
-          {/* ==============================
+          {/* ==================================================
               DESKTOP NAVIGATION
-          ============================== */}
+          ================================================== */}
 
           <div className="hidden flex-1 items-center justify-center lg:flex">
             <div className="flex items-center gap-0.5">
@@ -189,16 +223,20 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* ==============================
+          {/* ==================================================
               RIGHT ACTION
-          ============================== */}
+          ================================================== */}
 
           <div className="ml-auto flex items-center">
-            {/* Desktop blue orb */}
+
+            {/* ==================================================
+                DESKTOP BOOK DEMO BUTTON
+            ================================================== */}
 
             <motion.button
               type="button"
-              aria-label="Contact Neiran Tech"
+              aria-label="Book a demo"
+              onClick={openScheduler}
               whileHover={{
                 scale: 1.08,
               }}
@@ -209,34 +247,42 @@ export default function Navbar() {
                 group
                 relative
                 hidden
-                h-[40px]
-                w-[40px]
+                h-[42px]
+                w-[42px]
                 items-center
                 justify-center
                 rounded-full
-                bg-[#4387F5]
+                bg-gradient-to-br
+                from-[#22D3EE]
+                via-[#0EA5E9]
+                to-[#4F46E5]
+                shadow-[0_10px_30px_rgba(14,165,233,0.22)]
 
                 lg:flex
 
-                xl:h-[42px]
-                xl:w-[42px]
+                xl:h-[46px]
+                xl:w-[46px]
               "
             >
               {/* Glow */}
 
               <span
                 className="
+                  pointer-events-none
                   absolute
-                  inset-[-8px]
+                  inset-[-9px]
                   -z-10
                   rounded-full
-                  bg-[#4387F5]/20
-                  blur-lg
+                  bg-[#0EA5E9]/20
+                  blur-xl
+                  opacity-70
                   transition-all
                   duration-300
-                  group-hover:bg-[#4387F5]/35
+                  group-hover:bg-[#0EA5E9]/35
                 "
               />
+
+              {/* Animated inner orb */}
 
               <motion.span
                 animate={{
@@ -248,21 +294,48 @@ export default function Navbar() {
                   ease: "easeInOut",
                 }}
                 className="
-                  h-[19px]
-                  w-[19px]
+                  flex
+                  h-[24px]
+                  w-[24px]
+                  items-center
+                  justify-center
                   rounded-full
-                  bg-[#4A8CF7]
-                  shadow-[0_0_20px_rgba(67,135,245,0.7)]
+                  bg-white/15
+                  text-white
+                  backdrop-blur-sm
+                  xl:h-[26px]
+                  xl:w-[26px]
+                "
+              >
+                <CalendarDays
+                  size={14}
+                  strokeWidth={2.2}
+                />
+              </motion.span>
 
-                  xl:h-[20px]
-                  xl:w-[20px]
+              {/* Hover ring */}
+
+              <span
+                className="
+                  pointer-events-none
+                  absolute
+                  inset-0
+                  rounded-full
+                  border
+                  border-white/30
+                  opacity-0
+                  scale-90
+                  transition-all
+                  duration-300
+                  group-hover:scale-100
+                  group-hover:opacity-100
                 "
               />
             </motion.button>
 
-            {/* ==============================
+            {/* ==================================================
                 MOBILE MENU BUTTON
-            ============================== */}
+            ================================================== */}
 
             <button
               type="button"
@@ -309,9 +382,9 @@ export default function Navbar() {
         </motion.nav>
       </motion.header>
 
-      {/* ==============================
+      {/* ==================================================
           MOBILE MENU
-      ============================== */}
+      ================================================== */}
 
       <AnimatePresence>
         {mobileOpen && (
@@ -387,6 +460,10 @@ export default function Navbar() {
                 lg:hidden
               "
             >
+              {/* ==================================================
+                  NAV ITEMS
+              ================================================== */}
+
               <div className="space-y-0.5">
                 {navItems.map((item, index) => (
                   <motion.div
@@ -451,32 +528,67 @@ export default function Navbar() {
                 ))}
               </div>
 
-              {/* Mobile bottom action */}
+              {/* ==================================================
+                  MOBILE BOOK DEMO
+              ================================================== */}
 
               <div
                 className="
                   mt-2
-                  rounded-xl
-                  bg-[#F3F8FF]
+                  rounded-2xl
+                  bg-gradient-to-br
+                  from-[#F0F9FF]
+                  via-[#F8FAFC]
+                  to-[#EEF2FF]
                   p-3
 
                   sm:p-3.5
                 "
               >
-                <div className="flex items-center justify-between">
-                  <div>
+                <div className="flex items-center gap-3">
+
+                  {/* Icon */}
+
+                  <div
+                    className="
+                      flex
+                      h-11
+                      w-11
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-gradient-to-br
+                      from-[#22D3EE]
+                      via-[#0EA5E9]
+                      to-[#4F46E5]
+                      text-white
+                      shadow-[0_8px_22px_rgba(14,165,233,0.22)]
+
+                      sm:h-12
+                      sm:w-12
+                    "
+                  >
+                    <CalendarDays
+                      size={18}
+                    />
+                  </div>
+
+                  {/* Text */}
+
+                  <div className="min-w-0 flex-1">
                     <p
                       className="
                         text-[10px]
                         font-medium
                         uppercase
                         tracking-[0.18em]
-                        text-[#7B8BA1]
+                        text-[#0EA5E9]
 
                         sm:text-xs
                       "
                     >
-                      Let's build
+                      Let's connect
                     </p>
 
                     <p
@@ -489,43 +601,68 @@ export default function Navbar() {
                         sm:text-sm
                       "
                     >
-                      Something amazing
+                      Schedule a Demo
                     </p>
                   </div>
 
-                  <div
+                  {/* Button */}
+
+                  <motion.button
+                    type="button"
+                    aria-label="Schedule a demo"
+                    onClick={openScheduler}
+                    whileHover={{
+                      scale: 1.08,
+                    }}
+                    whileTap={{
+                      scale: 0.94,
+                    }}
                     className="
                       flex
-                      h-9
-                      w-9
+                      h-10
+                      w-10
+                      shrink-0
                       items-center
                       justify-center
                       rounded-full
-                      bg-[#4387F5]
-                      shadow-[0_7px_20px_rgba(67,135,245,0.3)]
+                      bg-[#0F172A]
+                      text-white
+                      shadow-[0_8px_20px_rgba(15,23,42,0.18)]
+                      transition-colors
+                      duration-300
+                      hover:bg-[#0EA5E9]
 
-                      sm:h-10
-                      sm:w-10
+                      sm:h-11
+                      sm:w-11
                     "
                   >
                     <ArrowUpRight
-                      size={16}
-                      className="text-white"
+                      size={17}
                     />
-                  </div>
+                  </motion.button>
+
                 </div>
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      {/* ==================================================
+          SCHEDULER MODAL
+      ================================================== */}
+
+      <SchedulerModal
+        isOpen={schedulerOpen}
+        onClose={closeScheduler}
+      />
     </>
   );
 }
 
-/* ==========================================
+/* =========================================================
    NAV ITEM
-========================================== */
+========================================================= */
 
 function NavItem({
   label,
@@ -611,4 +748,3 @@ function NavItem({
     </Link>
   );
 }
-

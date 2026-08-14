@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -9,6 +9,7 @@ import {
   MapPin,
   Sparkles,
 } from "lucide-react";
+import { getProjects } from "../../actions/projectActions";
 
 /* =========================================================
 TYPES
@@ -30,7 +31,6 @@ PROJECT DATA
 ========================================================= */
 
 const projects: Project[] = [
-  
   {
     id: 4,
     title: "D Plus Landscaping",
@@ -75,9 +75,6 @@ const projects: Project[] = [
     description:
       "Premium chauffeur service platform with luxury vehicle booking and route optimization.",
   },
-  
-  
-  
   {
     id: 11,
     title: "David Taxi",
@@ -89,7 +86,6 @@ const projects: Project[] = [
     description:
       "Swiss taxi service with multilingual support and airport region coverage.",
   },
-  
   {
     id: 15,
     title: "Aqua Experts",
@@ -112,9 +108,6 @@ const projects: Project[] = [
     description:
       "Food products e-commerce with subscription management and health tracking.",
   },
-  
- 
- 
   {
     id: 20,
     title: "Minlon Solar",
@@ -126,7 +119,6 @@ const projects: Project[] = [
     description:
       "Solar energy solutions with system design calculator and installation management.",
   },
-  
   {
     id: 22,
     title: "LS O'Hare Taxi",
@@ -234,17 +226,27 @@ PAGE
 export default function Projects() {
   const [activeFilter, setActiveFilter] =
     useState("All");
+  const [projectsList, setProjectsList] = useState<Project[]>(projects);
+
+  useEffect(() => {
+    getProjects().then((data) => {
+      if (data && data.length > 0) {
+        // Cast or map if status type difference arises, but Project types are compatible
+        setProjectsList(data as Project[]);
+      }
+    });
+  }, []);
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === "All") {
-      return projects;
+      return projectsList;
     }
 
-    return projects.filter(
+    return projectsList.filter(
       (project) =>
         project.country === activeFilter
     );
-  }, [activeFilter]);
+  }, [activeFilter, projectsList]);
 
   return (
     <section className="relative overflow-hidden bg-[#F7FAFF] pt-36 pb-20 sm:pt-40 sm:pb-24 lg:pt-44 lg:pb-28">
