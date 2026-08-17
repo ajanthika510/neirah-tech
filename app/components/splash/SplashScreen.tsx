@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
@@ -16,27 +15,30 @@ export default function SplashScreen({
   const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    // ---------------------------------------------------------
-    // TIMELINE
-    // ---------------------------------------------------------
-    //
-    // 0.0s  - Universe starts
-    // 1.4s  - Neural logo formation starts
-    // 2.5s  - Neural logo formation completes
-    // 2.8s  - Full logo appears
-    // 3.3s  - Tagline appears
-    // 4.0s  - Cinematic exit
-    // 5.0s  - Splash complete
-    //
-    // ---------------------------------------------------------
+    /*
+     * =========================================================
+     * SYSTEM BOOT TIMELINE
+     * =========================================================
+     *
+     * 0.0s  - Digital environment starts
+     * 0.5s  - System UI appears
+     * 1.2s  - Particle system becomes active
+     * 1.8s  - Core begins synchronizing
+     * 2.8s  - System reaches stable state
+     * 3.5s  - Final loading phase
+     * 4.2s  - Cinematic exit
+     * 5.2s  - Splash complete
+     *
+     * =========================================================
+     */
 
     const exitTimer = window.setTimeout(() => {
       setExiting(true);
-    }, 4000);
+    }, 4200);
 
     const completeTimer = window.setTimeout(() => {
       onComplete?.();
-    }, 5000);
+    }, 5200);
 
     return () => {
       window.clearTimeout(exitTimer);
@@ -46,14 +48,20 @@ export default function SplashScreen({
 
   return (
     <motion.section
-      className="fixed inset-0 z-[9999] overflow-hidden bg-[#030712]"
+      className="
+        fixed
+        inset-0
+        z-[9999]
+        overflow-hidden
+        bg-[#030712]
+      "
       initial={{
         opacity: 1,
         scale: 1,
       }}
       animate={{
         opacity: exiting ? 0 : 1,
-        scale: exiting ? 1.08 : 1,
+        scale: exiting ? 1.06 : 1,
       }}
       transition={{
         duration: 1,
@@ -61,7 +69,7 @@ export default function SplashScreen({
       }}
     >
       {/* =====================================================
-          3D AI UNIVERSE
+          3D DIGITAL ENVIRONMENT
       ===================================================== */}
 
       <div className="absolute inset-0">
@@ -69,19 +77,24 @@ export default function SplashScreen({
       </div>
 
       {/* =====================================================
-          DARK VIGNETTE
+          BACKGROUND VIGNETTE
       ===================================================== */}
 
       <div
-        className="pointer-events-none absolute inset-0"
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          z-10
+        "
         style={{
           background:
-            "radial-gradient(circle at center, transparent 0%, rgba(3,7,18,0.08) 32%, rgba(3,7,18,0.82) 100%)",
+            "radial-gradient(circle at center, transparent 0%, rgba(3,7,18,0.05) 30%, rgba(3,7,18,0.78) 100%)",
         }}
       />
 
       {/* =====================================================
-          CENTRAL BLUE ATMOSPHERE
+          CENTRAL ATMOSPHERE
       ===================================================== */}
 
       <motion.div
@@ -90,29 +103,30 @@ export default function SplashScreen({
           absolute
           left-1/2
           top-1/2
-          h-[420px]
-          w-[420px]
+          z-10
+          h-[360px]
+          w-[360px]
           -translate-x-1/2
           -translate-y-1/2
           rounded-full
-          bg-blue-500/10
-          blur-[120px]
-          sm:h-[550px]
-          sm:w-[550px]
+          bg-cyan-500/[0.06]
+          blur-[110px]
+          sm:h-[500px]
+          sm:w-[500px]
         "
         animate={{
-          scale: [0.8, 1.15, 0.9],
-          opacity: [0.2, 0.55, 0.25],
+          scale: [0.75, 1.15, 0.85],
+          opacity: [0.25, 0.55, 0.25],
         }}
         transition={{
-          duration: 3,
+          duration: 3.5,
           repeat: Infinity,
           ease: "easeInOut",
         }}
       />
 
       {/* =====================================================
-          TOP LEFT SYSTEM BRAND
+          TOP LEFT SYSTEM LABEL
       ===================================================== */}
 
       <motion.div
@@ -120,6 +134,7 @@ export default function SplashScreen({
           absolute
           left-6
           top-6
+          z-30
           flex
           items-center
           gap-3
@@ -136,42 +151,44 @@ export default function SplashScreen({
         }}
         transition={{
           duration: 0.7,
-          delay: 0.4,
+          delay: 0.3,
         }}
       >
         <motion.div
           className="
-            h-2
-            w-2
+            h-1.5
+            w-1.5
             rounded-full
             bg-cyan-300
             shadow-[0_0_14px_rgba(103,232,249,0.9)]
           "
           animate={{
             scale: [1, 1.5, 1],
-            opacity: [0.5, 1, 0.5],
+            opacity: [0.4, 1, 0.4],
           }}
           transition={{
-            duration: 1.4,
+            duration: 1.3,
             repeat: Infinity,
+            ease: "easeInOut",
           }}
         />
 
         <span
           className="
-            text-[9px]
+            text-[8px]
             font-medium
             uppercase
             tracking-[0.35em]
-            text-slate-500
+            text-slate-600
+            sm:text-[9px]
           "
         >
-          NEIRAH / AI SYSTEM
+          DIGITAL ENVIRONMENT
         </span>
       </motion.div>
 
       {/* =====================================================
-          TOP RIGHT STATUS
+          TOP RIGHT SYSTEM STATUS
       ===================================================== */}
 
       <motion.div
@@ -179,12 +196,13 @@ export default function SplashScreen({
           absolute
           right-6
           top-6
+          z-30
           sm:right-10
           sm:top-10
         "
         initial={{
           opacity: 0,
-          x: 10,
+          x: 12,
         }}
         animate={{
           opacity: exiting ? 0 : 1,
@@ -192,19 +210,20 @@ export default function SplashScreen({
         }}
         transition={{
           duration: 0.6,
-          delay: 0.8,
+          delay: 0.6,
         }}
       >
         <div className="flex items-center gap-2">
           <span
             className="
-              text-[8px]
+              text-[7px]
               uppercase
-              tracking-[0.25em]
-              text-slate-600
+              tracking-[0.28em]
+              text-slate-700
+              sm:text-[8px]
             "
           >
-            NEURAL CORE
+            SYSTEM BOOT
           </span>
 
           <motion.span
@@ -216,10 +235,10 @@ export default function SplashScreen({
               shadow-[0_0_10px_rgba(103,232,249,0.8)]
             "
             animate={{
-              opacity: [0.25, 1, 0.25],
+              opacity: [0.2, 1, 0.2],
             }}
             transition={{
-              duration: 1.2,
+              duration: 1.1,
               repeat: Infinity,
             }}
           />
@@ -227,7 +246,7 @@ export default function SplashScreen({
       </motion.div>
 
       {/* =====================================================
-          CENTER BRAND AREA
+          CENTER SYSTEM CORE
       ===================================================== */}
 
       <div
@@ -235,204 +254,403 @@ export default function SplashScreen({
           pointer-events-none
           absolute
           inset-0
+          z-20
           flex
-          items-end
+          items-center
           justify-center
-          pb-[12vh]
-          sm:pb-[9vh]
         "
       >
         <motion.div
-          className="flex flex-col items-center"
+          className="
+            flex
+            flex-col
+            items-center
+          "
           initial={{
             opacity: 0,
-            y: 25,
+            y: 20,
           }}
           animate={{
             opacity: exiting ? 0 : 1,
-            y: exiting ? -30 : 0,
+            y: exiting ? -20 : 0,
           }}
           transition={{
-            opacity: {
-              duration: 0.7,
-            },
-            y: {
-              duration: 0.9,
-              ease: [0.16, 1, 0.3, 1],
-            },
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1],
           }}
         >
           {/* =================================================
-              LOGO CONTAINER
+              CORE VISUAL
           ================================================= */}
 
-          <motion.div
-            className="relative"
-            initial={{
-              opacity: 0,
-              scale: 0.82,
-              filter: "blur(14px)",
-            }}
-            animate={{
-              opacity: exiting ? 0 : 1,
-              scale: exiting ? 1.05 : 1,
-              filter: "blur(0px)",
-            }}
-            transition={{
-              opacity: {
-                duration: 0.7,
-                delay: 2.75,
-              },
-              scale: {
-                duration: 0.9,
-                delay: 2.75,
-                ease: [0.16, 1, 0.3, 1],
-              },
-              filter: {
-                duration: 0.8,
-                delay: 2.75,
-              },
-            }}
-          >
-            {/* =================================================
-                OUTER LOGO GLOW
-            ================================================= */}
+          <div className="relative flex items-center justify-center">
+
+            {/* Large atmospheric glow */}
 
             <motion.div
               className="
                 absolute
-                inset-0
-                scale-75
+                h-[180px]
+                w-[180px]
                 rounded-full
-                bg-blue-500/20
+                bg-blue-500/[0.08]
                 blur-[55px]
+                sm:h-[230px]
+                sm:w-[230px]
               "
               animate={{
+                scale: [0.8, 1.1, 0.8],
                 opacity: [0.25, 0.65, 0.25],
-                scale: [0.72, 0.92, 0.72],
               }}
               transition={{
-                duration: 2.4,
+                duration: 2.8,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
             />
 
-            {/* =================================================
-                CYAN INNER GLOW
-            ================================================= */}
+            {/* Outer ring */}
 
             <motion.div
               className="
                 absolute
-                inset-0
-                scale-90
+                h-[155px]
+                w-[155px]
                 rounded-full
-                bg-cyan-400/10
-                blur-[35px]
+                border
+                border-cyan-400/[0.12]
+                sm:h-[195px]
+                sm:w-[195px]
               "
               animate={{
-                opacity: [0.2, 0.55, 0.2],
+                rotate: 360,
+              }}
+              transition={{
+                duration: 9,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+
+            {/* Outer segmented ring */}
+
+            <motion.div
+              className="
+                absolute
+                h-[140px]
+                w-[140px]
+                rounded-full
+                border
+                border-dashed
+                border-blue-400/[0.18]
+                sm:h-[175px]
+                sm:w-[175px]
+              "
+              animate={{
+                rotate: -360,
+              }}
+              transition={{
+                duration: 13,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+
+            {/* Inner ring */}
+
+            <motion.div
+              className="
+                absolute
+                h-[105px]
+                w-[105px]
+                rounded-full
+                border
+                border-cyan-300/[0.10]
+                sm:h-[135px]
+                sm:w-[135px]
+              "
+              animate={{
+                rotate: 360,
+                scale: [0.95, 1.04, 0.95],
+              }}
+              transition={{
+                rotate: {
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "linear",
+                },
+                scale: {
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+              }}
+            />
+
+            {/* Scanning arc */}
+
+            <motion.div
+              className="
+                absolute
+                h-[155px]
+                w-[155px]
+                rounded-full
+                border-t
+                border-cyan-300/60
+                sm:h-[195px]
+                sm:w-[195px]
+              "
+              animate={{
+                rotate: [0, 360],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+
+            {/* Center core */}
+
+            <motion.div
+              className="
+                relative
+                z-10
+                flex
+                h-[54px]
+                w-[54px]
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-cyan-300/20
+                bg-[#030712]/90
+                shadow-[0_0_40px_rgba(34,211,238,0.18)]
+                sm:h-[64px]
+                sm:w-[64px]
+              "
+              animate={{
+                scale: [1, 1.08, 1],
+              }}
+              transition={{
+                duration: 1.6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              {/* Core glow */}
+
+              <motion.div
+                className="
+                  absolute
+                  h-5
+                  w-5
+                  rounded-full
+                  bg-cyan-400/20
+                  blur-md
+                "
+                animate={{
+                  scale: [0.7, 1.5, 0.7],
+                  opacity: [0.4, 0.9, 0.4],
+                }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                }}
+              />
+
+              {/* Core point */}
+
+              <motion.div
+                className="
+                  relative
+                  h-2
+                  w-2
+                  rounded-full
+                  bg-cyan-200
+                  shadow-[0_0_20px_rgba(103,232,249,1)]
+                "
+                animate={{
+                  scale: [0.7, 1.5, 0.7],
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                }}
+              />
+            </motion.div>
+
+            {/* Small orbital nodes */}
+
+            {[0, 90, 180, 270].map((rotation) => (
+              <motion.div
+                key={rotation}
+                className="
+                  absolute
+                  h-1
+                  w-1
+                  rounded-full
+                  bg-blue-300
+                  shadow-[0_0_8px_rgba(96,165,250,0.9)]
+                "
+                style={{
+                  transform: `rotate(${rotation}deg) translateY(-82px)`,
+                }}
+                animate={{
+                  opacity: [0.2, 1, 0.2],
+                }}
+                transition={{
+                  duration: 1.6,
+                  delay: rotation / 360,
+                  repeat: Infinity,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* =================================================
+              STATUS TEXT
+          ================================================= */}
+
+          <motion.div
+            className="
+              mt-10
+              flex
+              flex-col
+              items-center
+            "
+            initial={{
+              opacity: 0,
+              filter: "blur(8px)",
+            }}
+            animate={{
+              opacity: exiting ? 0 : 1,
+              filter: "blur(0px)",
+            }}
+            transition={{
+              duration: 0.7,
+              delay: 0.7,
+            }}
+          >
+            <motion.p
+              className="
+                text-[10px]
+                font-medium
+                uppercase
+                tracking-[0.45em]
+                text-slate-300
+                sm:text-xs
+              "
+              animate={{
+                opacity: [0.45, 1, 0.45],
               }}
               transition={{
                 duration: 1.8,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-            />
+            >
+              Initializing
+            </motion.p>
 
-            {/* =================================================
-                REAL NEIRAH LOGO
-            ================================================= */}
-
-            <Image
-              src="/images/logo.png"
-              alt="Neirah Tech Solutions"
-              width={500}
-              height={250}
-              priority
+            <motion.p
               className="
-                relative
-                z-10
-                h-auto
-                w-[235px]
-                object-contain
-                drop-shadow-[0_0_30px_rgba(37,99,235,0.5)]
-                sm:w-[320px]
-                md:w-[380px]
+                mt-3
+                text-[7px]
+                uppercase
+                tracking-[0.3em]
+                text-slate-600
+                sm:text-[8px]
               "
-            />
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+              }}
+            >
+              Processing digital environment
+            </motion.p>
           </motion.div>
 
           {/* =================================================
-              TAGLINE
+              LOADING BAR
           ================================================= */}
 
-          <motion.div
-            className="mt-5 flex flex-col items-center"
-            initial={{
-              opacity: 0,
-              y: 12,
-              filter: "blur(8px)",
-            }}
-            animate={{
-              opacity: exiting ? 0 : 1,
-              y: 0,
-              filter: "blur(0px)",
-            }}
-            transition={{
-              duration: 0.7,
-              delay: 3.25,
-            }}
+          <div
+            className="
+              mt-6
+              h-px
+              w-[180px]
+              overflow-hidden
+              bg-slate-800
+              sm:w-[240px]
+            "
           >
-            <p
+            <motion.div
               className="
-                text-center
-                text-[9px]
-                uppercase
-                tracking-[0.35em]
-                text-slate-400
-                sm:text-xs
+                h-full
+                w-1/2
+                bg-gradient-to-r
+                from-transparent
+                via-cyan-300
+                to-transparent
               "
-            >
-              Intelligent Digital Engineering
-            </p>
+              animate={{
+                x: [
+                  "-150%",
+                  "300%",
+                ],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          </div>
 
-            {/* =================================================
-                TECHNOLOGY STACK
-            ================================================= */}
+          {/* =================================================
+              SYSTEM METRICS
+          ================================================= */}
 
-            <div
-              className="
-                mt-4
-                flex
-                flex-wrap
-                items-center
-                justify-center
-                gap-2
-                text-[7px]
-                uppercase
-                tracking-[0.22em]
-                text-slate-600
-                sm:gap-3
-                sm:text-[8px]
-              "
-            >
-              <span>AI</span>
+          <div
+            className="
+              mt-5
+              flex
+              items-center
+              gap-3
+              text-[6px]
+              uppercase
+              tracking-[0.22em]
+              text-slate-700
+              sm:gap-4
+              sm:text-[7px]
+            "
+          >
+            <span>CORE</span>
 
-              <span className="h-px w-3 bg-blue-500/30 sm:w-4" />
+            <span className="text-cyan-500/50">
+              ACTIVE
+            </span>
 
-              <span>Software</span>
+            <span className="h-3 w-px bg-slate-800" />
 
-              <span className="h-px w-3 bg-blue-500/30 sm:w-4" />
+            <span>DATA</span>
 
-              <span>Cloud</span>
+            <span className="text-cyan-500/50">
+              SYNC
+            </span>
 
-              <span className="h-px w-3 bg-blue-500/30 sm:w-4" />
+            <span className="h-3 w-px bg-slate-800" />
 
-              <span>Data</span>
-            </div>
-          </motion.div>
+            <span>ENV</span>
+
+            <span className="text-cyan-500/50">
+              READY
+            </span>
+          </div>
         </motion.div>
       </div>
 
@@ -446,22 +664,26 @@ export default function SplashScreen({
           bottom-6
           left-0
           right-0
+          z-30
           flex
           justify-center
           sm:bottom-8
         "
         initial={{
           opacity: 0,
+          y: 8,
         }}
         animate={{
           opacity: exiting ? 0 : 1,
+          y: 0,
         }}
         transition={{
-          delay: 1.8,
+          delay: 1.2,
           duration: 0.6,
         }}
       >
         <div className="flex items-center gap-3">
+
           <motion.div
             className="
               h-1
@@ -472,7 +694,7 @@ export default function SplashScreen({
             "
             animate={{
               scale: [1, 1.8, 1],
-              opacity: [0.4, 1, 0.4],
+              opacity: [0.3, 1, 0.3],
             }}
             transition={{
               duration: 1,
@@ -480,7 +702,7 @@ export default function SplashScreen({
             }}
           />
 
-          <span
+          <motion.span
             className="
               text-[7px]
               uppercase
@@ -490,69 +712,116 @@ export default function SplashScreen({
               sm:tracking-[0.35em]
             "
           >
-            Engineering Digital Possibilities
-          </span>
+            Establishing secure runtime environment
+          </motion.span>
         </div>
       </motion.div>
 
       {/* =====================================================
-          CORNER UI DETAILS
+          CORNER UI — TOP LEFT
       ===================================================== */}
 
-      <div
+      <motion.div
         className="
           pointer-events-none
           absolute
           left-5
           top-5
+          z-30
           h-10
           w-10
           border-l
           border-t
           border-blue-400/10
         "
+        animate={{
+          opacity: exiting ? 0 : [0.4, 0.8, 0.4],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+        }}
       />
 
-      <div
+      {/* =====================================================
+          CORNER UI — TOP RIGHT
+      ===================================================== */}
+
+      <motion.div
         className="
           pointer-events-none
           absolute
           right-5
           top-5
+          z-30
           h-10
           w-10
           border-r
           border-t
           border-blue-400/10
         "
+        animate={{
+          opacity: exiting ? 0 : [0.4, 0.8, 0.4],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          delay: 0.5,
+        }}
       />
 
-      <div
+      {/* =====================================================
+          CORNER UI — BOTTOM LEFT
+      ===================================================== */}
+
+      <motion.div
         className="
           pointer-events-none
           absolute
           bottom-5
           left-5
+          z-30
           h-10
           w-10
           border-b
           border-l
           border-blue-400/10
         "
+        animate={{
+          opacity: exiting ? 0 : [0.4, 0.8, 0.4],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          delay: 1,
+        }}
       />
 
-      <div
+      {/* =====================================================
+          CORNER UI — BOTTOM RIGHT
+      ===================================================== */}
+
+      <motion.div
         className="
           pointer-events-none
           absolute
           bottom-5
           right-5
+          z-30
           h-10
           w-10
           border-b
           border-r
           border-blue-400/10
         "
+        animate={{
+          opacity: exiting ? 0 : [0.4, 0.8, 0.4],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          delay: 1.5,
+        }}
       />
 
       {/* =====================================================
@@ -565,12 +834,13 @@ export default function SplashScreen({
           absolute
           left-1/2
           top-1/2
+          z-50
           h-[20px]
           w-[20px]
           -translate-x-1/2
           -translate-y-1/2
           rounded-full
-          bg-cyan-200
+          bg-cyan-100
         "
         initial={{
           opacity: 0,
@@ -586,6 +856,39 @@ export default function SplashScreen({
         }}
         transition={{
           duration: 1,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+      />
+
+      {/* =====================================================
+          EXIT SCAN LINE
+      ===================================================== */}
+
+      <motion.div
+        className="
+          pointer-events-none
+          absolute
+          left-0
+          right-0
+          top-1/2
+          z-40
+          h-px
+          bg-cyan-300/0
+        "
+        animate={{
+          backgroundColor: exiting
+            ? [
+                "rgba(103,232,249,0)",
+                "rgba(103,232,249,0.5)",
+                "rgba(103,232,249,0)",
+              ]
+            : "rgba(103,232,249,0)",
+          scaleX: exiting
+            ? [0, 1, 1.4]
+            : 0,
+        }}
+        transition={{
+          duration: 0.9,
           ease: [0.16, 1, 0.3, 1],
         }}
       />

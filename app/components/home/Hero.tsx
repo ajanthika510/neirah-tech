@@ -777,6 +777,8 @@ export default function Hero() {
             </div>
           </div>
         </div>
+        {/* === SECTION BLEND — fades into ServiceSection === */}
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 z-10 bg-gradient-to-b from-transparent to-[#f8fbff]" />
       </section>
 
       {/* ==============================

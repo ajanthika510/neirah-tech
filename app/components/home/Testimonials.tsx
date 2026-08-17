@@ -243,7 +243,7 @@ export default function Testimonials() {
 
                   <div className="mx-auto flex h-52 w-52 items-center justify-center rounded-full border border-blue-100 bg-gradient-to-br from-blue-50 to-cyan-50">
 
-                    <div className="flex h-32 w-32 items-center justify-center rounded-full bg-white shadow-[0_15px_40px_rgba(37,99,235,0.12)]">
+                      <div className="flex h-32 w-32 items-center justify-center rounded-full bg-white shadow-[0_15px_40px_rgba(37,99,235,0.12)]">
 
                       <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-400 text-white shadow-lg">
                         <Quote size={34} />

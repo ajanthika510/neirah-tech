@@ -1,137 +1,24 @@
 "use client";
 
-import { useLoader, useFrame } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { TextureLoader } from "three";
 import { useMemo, useRef } from "react";
 
 const PARTICLE_COUNT = 850;
 
 export default function LogoFormation() {
-  const texture = useLoader(
-    TextureLoader,
-    "/images/logo.png"
-  );
-
   const pointsRef = useRef<THREE.Points>(null);
 
   const { positions, targets } = useMemo(() => {
-    const image = texture.image as HTMLImageElement;
-
-    const canvas = document.createElement("canvas");
-
-    // Use only the left portion of the logo.
-    // This contains the Neirah symbol rather than the text.
-    const cropWidth = Math.floor(image.width * 0.58);
-
-    canvas.width = cropWidth;
-    canvas.height = image.height;
-
-    const context = canvas.getContext("2d");
-
-    if (!context) {
-      return {
-        positions: new Float32Array(),
-        targets: new Float32Array(),
-      };
-    }
-
-    context.drawImage(
-      image,
-      0,
-      0,
-      cropWidth,
-      image.height,
-      0,
-      0,
-      cropWidth,
-      image.height
-    );
-
-    const pixels = context.getImageData(
-      0,
-      0,
-      cropWidth,
-      image.height
-    ).data;
-
-    const candidates: [number, number][] = [];
-
-    for (
-      let y = 0;
-      y < image.height;
-      y += 3
-    ) {
-      for (
-        let x = 0;
-        x < cropWidth;
-        x += 3
-      ) {
-        const index =
-          (y * cropWidth + x) * 4;
-
-        const r = pixels[index];
-        const g = pixels[index + 1];
-        const b = pixels[index + 2];
-        const a = pixels[index + 3];
-
-        const brightness =
-          (r + g + b) / 3;
-
-        // Works with transparent PNGs and
-        // ignores a black background if present.
-        if (
-          a > 80 &&
-          brightness > 35
-        ) {
-          candidates.push([x, y]);
-        }
-      }
-    }
-
-    const finalTargets: number[] = [];
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const candidate =
-        candidates[
-          Math.floor(
-            Math.random() * candidates.length
-          )
-        ];
-
-      if (!candidate) {
-        finalTargets.push(0, 0, 0);
-        continue;
-      }
-
-      const [x, y] = candidate;
-
-      const normalizedX =
-        (x / cropWidth - 0.5) * 3.4;
-
-      const normalizedY =
-        -(y / image.height - 0.5) * 3.4;
-
-      finalTargets.push(
-        normalizedX,
-        normalizedY,
-        (Math.random() - 0.5) * 0.08
-      );
-    }
-
     const initialPositions: number[] = [];
+    const targetPositions: number[] = [];
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const radius =
-        1.1 + Math.random() * 1.7;
+      // Initial random 3D cloud
+      const radius = 1.5 + Math.random() * 2.2;
 
-      const theta =
-        Math.random() * Math.PI * 2;
-
-      const phi =
-        Math.acos(
-          2 * Math.random() - 1
-        );
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
 
       initialPositions.push(
         radius *
@@ -145,6 +32,43 @@ export default function LogoFormation() {
         radius *
           Math.cos(phi)
       );
+
+      /*
+       * Target = abstract AI/model structure.
+       *
+       * Instead of a logo, particles form
+       * several connected spherical layers.
+       */
+
+      const layer = Math.floor(
+        Math.random() * 5
+      );
+
+      const layerRadius =
+        0.35 + layer * 0.22;
+
+      const angle =
+        Math.random() * Math.PI * 2;
+
+      const vertical =
+        (Math.random() - 0.5) * 1.8;
+
+      const x =
+        Math.cos(angle) *
+        layerRadius;
+
+      const y =
+        vertical;
+
+      const z =
+        Math.sin(angle) *
+        layerRadius;
+
+      targetPositions.push(
+        x,
+        y,
+        z
+      );
     }
 
     return {
@@ -152,10 +76,10 @@ export default function LogoFormation() {
         initialPositions
       ),
       targets: new Float32Array(
-        finalTargets
+        targetPositions
       ),
     };
-  }, [texture]);
+  }, []);
 
   useFrame((state) => {
     if (!pointsRef.current) return;
@@ -164,22 +88,25 @@ export default function LogoFormation() {
       state.clock.elapsedTime;
 
     /*
-     * 0 - 1.5 sec:
-     * particles behave like AI network
+     * Animation cycle
      *
-     * 1.5 - 2.8 sec:
-     * particles assemble into logo
+     * 0 - 1.5:
+     *     particles behave like a
+     *     loading / AI particle cloud
      *
-     * 2.8 - 3.8 sec:
-     * logo holds
+     * 1.5 - 3:
+     *     particles assemble
      *
-     * after 3.8 sec:
-     * logo slowly dissolves
+     * 3 - 4:
+     *     model holds
+     *
+     * 4+:
+     *     model dissolves
      */
 
     const formationStart = 1.4;
     const formationEnd = 2.8;
-    const dissolveStart = 3.2;
+    const dissolveStart = 3.6;
 
     let progress = THREE.MathUtils.clamp(
       (elapsed - formationStart) /
@@ -194,10 +121,11 @@ export default function LogoFormation() {
       progress *
       (3 - 2 * progress);
 
+    // Dissolve
     if (elapsed > dissolveStart) {
       const dissolveProgress =
         THREE.MathUtils.clamp(
-          (elapsed - dissolveStart) / 0.8,
+          (elapsed - dissolveStart) / 1.2,
           0,
           1
         );
@@ -215,55 +143,96 @@ export default function LogoFormation() {
       i < positionArray.length;
       i += 3
     ) {
-      const index = i;
-
-      const targetX =
-        targets[index];
-
-      const targetY =
-        targets[index + 1];
-
-      const targetZ =
-        targets[index + 2];
+      const targetX = targets[i];
+      const targetY = targets[i + 1];
+      const targetZ = targets[i + 2];
 
       /*
-       * Add a subtle living movement
-       * while the logo is forming.
+       * Organic particle movement.
        */
       const wave =
         Math.sin(
-          elapsed * 3 +
-            i * 0.012
+          elapsed * 2.5 +
+            i * 0.015
+        ) * 0.025;
+
+      const wave2 =
+        Math.cos(
+          elapsed * 1.8 +
+            i * 0.01
         ) * 0.015;
 
-      positionArray[index] +=
-        (targetX -
-          positionArray[index]) *
-          progress *
-          0.075;
-
-      positionArray[index + 1] +=
-        (targetY -
-          positionArray[index + 1]) *
-          progress *
-          0.075;
-
-      positionArray[index + 2] +=
-        (targetZ +
+      positionArray[i] +=
+        (targetX +
           wave -
-          positionArray[index + 2]) *
-          progress *
-          0.075;
+          positionArray[i]) *
+        progress *
+        0.06;
+
+      positionArray[i + 1] +=
+        (targetY +
+          wave2 -
+          positionArray[i + 1]) *
+        progress *
+        0.06;
+
+      positionArray[i + 2] +=
+        (targetZ -
+          positionArray[i + 2]) *
+        progress *
+        0.06;
+
+      /*
+       * When dissolving, push particles
+       * outward.
+       */
+      if (elapsed > dissolveStart) {
+        const dissolveProgress =
+          THREE.MathUtils.clamp(
+            (elapsed - dissolveStart) / 1.2,
+            0,
+            1
+          );
+
+        const length = Math.sqrt(
+          positionArray[i] *
+            positionArray[i] +
+            positionArray[i + 1] *
+              positionArray[i + 1] +
+            positionArray[i + 2] *
+              positionArray[i + 2]
+        );
+
+        if (length > 0) {
+          positionArray[i] +=
+            (positionArray[i] / length) *
+            dissolveProgress *
+            0.025;
+
+          positionArray[i + 1] +=
+            (positionArray[i + 1] / length) *
+            dissolveProgress *
+            0.025;
+
+          positionArray[i + 2] +=
+            (positionArray[i + 2] / length) *
+            dissolveProgress *
+            0.025;
+        }
+      }
     }
 
     pointsRef.current.geometry.attributes.position.needsUpdate =
       true;
 
     /*
-     * Keep the formation slightly floating.
+     * Slow AI-model rotation.
      */
     pointsRef.current.rotation.y =
-      Math.sin(elapsed * 0.25) * 0.04;
+      elapsed * 0.18;
+
+    pointsRef.current.rotation.x =
+      Math.sin(elapsed * 0.25) * 0.08;
   });
 
   return (
@@ -282,7 +251,7 @@ export default function LogoFormation() {
         color="#38bdf8"
         size={0.035}
         transparent
-        opacity={0.95}
+        opacity={0.9}
         sizeAttenuation
         depthWrite={false}
         blending={
