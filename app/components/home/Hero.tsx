@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  Database,
   Brain,
-  ShoppingCart,
-  Smartphone,
-  Cloud,
+  Cpu,
+  Palette,
+  Truck,
+  Building2,
   ArrowUpRight,
 } from "lucide-react";
 
@@ -18,44 +18,83 @@ import SchedulerModal from "./SchedulerModal";
 
 export default function Hero() {
   const [schedulerOpen, setSchedulerOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  /* ==========================================
+     RESPONSIVE ORBIT
+  ========================================== */
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  /* ==========================================
+     NEIRAH SERVICE ECOSYSTEM
+
+     These are services/capabilities,
+     NOT individual products.
+  ========================================== */
 
   const services = [
     {
-      name: "ERP System",
-      icon: <Database className="w-4 h-4 text-sky-600" />,
+      name: "Digital Product Design",
+      shortName: "Digital Design",
+      icon: <Palette className="w-4 h-4 text-sky-600" />,
       angle: 0,
     },
     {
-      name: "AI Analytics",
+      name: "AI & Automation",
+      shortName: "AI & Automation",
       icon: <Brain className="w-4 h-4 text-sky-600" />,
       angle: 72,
     },
     {
-      name: "POS System",
-      icon: <ShoppingCart className="w-4 h-4 text-sky-600" />,
+      name: "Business Software",
+      shortName: "Business Software",
+      icon: <Building2 className="w-4 h-4 text-sky-600" />,
       angle: 144,
     },
     {
-      name: "Mobile App",
-      icon: <Smartphone className="w-4 h-4 text-sky-600" />,
+      name: "Mobility & Delivery",
+      shortName: "Mobility",
+      icon: <Truck className="w-4 h-4 text-sky-600" />,
       angle: 216,
     },
     {
-      name: "Cloud Infra",
-      icon: <Cloud className="w-4 h-4 text-sky-600" />,
+      name: "IoT & Smart Systems",
+      shortName: "IoT & Smart Systems",
+      icon: <Cpu className="w-4 h-4 text-sky-600" />,
       angle: 288,
     },
   ];
 
+  /*
+    Smaller radius on mobile so the orbit
+    stays inside the viewport.
+  */
+  const radius = isMobile ? 125 : 190;
+
   return (
     <>
       <section
-      id="hero"
+        id="hero"
         className="
           relative
           min-h-screen
-          pt-32
-          pb-20
+          pt-28
+          sm:pt-32
+          pb-16
+          sm:pb-20
           flex
           items-center
           justify-center
@@ -68,9 +107,9 @@ export default function Hero() {
       >
         <HeroBackground />
 
-        {/* ==============================
+        {/* ==========================================
             AMBIENT GLOW
-        ============================== */}
+        ========================================== */}
 
         <div
           className="
@@ -79,11 +118,14 @@ export default function Hero() {
             left-1/4
             -translate-x-1/2
             -translate-y-1/2
-            w-96
-            h-96
+            w-64
+            h-64
+            sm:w-96
+            sm:h-96
             bg-sky-300/30
             rounded-full
-            blur-[140px]
+            blur-[120px]
+            sm:blur-[140px]
             pointer-events-none
           "
         />
@@ -95,18 +137,21 @@ export default function Hero() {
             right-1/4
             translate-x-1/2
             translate-y-1/2
-            w-96
-            h-96
+            w-64
+            h-64
+            sm:w-96
+            sm:h-96
             bg-indigo-300/30
             rounded-full
-            blur-[140px]
+            blur-[120px]
+            sm:blur-[140px]
             pointer-events-none
           "
         />
 
-        {/* ==============================
+        {/* ==========================================
             DOT GRID
-        ============================== */}
+        ========================================== */}
 
         <div
           className="
@@ -122,33 +167,36 @@ export default function Hero() {
           }}
         />
 
-        {/* ==============================
+        {/* ==========================================
             MAIN CONTENT
-        ============================== */}
+        ========================================== */}
 
         <div
           className="
             max-w-7xl
             mx-auto
-            px-6
+            px-5
+            sm:px-6
             grid
             grid-cols-1
             lg:grid-cols-12
-            gap-12
+            gap-10
+            lg:gap-12
             items-center
             relative
             z-10
             w-full
           "
         >
-          {/* ==============================
+          {/* ==========================================
               LEFT CONTENT
-          ============================== */}
+          ========================================== */}
 
           <div
             className="
               lg:col-span-6
-              space-y-8
+              space-y-7
+              sm:space-y-8
               text-center
               lg:text-left
             "
@@ -192,10 +240,12 @@ export default function Hero() {
                 "
               />
 
-              Software, AI & Innovation
+              Technology for Every Layer of Business
             </motion.div>
 
-            {/* Heading */}
+            {/* ==========================================
+                HEADING
+            ========================================== */}
 
             <div className="space-y-4">
               <motion.h1
@@ -214,15 +264,15 @@ export default function Hero() {
                 className="
                   font-display
                   font-extrabold
-                  text-4xl
+                  text-[2.5rem]
+                  leading-[1.05]
                   sm:text-5xl
                   md:text-6xl
                   text-slate-900
                   tracking-tight
-                  leading-[1.05]
                 "
               >
-                Smart Software Built for
+                Technology That
                 <br />
 
                 <span
@@ -237,7 +287,7 @@ export default function Hero() {
                     animate-[pulse_6s_linear_infinite]
                   "
                 >
-                  Growing Businesses
+                  Connects Business.
                 </span>
               </motion.h1>
 
@@ -267,15 +317,15 @@ export default function Hero() {
                   lg:mx-0
                 "
               >
-                We build ERP systems, AI solutions and business software that
-                help retailers, factories and enterprises work faster and scale
-                effortlessly.
+                We design digital experiences, build intelligent software,
+                automate businesses and connect technology with the physical
+                world.
               </motion.p>
             </div>
 
-            {/* ==============================
+            {/* ==========================================
                 ACTION BUTTONS
-            ============================== */}
+            ========================================== */}
 
             <motion.div
               initial={{
@@ -297,12 +347,11 @@ export default function Hero() {
                 items-center
                 justify-center
                 lg:justify-start
-                gap-4
+                gap-3
+                sm:gap-4
               "
             >
-              {/* ==============================
-                  BOOK DEMO
-              ============================== */}
+              {/* BOOK DEMO */}
 
               <button
                 type="button"
@@ -311,8 +360,10 @@ export default function Hero() {
                   group
                   w-full
                   sm:w-auto
-                  px-8
-                  py-4
+                  px-7
+                  sm:px-8
+                  py-3.5
+                  sm:py-4
                   rounded-full
                   bg-gradient-to-r
                   from-sky-500
@@ -343,9 +394,7 @@ export default function Hero() {
                 />
               </button>
 
-              {/* ==============================
-                  EXPLORE SOLUTIONS
-              ============================== */}
+              {/* EXPLORE */}
 
               <button
                 type="button"
@@ -356,8 +405,10 @@ export default function Hero() {
                   group
                   w-full
                   sm:w-auto
-                  px-8
-                  py-4
+                  px-7
+                  sm:px-8
+                  py-3.5
+                  sm:py-4
                   rounded-full
                   bg-white
                   border
@@ -392,9 +443,9 @@ export default function Hero() {
               </button>
             </motion.div>
 
-            {/* ==============================
+            {/* ==========================================
                 TRUST STATS
-            ============================== */}
+            ========================================== */}
 
             <motion.div
               initial={{
@@ -408,7 +459,8 @@ export default function Hero() {
                 delay: 0.4,
               }}
               className="
-                pt-6
+                pt-5
+                sm:pt-6
                 border-t
                 border-slate-200
                 flex
@@ -416,24 +468,26 @@ export default function Hero() {
                 items-center
                 justify-center
                 lg:justify-start
-                gap-8
+                gap-5
+                sm:gap-8
               "
             >
               <div className="text-center lg:text-left">
-                <p className="text-2xl font-bold text-slate-900">
+                <p className="text-xl sm:text-2xl font-bold text-slate-900">
                   250+
                 </p>
 
                 <p
                   className="
-                    text-xs
+                    text-[10px]
+                    sm:text-xs
                     text-slate-500
                     font-medium
                     uppercase
                     tracking-wider
                   "
                 >
-                  Projects Completed
+                  Projects
                 </p>
               </div>
 
@@ -448,20 +502,21 @@ export default function Hero() {
               />
 
               <div className="text-center lg:text-left">
-                <p className="text-2xl font-bold text-slate-900">
+                <p className="text-xl sm:text-2xl font-bold text-slate-900">
                   98%
                 </p>
 
                 <p
                   className="
-                    text-xs
+                    text-[10px]
+                    sm:text-xs
                     text-slate-500
                     font-medium
                     uppercase
                     tracking-wider
                   "
                 >
-                  Customer Satisfaction
+                  Satisfaction
                 </p>
               </div>
 
@@ -476,28 +531,29 @@ export default function Hero() {
               />
 
               <div className="text-center lg:text-left">
-                <p className="text-2xl font-bold text-slate-900">
+                <p className="text-xl sm:text-2xl font-bold text-slate-900">
                   10+
                 </p>
 
                 <p
                   className="
-                    text-xs
+                    text-[10px]
+                    sm:text-xs
                     text-slate-500
                     font-medium
                     uppercase
                     tracking-wider
                   "
                 >
-                  Years of Innovation
+                  Years
                 </p>
               </div>
             </motion.div>
           </div>
 
-          {/* ==============================
-              RIGHT ORBIT SYSTEM
-          ============================== */}
+          {/* ==========================================
+              RIGHT SERVICE ECOSYSTEM
+          ========================================== */}
 
           <div
             className="
@@ -506,17 +562,24 @@ export default function Hero() {
               flex
               items-center
               justify-center
-              min-h-[480px]
+              min-h-[390px]
+              sm:min-h-[480px]
               lg:min-h-[560px]
+              mt-2
+              lg:mt-0
             "
           >
+            {/* ==========================================
+                ORBIT
+            ========================================== */}
+
             <motion.div
               variants={orbitVariants}
               animate="animate"
               className="
                 relative
-                w-80
-                h-80
+                w-[250px]
+                h-[250px]
                 sm:w-[420px]
                 sm:h-[420px]
                 rounded-full
@@ -530,7 +593,9 @@ export default function Hero() {
                 justify-center
               "
             >
-              {/* Orbit Line */}
+              {/* ==========================================
+                  ORBIT LINE
+              ========================================== */}
 
               <svg
                 className="
@@ -554,13 +619,24 @@ export default function Hero() {
                 />
               </svg>
 
-              {/* ==============================
+              {/* Secondary Orbit */}
+
+              <div
+                className="
+                  absolute
+                  inset-[12%]
+                  rounded-full
+                  border
+                  border-dashed
+                  border-indigo-200/50
+                "
+              />
+
+              {/* ==========================================
                   SERVICE CARDS
-              ============================== */}
+              ========================================== */}
 
               {services.map((item) => {
-                const radius = 195;
-
                 const radian =
                   (item.angle * Math.PI) / 180;
 
@@ -588,18 +664,21 @@ export default function Hero() {
                       variants={cardVariants}
                       animate="animate"
                       whileHover={{
-                        scale: 1.1,
+                        scale: 1.08,
                       }}
                       className="
                         flex
-                        w-40
+                        w-[132px]
+                        sm:w-[165px]
                         items-center
-                        gap-3
+                        gap-2
+                        sm:gap-3
                         rounded-xl
                         border
                         border-slate-200
-                        bg-white/90
-                        p-3.5
+                        bg-white/95
+                        p-2.5
+                        sm:p-3.5
                         shadow-[0_10px_30px_rgba(15,23,42,.08)]
                         backdrop-blur-xl
                         transition-all
@@ -608,27 +687,41 @@ export default function Hero() {
                         hover:shadow-[0_0_25px_rgba(14,165,233,.25)]
                       "
                     >
+                      {/* Icon */}
+
                       <div
                         className="
+                          shrink-0
                           rounded-lg
                           border
                           border-sky-100
                           bg-sky-50
-                          p-2
+                          p-1.5
+                          sm:p-2
                         "
                       >
                         {item.icon}
                       </div>
 
+                      {/* Name */}
+
                       <span
                         className="
-                          text-xs
+                          text-[10px]
+                          sm:text-xs
                           font-semibold
+                          leading-tight
                           tracking-wide
                           text-slate-800
                         "
                       >
-                        {item.name}
+                        <span className="sm:hidden">
+                          {item.shortName}
+                        </span>
+
+                        <span className="hidden sm:block">
+                          {item.name}
+                        </span>
                       </span>
                     </motion.div>
                   </div>
@@ -636,15 +729,15 @@ export default function Hero() {
               })}
             </motion.div>
 
-            {/* ==============================
-                CENTRAL AI CORE
-            ============================== */}
+            {/* ==========================================
+                CENTRAL NEIRAH CORE
+            ========================================== */}
 
             <div
               className="
                 absolute
-                w-32
-                h-32
+                w-[100px]
+                h-[100px]
                 sm:w-40
                 sm:h-40
                 rounded-full
@@ -672,7 +765,8 @@ export default function Hero() {
                 }}
                 className="
                   absolute
-                  inset-3
+                  inset-2
+                  sm:inset-3
                   rounded-full
                   bg-gradient-to-tr
                   from-sky-300/40
@@ -682,45 +776,52 @@ export default function Hero() {
                 "
               />
 
-              {/* Logo Circle */}
-
-              <div
-                className="
-                  relative
-                  z-10
-                  w-20
-                  h-20
-                  sm:w-24
-                  sm:h-24
-                  rounded-full
-                  bg-white/80
-                  border
-                  border-sky-200
-                  backdrop-blur-md
-                  shadow-[0_0_40px_rgba(14,165,233,.25)]
-                  flex
-                  items-center
-                  justify-center
-                "
-              >
-                <Image
-                  src="/images/logo.png"
-                  alt="Neirah Tech"
-                  width={90}
-                  height={90}
-                  priority
-                  className="
-                    w-16
-                    h-16
-                    sm:w-20
-                    sm:h-20
-                    object-contain
-                    drop-shadow-[0_0_20px_rgba(14,165,233,.45)]
-                  "
-                />
-              </div>
-
-              {/* Rotating Blue Ring */}
+             {/* Logo */}
+<div
+  className="
+    relative
+    z-10
+    flex
+    items-center
+    justify-center
+    w-24
+    h-24
+    sm:w-32
+    sm:h-32
+    md:w-36
+    md:h-36
+    lg:w-40
+    lg:h-40
+    rounded-full
+    bg-white/80
+    border
+    border-sky-200
+    backdrop-blur-md
+    shadow-[0_0_40px_rgba(14,165,233,.25)]
+    overflow-hidden
+  "
+>
+  <Image
+  src="/images/hero.png"
+  alt="Neirah Tech"
+  width={180}
+  height={180}
+  priority
+  className="
+    w-28
+    h-28
+    sm:w-32
+    sm:h-32
+    md:w-36
+    md:h-36
+    lg:w-40
+    lg:h-40
+    object-contain
+    drop-shadow-[0_0_25px_rgba(14,165,233,.5)]
+  "
+/>
+</div>
+              {/* Blue Ring */}
 
               <motion.div
                 animate={{
@@ -733,14 +834,15 @@ export default function Hero() {
                 }}
                 className="
                   absolute
-                  -inset-4
+                  -inset-3
+                  sm:-inset-4
                   rounded-full
                   border
                   border-sky-300/50
                 "
               />
 
-              {/* Rotating Purple Ring */}
+              {/* Purple Ring */}
 
               <motion.div
                 animate={{
@@ -753,7 +855,8 @@ export default function Hero() {
                 }}
                 className="
                   absolute
-                  -inset-8
+                  -inset-6
+                  sm:-inset-8
                   rounded-full
                   border
                   border-indigo-300/40
@@ -765,7 +868,8 @@ export default function Hero() {
               <div
                 className="
                   absolute
-                  -inset-[45px]
+                  -inset-[32px]
+                  sm:-inset-[45px]
                   rounded-full
                   border
                   border-dashed
@@ -777,13 +881,31 @@ export default function Hero() {
             </div>
           </div>
         </div>
-        {/* === SECTION BLEND — fades into ServiceSection === */}
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 z-10 bg-gradient-to-b from-transparent to-[#f8fbff]" />
+
+        {/* ==========================================
+            SECTION BLEND
+        ========================================== */}
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            bottom-0
+            left-0
+            right-0
+            h-20
+            sm:h-28
+            z-10
+            bg-gradient-to-b
+            from-transparent
+            to-[#f8fbff]
+          "
+        />
       </section>
 
-      {/* ==============================
+      {/* ==========================================
           SCHEDULER MODAL
-      ============================== */}
+      ========================================== */}
 
       <SchedulerModal
         isOpen={schedulerOpen}
