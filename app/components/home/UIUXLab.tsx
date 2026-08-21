@@ -538,6 +538,10 @@ export default function UIUXLab() {
               </Link>
 
               <button
+                type="button"
+                onClick={() => {
+                  document.getElementById("design-process")?.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="
                   rounded-full
                   border
@@ -550,6 +554,7 @@ export default function UIUXLab() {
                   backdrop-blur-xl
                   transition
                   hover:bg-white
+                  cursor-pointer
                 "
               >
                 Our Process
@@ -1557,6 +1562,7 @@ function DesignJourney() {
 
   return (
     <section
+      id="design-process"
       ref={journeyRef}
       className="
         relative
@@ -2222,16 +2228,54 @@ function SelectedWork() {
   const nextTwo =
     projects[(activeIndex + 2) % projects.length];
 
-  const goTo = (index: number) => {
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const goTo = (index: number, forcedDir?: number) => {
     const nextIndex =
       (index + projects.length) % projects.length;
 
-    setDirection(nextIndex >= activeIndex ? 1 : -1);
+    if (forcedDir !== undefined) {
+      setDirection(forcedDir);
+    } else {
+      setDirection(nextIndex >= activeIndex ? 1 : -1);
+    }
     setActiveIndex(nextIndex);
   };
 
-  const goNext = () => goTo(activeIndex + 1);
-  const goPrevious = () => goTo(activeIndex - 1);
+  const goNext = () => {
+    setDirection(1);
+    setActiveIndex((prev) => (prev + 1) % projects.length);
+  };
+
+  const goPrevious = () => {
+    setDirection(-1);
+    setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX.current - touchEndX;
+    const diffY = (touchStartY.current || 0) - touchEndY;
+
+    // Horizontal swipe threshold 35px
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
+        goNext();
+      } else {
+        goPrevious();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -2242,7 +2286,7 @@ function SelectedWork() {
     window.addEventListener("keydown", onKeyDown);
 
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeIndex]);
+  }, []);
 
   const handlePointerMove = (
     event: React.MouseEvent<HTMLDivElement>
@@ -2582,99 +2626,186 @@ function SelectedWork() {
             onClick={goPrevious}
           />
 
-          {/* ACTIVE */}
-
-          <motion.div
-            key={activeProject.id}
-            initial={{
-              opacity: 0,
-              x: direction * 70,
-              scale: 0.96,
-              rotateY: direction * 3,
-            }}
-            animate={{
-              opacity: 1,
-              x: 0,
-              scale: 1,
-              rotateY: 0,
-            }}
-            transition={{
-              duration: 0.85,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            drag="x"
-            dragConstraints={{
-              left: 0,
-              right: 0,
-            }}
-            dragElastic={0.18}
-            onDragStart={() => setIsDragging(true)}
-            onDragEnd={(_, info) => {
-              setIsDragging(false);
-
-              if (
-                info.offset.x < -70 ||
-                info.velocity.x < -500
-              ) {
-                goNext();
-              } else if (
-                info.offset.x > 70 ||
-                info.velocity.x > 500
-              ) {
-                goPrevious();
-              }
-            }}
-            className={`
+          {/* ACTIVE CARD CONTAINER */}
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="
               group
               relative
               h-[500px]
-              w-[min(67vw,900px)]
+              w-[min(94vw,900px)]
+              sm:h-[570px]
+              sm:w-[min(84vw,900px)]
+              lg:h-[650px]
+              lg:w-[min(67vw,900px)]
               shrink-0
               overflow-hidden
               rounded-[24px]
+              sm:rounded-[28px]
               bg-[#0F172A]
               shadow-[0_45px_120px_rgba(15,23,42,.24)]
-              sm:h-[570px]
-              sm:rounded-[28px]
-              lg:h-[650px]
-              ${
-                isDragging
-                  ? "cursor-grabbing"
-                  : "cursor-grab"
-              }
-            `}
+              touch-pan-y
+            "
             style={{
-              rotateX: pointer.y * -3,
-              rotateY: pointer.x * 4,
+              transform: `rotateX(${pointer.y * -3}deg) rotateY(${pointer.x * 4}deg)`,
               transformStyle: "preserve-3d",
             }}
           >
+            {/* FLOATING DIRECT CARD ON-CARD SWAP ARROWS */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                goPrevious();
+              }}
+              aria-label="Previous project"
+              className="
+                absolute
+                left-2.5
+                sm:left-4
+                top-1/2
+                -translate-y-1/2
+                z-40
+                flex
+                h-10
+                w-10
+                sm:h-12
+                sm:w-12
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-white/25
+                bg-slate-950/40
+                text-white
+                shadow-lg
+                backdrop-blur-md
+                transition-all
+                duration-200
+                hover:scale-110
+                hover:bg-sky-500/80
+                hover:border-sky-300
+                active:scale-90
+              "
+            >
+              <ArrowLeft size={18} />
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                goNext();
+              }}
+              aria-label="Next project"
+              className="
+                absolute
+                right-2.5
+                sm:right-4
+                top-1/2
+                -translate-y-1/2
+                z-40
+                flex
+                h-10
+                w-10
+                sm:h-12
+                sm:w-12
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-white/25
+                bg-slate-950/40
+                text-white
+                shadow-lg
+                backdrop-blur-md
+                transition-all
+                duration-200
+                hover:scale-110
+                hover:bg-sky-500/80
+                hover:border-sky-300
+                active:scale-90
+              "
+            >
+              <ArrowRight size={18} />
+            </button>
+
             <AnimatePresence
               initial={false}
+              custom={direction}
               mode="wait"
             >
               <motion.div
                 key={activeProject.id}
-                initial={{
-                  opacity: 0,
-                  scale: 1.12,
-                  x: direction * 35,
+                custom={direction}
+                variants={{
+                  enter: (dir: number) => ({
+                    x: dir > 0 ? 100 : -100,
+                    opacity: 0,
+                    scale: 0.94,
+                    filter: "blur(4px)",
+                  }),
+                  center: {
+                    zIndex: 1,
+                    x: 0,
+                    opacity: 1,
+                    scale: 1,
+                    filter: "blur(0px)",
+                    transition: {
+                      x: { type: "spring", stiffness: 280, damping: 28 },
+                      opacity: { duration: 0.35 },
+                      scale: { duration: 0.35 },
+                      filter: { duration: 0.3 },
+                    },
+                  },
+                  exit: (dir: number) => ({
+                    zIndex: 0,
+                    x: dir < 0 ? 100 : -100,
+                    opacity: 0,
+                    scale: 0.94,
+                    filter: "blur(4px)",
+                    transition: {
+                      x: { type: "spring", stiffness: 280, damping: 28 },
+                      opacity: { duration: 0.3 },
+                      scale: { duration: 0.3 },
+                      filter: { duration: 0.3 },
+                    },
+                  }),
                 }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  x: 0,
+                initial="enter"
+                animate="center"
+                exit="exit"
+                drag="x"
+                dragConstraints={{
+                  left: 0,
+                  right: 0,
                 }}
-                exit={{
-                  opacity: 0,
-                  scale: 0.97,
-                  x: -direction * 30,
+                dragElastic={0.2}
+                onDragStart={() => setIsDragging(true)}
+                onDragEnd={(_, info) => {
+                  setIsDragging(false);
+
+                  if (
+                    info.offset.x < -30 ||
+                    info.velocity.x < -180
+                  ) {
+                    goNext();
+                  } else if (
+                    info.offset.x > 30 ||
+                    info.velocity.x > 180
+                  ) {
+                    goPrevious();
+                  }
                 }}
-                transition={{
-                  duration: 1,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="absolute inset-0"
+                className={`
+                  absolute inset-0 select-none
+                  ${
+                    isDragging
+                      ? "cursor-grabbing"
+                      : "cursor-grab"
+                  }
+                `}
               >
                 <motion.div
                   className="absolute inset-[-3%] bg-cover bg-center"
@@ -2774,27 +2905,30 @@ function SelectedWork() {
                     </p>
                   </div>
 
-                  <motion.div
-                    whileHover={{
-                      rotate: 45,
-                      scale: 1.08,
-                    }}
-                    className="
-                      flex
-                      h-11
-                      w-11
-                      items-center
-                      justify-center
-                      rounded-full
-                      border
-                      border-white/20
-                      bg-sky-950/20
-                      text-white
-                      backdrop-blur-md
-                    "
-                  >
-                    <ArrowUpRight size={17} />
-                  </motion.div>
+                  <Link href="/projects" aria-label="Explore all projects">
+                    <motion.div
+                      whileHover={{
+                        rotate: 45,
+                        scale: 1.08,
+                      }}
+                      className="
+                        flex
+                        h-11
+                        w-11
+                        items-center
+                        justify-center
+                        rounded-full
+                        border
+                        border-white/20
+                        bg-sky-950/20
+                        text-white
+                        backdrop-blur-md
+                        cursor-pointer
+                      "
+                    >
+                      <ArrowUpRight size={17} />
+                    </motion.div>
+                  </Link>
                 </div>
 
                 {/* VERTICAL */}
@@ -2995,7 +3129,7 @@ function SelectedWork() {
                 </div>
               </motion.div>
             </AnimatePresence>
-          </motion.div>
+          </div>
 
           <GallerySideCard
             project={next}
@@ -3277,17 +3411,16 @@ function GallerySideCard({
       className={`
         group
         relative
-        hidden
         shrink-0
         overflow-hidden
         rounded-[20px]
         bg-[#0F172A]
         shadow-[0_25px_70px_rgba(15,23,42,.16)]
-        lg:block
+        cursor-pointer
         ${
           isFar
-            ? "h-[520px] w-[90px]"
-            : "h-[590px] w-[135px] xl:h-[650px] xl:w-[150px]"
+            ? "hidden xl:block h-[520px] w-[90px]"
+            : "hidden md:block h-[520px] w-[90px] lg:h-[590px] lg:w-[135px] xl:h-[650px] xl:w-[150px]"
         }
         ${isLeft ? "origin-right" : "origin-left"}
       `}

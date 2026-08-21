@@ -229,20 +229,40 @@ export async function initDb() {
         );
       }
     }
+    // 5. Create messages table
+    await query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        type VARCHAR(50) NOT NULL,
+        name VARCHAR(255),
+        email VARCHAR(255),
+        phone VARCHAR(50),
+        message TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // 6. Create bookings table for scheduler
+    await query(`
+      CREATE TABLE IF NOT EXISTS bookings (
+        id SERIAL PRIMARY KEY,
+        reference_code VARCHAR(50) UNIQUE NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(50) NOT NULL,
+        company VARCHAR(255),
+        service VARCHAR(255) NOT NULL,
+        duration INT NOT NULL DEFAULT 30,
+        booking_date DATE NOT NULL,
+        booking_time VARCHAR(50) NOT NULL,
+        timezone VARCHAR(100) NOT NULL,
+        meeting_platform VARCHAR(50) NOT NULL DEFAULT 'Google Meet',
+        notes TEXT,
+        status VARCHAR(50) DEFAULT 'confirmed',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
   } catch (err) {
     console.error("Failed to initialize database:", err);
   }
 }
-
-      // Create messages table
-      await query(`
-        CREATE TABLE IF NOT EXISTS messages (
-          id SERIAL PRIMARY KEY,
-          type VARCHAR(50) NOT NULL,
-          name VARCHAR(255),
-          email VARCHAR(255),
-          phone VARCHAR(50),
-          message TEXT,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);

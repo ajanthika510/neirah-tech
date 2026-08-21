@@ -1,29 +1,61 @@
-"use client";
+﻿"use client";
 
-import FloatingBackground from "./FloatingBackground";
-import SectionHeading from "./SectionHeading";
-import BusinessGoals from "./BusinessGoals";
+import { useState, useCallback } from "react";
+import ChapterIndicator from "./ChapterIndicator";
+import ChapterHero from "./ChapterHero";
+import CapabilityReveal from "./CapabilityReveal";
+import RopePinnedServices from "./RopePinnedServices";
+import ImpactStats from "./ImpactStats";
+import FinalCTA from "./FinalCTA";
+
+/*
+  Chapter mapping:
+  0  ChapterHero          (The Invitation)
+  1  CapabilityReveal     (We Build)
+  2  RopePinnedServices   (Capabilities)
+  3  ImpactStats          (The Impact)
+  4  FinalCTA             (Lets Talk)
+*/
 
 export default function Services() {
-  return (
-    <section
-      className="
-        relative
-        overflow-hidden
-        bg-gradient-to-br
-        from-white
-        via-sky-50
-        to-indigo-50
-        pt-40
-        pb-28
-      "
-    >
-      <FloatingBackground />
+  const [activeChapter, setActiveChapter] = useState(0);
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
-        <SectionHeading />
-        <BusinessGoals />
+  const handleChapterEnter = useCallback((chapter: number) => {
+    setActiveChapter(chapter);
+  }, []);
+
+  return (
+    <>
+      <div className="relative bg-white overflow-x-hidden">
+        {/* Reduced motion */}
+        <style>{`
+          @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.01ms !important;
+            }
+          }
+        `}</style>
+
+        {/* Sticky chapter indicator */}
+        <ChapterIndicator activeChapter={activeChapter} />
+
+        {/* Chapter I */}
+        <ChapterHero onEnter={() => handleChapterEnter(0)} />
+
+        {/* Chapter II */}
+        <CapabilityReveal onEnter={() => handleChapterEnter(1)} />
+
+        {/* Chapter III — Rope pinned service cards */}
+        <RopePinnedServices onEnter={() => handleChapterEnter(2)} />
+
+        {/* Chapter IV */}
+        <ImpactStats onEnter={() => handleChapterEnter(3)} />
+
+        {/* Chapter V */}
+        <FinalCTA onEnter={() => handleChapterEnter(4)} />
       </div>
-    </section>
+    </>
   );
 }

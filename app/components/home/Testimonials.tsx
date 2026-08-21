@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 import {
   ArrowUpRight,
   ChevronDown,
@@ -675,8 +676,10 @@ export default function Testimonials() {
 
           </div>
 
-          <div className="group flex items-center gap-2 text-xs font-semibold text-[#17233D]">
-
+          <Link
+            href="/contact"
+            className="group flex items-center gap-2 text-xs font-semibold text-[#17233D] transition-colors hover:text-blue-600"
+          >
             <span>Let's build something meaningful</span>
 
             <ArrowUpRight
@@ -688,8 +691,7 @@ export default function Testimonials() {
                 group-hover:-translate-y-1
               "
             />
-
-          </div>
+          </Link>
 
         </motion.div>
 

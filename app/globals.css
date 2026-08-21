@@ -89,3 +89,52 @@ body {
   animation: marquee 30s linear infinite;
 }
 
+/* ─── Services Page: Light Theme Utilities ────────────────── */
+
+/* Light glass panel for services page */
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Scrollbar override for light pages */
+main.bg-white ::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+main.bg-white ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+main.bg-white ::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+
+/* Clip-reveal text animation */
+@keyframes clipReveal {
+  from {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    clip-path: inset(0% 0 0 0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.clip-reveal {
+  animation: clipReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Smooth ambient float */
+@keyframes ambientFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.98); }
+}
+
+.ambient-float {
+  animation: ambientFloat 20s ease-in-out infinite;
+}

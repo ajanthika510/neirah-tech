@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+﻿import { LucideIcon } from 'lucide-react';
 
 export interface Service {
   id: number;
@@ -8,4 +8,9 @@ export interface Service {
   benefits: string[];
   icon: LucideIcon;
   gradient: string;
+  discipline: string;
+  chapter: string;
+  visual: string;
+  accentFrom: string;
+  accentTo: string;
 }

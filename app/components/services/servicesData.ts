@@ -1,108 +1,151 @@
-import {
+﻿import {
   Globe,
   Smartphone,
   Bot,
   TrendingUp,
   ShieldCheck,
   BarChart3,
-} from "lucide-react";
+  Cpu,
+  FlaskConical,
+} from 'lucide-react';
 
-import { Service } from "./types";
+import { Service } from './types';
 
 export const services: Service[] = [
   {
     id: 1,
-    title: "Business Website",
-    subtitle: "Build Trust Online",
-    description:
-      "Create a modern website that attracts customers and helps your business grow 24/7.",
-    benefits: [
-      "Professional Design",
-      "Google Friendly",
-      "Fast Loading",
-      "Mobile Responsive",
-    ],
+    title: 'Business Website',
+    subtitle: 'Build Trust Online',
+    description: 'Create a modern website that attracts customers and helps your business grow 24/7.',
+    benefits: ['Professional Design', 'Google Friendly', 'Fast Loading', 'Mobile Responsive'],
     icon: Globe,
-    gradient: "from-sky-500 to-cyan-400",
+    gradient: 'from-sky-500 to-cyan-400',
+    discipline: 'Web Design & Development',
+    chapter: '01',
+    visual: 'globe',
+    accentFrom: '#0EA5E9',
+    accentTo: '#06B6D4',
   },
-
   {
     id: 2,
-    title: "Mobile Apps",
-    subtitle: "Stay Connected",
-    description:
-      "Allow your customers to access your services anytime from their phones.",
-    benefits: [
-      "Android",
-      "iPhone",
-      "Push Notifications",
-      "Easy Updates",
-    ],
+    title: 'Mobile Apps',
+    subtitle: 'Stay Connected',
+    description: 'Allow your customers to access your services anytime from their phones.',
+    benefits: ['Android', 'iPhone', 'Push Notifications', 'Easy Updates'],
     icon: Smartphone,
-    gradient: "from-indigo-500 to-sky-500",
+    gradient: 'from-indigo-500 to-sky-500',
+    discipline: 'Mobile Experience',
+    chapter: '02',
+    visual: 'mobile',
+    accentFrom: '#6366F1',
+    accentTo: '#0EA5E9',
   },
-
   {
     id: 3,
-    title: "AI Assistant",
-    subtitle: "Save Time",
-    description:
-      "Automate repetitive tasks and answer customer questions instantly.",
-    benefits: [
-      "24/7 Support",
-      "Chatbot",
-      "Automation",
-      "WhatsApp",
-    ],
+    title: 'AI Assistant',
+    subtitle: 'Save Time',
+    description: 'Automate repetitive tasks and answer customer questions instantly.',
+    benefits: ['24/7 Support', 'Chatbot', 'Automation', 'WhatsApp'],
     icon: Bot,
-    gradient: "from-cyan-500 to-sky-500",
+    gradient: 'from-violet-500 to-indigo-500',
+    discipline: 'Intelligent Automation',
+    chapter: '03',
+    visual: 'ai',
+    accentFrom: '#8B5CF6',
+    accentTo: '#6366F1',
   },
-
   {
     id: 4,
-    title: "Digital Marketing",
-    subtitle: "Reach More Customers",
-    description:
-      "Increase visibility and attract more customers through online marketing.",
-    benefits: [
-      "SEO",
-      "Facebook Ads",
-      "Google Ads",
-      "Brand Awareness",
-    ],
+    title: 'Digital Marketing',
+    subtitle: 'Reach More Customers',
+    description: 'Increase visibility and attract more customers through online marketing.',
+    benefits: ['SEO', 'Facebook Ads', 'Google Ads', 'Brand Awareness'],
     icon: TrendingUp,
-    gradient: "from-sky-600 to-indigo-500",
+    gradient: 'from-sky-600 to-indigo-500',
+    discipline: 'Growth & Visibility',
+    chapter: '04',
+    visual: 'marketing',
+    accentFrom: '#0284C7',
+    accentTo: '#6366F1',
   },
-
   {
     id: 5,
-    title: "Business Software",
-    subtitle: "Manage Everything",
-    description:
-      "Track sales, inventory, customers and reports in one place.",
-    benefits: [
-      "Sales",
-      "Inventory",
-      "CRM",
-      "Reports",
-    ],
+    title: 'Business Software',
+    subtitle: 'Manage Everything',
+    description: 'Track sales, inventory, customers and reports in one place.',
+    benefits: ['Sales', 'Inventory', 'CRM', 'Reports'],
     icon: BarChart3,
-    gradient: "from-cyan-500 to-indigo-600",
+    gradient: 'from-purple-500 to-indigo-600',
+    discipline: 'Enterprise Software',
+    chapter: '05',
+    visual: 'software',
+    accentFrom: '#A855F7',
+    accentTo: '#6366F1',
   },
-
   {
     id: 6,
-    title: "Consulting",
-    subtitle: "Expert Guidance",
-    description:
-      "Choose the right technology based on your business goals.",
-    benefits: [
-      "Planning",
-      "Roadmap",
-      "Training",
-      "Support",
-    ],
+    title: 'Consulting',
+    subtitle: 'Expert Guidance',
+    description: 'Choose the right technology based on your business goals.',
+    benefits: ['Planning', 'Roadmap', 'Training', 'Support'],
     icon: ShieldCheck,
-    gradient: "from-indigo-600 to-sky-500",
+    gradient: 'from-indigo-600 to-sky-500',
+    discipline: 'Strategy & Advisory',
+    chapter: '06',
+    visual: 'consulting',
+    accentFrom: '#6366F1',
+    accentTo: '#0EA5E9',
   },
+
+    {
+    id: 7,
+    title: 'Smart Devices & IoT',
+    subtitle: 'Connect the Physical World',
+    description: 'Sensors, drones and smart devices that bring automation to farms, sites and operations.',
+    benefits: ['IoT Sensors', 'Drone Monitoring', 'Smart Agriculture', 'Real-Time Data'],
+    icon: Cpu, // or a drone/satellite icon if available
+    gradient: 'from-emerald-500 to-sky-500',
+    discipline: 'IoT & Emerging Technology',
+    chapter: '07',
+    visual: 'iot',
+    accentFrom: '#10B981',
+    accentTo: '#0EA5E9',
+  },
+  {
+    id: 8,
+    title: 'Innovation Lab',
+    subtitle: 'Built for What\'s Next',
+    description: 'We research and prototype emerging technology so your business stays ahead.',
+    benefits: ['R&D', 'Prototyping', 'AI Research', 'Future Tech'],
+    icon: FlaskConical, // or Rocket
+    gradient: 'from-fuchsia-500 to-violet-500',
+    discipline: 'Research & Development',
+    chapter: '08',
+    visual: 'lab',
+    accentFrom: '#D946EF',
+    accentTo: '#8B5CF6',
+  },
+];
+
+export const capabilities = [
+  { word: 'DESIGN', delay: 0 },
+  { word: 'DIGITAL PRODUCTS', delay: 1 },
+  { word: 'BRANDS', delay: 2 },
+  { word: 'EXPERIENCES', delay: 3 },
+  { word: 'SYSTEMS', delay: 4 },
+];
+
+export const impactStats = [
+  { number: '120+', label: 'PROJECTS', description: 'Delivered across industries' },
+  { number: '35+', label: 'CLIENTS', description: 'Businesses transformed' },
+  { number: '15+', label: 'INDUSTRIES', description: 'Served with expertise' },
+  { number: '11+', label: 'YEARS', description: 'Of building together' },
+];
+
+export const chapters = [
+  { number: 'I', name: 'The Invitation' },
+  { number: 'II', name: 'We Build' },
+  { number: 'III', name: 'Capabilities' },
+  { number: 'IV', name: 'The Impact' },
+  { number: 'V', name: 'Lets Talk' },
 ];

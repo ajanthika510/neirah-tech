@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import { motion } from "framer-motion";
 import {
@@ -177,7 +178,7 @@ export default function Footer() {
 
           <div>
 
-            <a
+            <Link
               href="/"
               className="group inline-flex items-center gap-3"
             >
@@ -211,7 +212,7 @@ export default function Footer() {
 
               </div>
 
-            </a>
+            </Link>
 
 
             <p className="mt-7 max-w-sm text-sm leading-7 text-slate-500">
@@ -406,7 +407,7 @@ function FooterColumn({
         {links.map((link) => (
           <li key={link.name}>
 
-            <a
+            <Link
               href={link.href}
               className="group inline-flex items-center gap-2 text-sm text-slate-500 transition-colors duration-300 hover:text-white"
             >
@@ -420,7 +421,7 @@ function FooterColumn({
                 className="opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
               />
 
-            </a>
+            </Link>
 
           </li>
         ))}

@@ -1214,45 +1214,42 @@ function BalloonWorld({
 
 /* =========================================================
    BACKGROUND
-========================================================= */
+======================================================= */
 
-function Background() {
+ function Background() {
   return (
     <div
       className="
         absolute
         inset-0
         overflow-hidden
-        bg-[#F5F8FC]
+        bg-[#F4F8FC]
       "
     >
-      {/* Main ecosystem atmosphere */}
-
+      {/* Main atmosphere */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 50% 48%, rgba(56,189,248,0.14) 0%, rgba(99,102,241,0.075) 24%, rgba(255,255,255,0.78) 48%, #F5F8FC 82%)",
+            "radial-gradient(circle at 50% 45%, rgba(14,165,233,0.10), rgba(244,248,252,0.72) 42%, #F4F8FC 82%)",
         }}
       />
 
-      {/* Blue atmosphere */}
-
+      {/* Left atmosphere */}
       <motion.div
         className="
           absolute
-          -left-[18vw]
-          top-[5vh]
-          h-[65vh]
-          w-[65vh]
+          -left-[15vw]
+          top-[8vh]
+          h-[55vh]
+          w-[55vh]
           rounded-full
           bg-sky-300/10
           blur-[150px]
         "
         animate={{
           x: [0, 100, 0],
-          y: [0, 45, 0],
-          scale: [1, 1.08, 1],
+          y: [0, 50, 0],
         }}
         transition={{
           duration: 14,
@@ -1261,15 +1258,14 @@ function Background() {
         }}
       />
 
-      {/* Indigo atmosphere */}
-
+      {/* Right atmosphere */}
       <motion.div
         className="
           absolute
-          -right-[18vw]
-          bottom-[0]
-          h-[65vh]
-          w-[65vh]
+          -right-[15vw]
+          bottom-[5vh]
+          h-[60vh]
+          w-[60vh]
           rounded-full
           bg-indigo-300/10
           blur-[160px]
@@ -1277,7 +1273,6 @@ function Background() {
         animate={{
           x: [0, -90, 0],
           y: [0, -50, 0],
-          scale: [1, 1.1, 1],
         }}
         transition={{
           duration: 16,
@@ -1286,75 +1281,42 @@ function Background() {
         }}
       />
 
-      {/* Cyan atmosphere */}
-
-      <motion.div
-        className="
-          absolute
-          left-[25%]
-          top-[30%]
-          h-[35vh]
-          w-[35vh]
-          rounded-full
-          bg-cyan-300/10
-          blur-[130px]
-        "
-        animate={{
-          x: [0, 60, 0],
-          y: [0, -40, 0],
-          opacity: [0.35, 0.65, 0.35],
-        }}
-        transition={{
-          duration: 11,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
       {/* Technical grid */}
-
       <div
-        className="
-          absolute
-          inset-0
-          opacity-[0.035]
-        "
+        className="absolute inset-0 opacity-[0.028]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(37,99,235,0.45) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.45) 1px, transparent 1px)",
-          backgroundSize:
-            "70px 70px",
+            "linear-gradient(rgba(37,99,235,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.35) 1px, transparent 1px)",
+          backgroundSize: "70px 70px",
         }}
       />
 
-      {/* Fine center halo */}
-
+      {/* Soft vignette */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 25%, rgba(226,232,240,0.25) 72%, rgba(226,232,240,0.42) 100%)",
+            "radial-gradient(circle at center, transparent 25%, rgba(226,232,240,0.18) 100%)",
         }}
       />
 
       {/* Center glow */}
-
       <motion.div
         className="
           absolute
           left-1/2
           top-1/2
-          h-[34vh]
-          w-[34vh]
+          h-[30vh]
+          w-[30vh]
           -translate-x-1/2
           -translate-y-1/2
           rounded-full
           bg-sky-300/10
-          blur-[110px]
+          blur-[100px]
         "
         animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.35, 0.7, 0.35],
+          scale: [1, 1.25, 1],
+          opacity: [0.35, 0.65, 0.35],
         }}
         transition={{
           duration: 7,
@@ -1365,7 +1327,6 @@ function Background() {
     </div>
   );
 }
-
 /* =========================================================
    INTRO
 ========================================================= */
@@ -2064,7 +2025,7 @@ export default function FeaturedProjects() {
         relative
         h-[1550vh]
         overflow-hidden
-        bg-[#F5F8FC]
+        bg-[#F4F8FC]
         border-none
       "
       style={{
@@ -2222,36 +2183,35 @@ export default function FeaturedProjects() {
         {/* TOP FADE */}
 
         <div
-          className="
-            pointer-events-none
-            absolute
-            inset-x-0
-            top-0
-            z-[170]
-            h-32
-          "
-          style={{
-            background:
-              "linear-gradient(to bottom, #F5F8FC 0%, rgba(245,248,252,0.72) 45%, transparent 100%)",
-          }}
-        />
-
+  className="
+    pointer-events-none
+    absolute
+    inset-x-0
+    top-0
+    z-[170]
+    h-24
+  "
+  style={{
+    background:
+      "linear-gradient(to bottom, #F4F8FC 0%, rgba(244,248,252,0.65) 45%, transparent 100%)",
+  }}
+/>
         {/* BOTTOM FADE */}
 
         <div
-          className="
-            pointer-events-none
-            absolute
-            inset-x-0
-            bottom-0
-            z-[170]
-            h-36
-          "
-          style={{
-            background:
-              "linear-gradient(to top, #F5F8FC 0%, rgba(245,248,252,0.72) 45%, transparent 100%)",
-          }}
-        />
+  className="
+    pointer-events-none
+    absolute
+    inset-x-0
+    bottom-0
+    z-[170]
+    h-24
+  "
+  style={{
+    background:
+      "linear-gradient(to top, #F4F8FC 0%, rgba(244,248,252,0.65) 45%, transparent 100%)",
+  }}
+/>
 
         {/* CENTER VIGNETTE */}
 

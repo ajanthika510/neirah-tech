@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
+import SchedulerModal from "./SchedulerModal";
 
 const benefits = [
   "Custom Software",
@@ -27,6 +28,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function ProjectCTA() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [schedulerOpen, setSchedulerOpen] = useState(false);
 
   /*
   ============================================================
@@ -727,8 +729,8 @@ export default function ProjectCTA() {
                   gap-4
                 "
               >
-                <Link href="/services">
-                  <motion.button
+                <Link href="/contact">
+                  <motion.div
                     whileHover={{
                       y: -5,
                       scale: 1.02,
@@ -752,6 +754,10 @@ export default function ProjectCTA() {
                       text-white
                       font-bold
                       shadow-[0_18px_45px_rgba(14,165,233,.3)]
+                      cursor-pointer
+                      flex
+                      items-center
+                      justify-center
                     "
                   >
                     <span
@@ -785,54 +791,55 @@ export default function ProjectCTA() {
                         "
                       />
                     </span>
-                  </motion.button>
+                  </motion.div>
                 </Link>
 
-                <Link href="#hero">
-                  <motion.button
-                    whileHover={{
-                      y: -5,
-                      scale: 1.02,
-                    }}
-                    whileTap={{
-                      scale: 0.97,
-                    }}
+                <motion.button
+                  type="button"
+                  onClick={() => setSchedulerOpen(true)}
+                  whileHover={{
+                    y: -5,
+                    scale: 1.02,
+                  }}
+                  whileTap={{
+                    scale: 0.97,
+                  }}
+                  className="
+                    group
+                    w-full
+                    sm:w-auto
+                    min-w-[210px]
+                    px-8
+                    py-4
+                    rounded-full
+                    bg-white/80
+                    border
+                    border-slate-200
+                    text-slate-800
+                    font-bold
+                    shadow-sm
+                    hover:bg-white
+                    hover:shadow-md
+                    transition
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                    cursor-pointer
+                  "
+                >
+                  Book Consultation
+
+                  <MoveUpRight
+                    size={17}
                     className="
-                      group
-                      w-full
-                      sm:w-auto
-                      min-w-[210px]
-                      px-8
-                      py-4
-                      rounded-full
-                      bg-white/80
-                      border
-                      border-slate-200
-                      text-slate-800
-                      font-bold
-                      shadow-sm
-                      hover:bg-white
-                      hover:shadow-md
+                      text-slate-400
+                      group-hover:translate-x-0.5
+                      group-hover:-translate-y-0.5
                       transition
-                      flex
-                      items-center
-                      justify-center
-                      gap-2
                     "
-                  >
-                    Book Consultation
-
-                    <MoveUpRight
-                      size={17}
-                      className="
-                        text-slate-400
-                        group-hover:translate-x-0.5
-                        group-hover:-translate-y-0.5
-                        transition
-                      "
-                    />
-                  </motion.button>
-                </Link>
+                  />
+                </motion.button>
               </div>
 
               {/* Benefits */}
@@ -885,6 +892,11 @@ export default function ProjectCTA() {
           </motion.div>
         </motion.div>
       </div>
+
+      <SchedulerModal
+        isOpen={schedulerOpen}
+        onClose={() => setSchedulerOpen(false)}
+      />
     </section>
   );
-}
+}
