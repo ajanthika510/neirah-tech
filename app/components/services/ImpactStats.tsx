@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
@@ -43,7 +43,7 @@ export default function ImpactStats({ onEnter }: { onEnter: () => void }) {
     <section
       ref={ref}
       data-chapter="3"
-      className="relative py-40 overflow-hidden bg-gradient-to-b from-indigo-50/80 via-white to-violet-50/50"
+      className="relative py-20 sm:py-32 lg:py-40 overflow-hidden bg-gradient-to-b from-indigo-50/80 via-white to-violet-50/50"
       onMouseEnter={onEnter}
     >
       {/* Background ambience */}
@@ -55,14 +55,14 @@ export default function ImpactStats({ onEnter }: { onEnter: () => void }) {
         />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
         {/* Chapter label */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-20 flex items-center gap-3"
+          className="mb-10 sm:mb-20 flex items-center gap-3"
         >
           <div className="h-px w-8 bg-gradient-to-r from-transparent to-violet-400" />
           <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-violet-500">
@@ -76,9 +76,9 @@ export default function ImpactStats({ onEnter }: { onEnter: () => void }) {
           whileInView={{ opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-20 overflow-hidden"
+          className="mb-12 sm:mb-20 overflow-hidden"
         >
-          <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
             Results that
             <span className="bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">
               {" "}speak.
@@ -87,7 +87,7 @@ export default function ImpactStats({ onEnter }: { onEnter: () => void }) {
         </motion.div>
 
         {/* Stats grid */}
-        <div className="grid gap-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {impactStats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -99,13 +99,13 @@ export default function ImpactStats({ onEnter }: { onEnter: () => void }) {
                 delay: i * 0.12,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="group relative p-8 rounded-[28px] bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_8px_40px_rgba(99,102,241,0.08)] hover:shadow-[0_12px_60px_rgba(99,102,241,0.14)] transition-shadow duration-500"
+              className="group relative p-6 sm:p-8 rounded-[28px] bg-white/75 backdrop-blur-xl border border-white/80 shadow-[0_8px_40px_rgba(99,102,241,0.08)] hover:shadow-[0_12px_60px_rgba(99,102,241,0.14)] transition-shadow duration-500"
             >
               {/* Gradient accent */}
               <div className="absolute inset-x-0 top-0 h-px rounded-t-[28px] bg-gradient-to-r from-sky-300 via-indigo-400 to-violet-400 opacity-50" />
 
               {/* Number */}
-              <div className="text-[72px] md:text-[90px] font-black leading-none tracking-tight bg-gradient-to-br from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">
+              <div className="text-5xl sm:text-6xl md:text-7xl lg:text-[84px] font-black leading-none tracking-tight bg-gradient-to-br from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">
                 <CountUp target={stat.number} inView={inView} />
               </div>
 
@@ -116,10 +116,10 @@ export default function ImpactStats({ onEnter }: { onEnter: () => void }) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.3 + i * 0.12 }}
               >
-                <p className="mt-2 text-sm font-black tracking-[0.25em] uppercase text-slate-900">
+                <p className="mt-3 sm:mt-4 text-xs sm:text-sm font-black tracking-[0.25em] uppercase text-slate-900">
                   {stat.label}
                 </p>
-                <p className="mt-1 text-xs text-slate-400 font-medium">
+                <p className="mt-1 text-xs text-slate-400 font-medium leading-relaxed">
                   {stat.description}
                 </p>
               </motion.div>

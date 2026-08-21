@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { services } from "./servicesData";
@@ -146,9 +147,9 @@ function PinnedCard({ service, globalIndex }: CardProps) {
       <Pin gradient={pinGrad} delay={delay} />
       <CardString delay={delay} />
 
-      {/* Card flyin from right */}
+      {/* Card flyin */}
       <motion.div
-        initial={{ x: 520, rotate: 28, opacity: 0, scale: 0.85 }}
+        initial={{ x: 60, rotate: 12, opacity: 0, scale: 0.92 }}
         whileInView={{ x: 0, rotate: restRotation, opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: "-8%" }}
         transition={{
@@ -181,15 +182,15 @@ function PinnedCard({ service, globalIndex }: CardProps) {
           }}
           whileHover={{
             rotate: 0,
-            scale: 1.05,
-            y: -10,
+            scale: 1.03,
+            y: -8,
             transition: { type: "spring", stiffness: 260, damping: 18 },
           }}
-          className="group relative overflow-hidden rounded-[26px] bg-white/88 backdrop-blur-xl
+          className="group relative overflow-hidden rounded-[26px] bg-white/90 backdrop-blur-xl
                      border border-white/90
-                     shadow-[0_24px_60px_rgba(99,102,241,0.14),0_4px_16px_rgba(0,0,0,0.06)]
-                     hover:shadow-[0_32px_80px_rgba(99,102,241,0.22),0_8px_24px_rgba(0,0,0,0.08)]
-                     transition-shadow duration-500 cursor-default"
+                     shadow-[0_20px_50px_rgba(99,102,241,0.12),0_4px_16px_rgba(0,0,0,0.05)]
+                     hover:shadow-[0_28px_70px_rgba(99,102,241,0.2),0_8px_24px_rgba(0,0,0,0.08)]
+                     transition-shadow duration-500"
           style={{ transformOrigin: "top center" }}
         >
           {/* Top gradient bar */}
@@ -203,12 +204,12 @@ function PinnedCard({ service, globalIndex }: CardProps) {
           />
 
           {/* Chapter watermark */}
-          <div className="absolute bottom-4 right-5 text-[72px] font-black leading-none text-slate-100/60 select-none pointer-events-none">
+          <div className="absolute bottom-4 right-5 text-[64px] sm:text-[72px] font-black leading-none text-slate-100/60 select-none pointer-events-none">
             {service.chapter}
           </div>
 
           {/* Content */}
-          <div className="relative p-6">
+          <div className="relative p-5 sm:p-6">
             {/* Discipline label */}
             <p className={`text-[10px] font-black tracking-[0.28em] uppercase bg-gradient-to-r ${service.gradient} bg-clip-text text-transparent`}>
               {service.discipline}
@@ -216,18 +217,18 @@ function PinnedCard({ service, globalIndex }: CardProps) {
 
             {/* Icon */}
             <div
-              className={`mt-3 w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}
+              className={`mt-3 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}
             >
-              <Icon size={26} className="text-white" />
+              <Icon size={24} className="text-white" />
             </div>
 
             {/* Title */}
-            <h3 className="mt-4 text-[1.35rem] font-extrabold text-slate-900 leading-tight tracking-tight">
+            <h3 className="mt-4 text-[1.2rem] sm:text-[1.35rem] font-extrabold text-slate-900 leading-tight tracking-tight">
               {service.title}
             </h3>
 
             {/* Description */}
-            <p className="mt-2 text-sm text-slate-500 leading-relaxed">
+            <p className="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed">
               {service.description}
             </p>
 
@@ -245,16 +246,14 @@ function PinnedCard({ service, globalIndex }: CardProps) {
             </ul>
 
             {/* CTA */}
-            <div className="mt-5 overflow-hidden h-5">
-              <motion.div
-                initial={{ y: "120%" }}
-                whileHover={{ y: "0%" }}
-                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                className="flex items-center gap-1.5 text-xs font-bold text-indigo-600"
+            <div className="mt-5">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 transition-colors hover:text-sky-500 group-hover:translate-x-0.5 transition-transform"
               >
-                Learn more
-                <ArrowRight size={11} />
-              </motion.div>
+                Inquire about this
+                <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
+              </Link>
             </div>
           </div>
         </motion.div>
@@ -349,7 +348,7 @@ export default function RopePinnedServices({
     <section
       data-chapter="2"
       onMouseEnter={onEnter}
-      className="relative overflow-hidden py-28"
+      className="relative overflow-hidden py-16 sm:py-28"
       style={{
         background:
           "linear-gradient(160deg, #f0f7ff 0%, #eef0ff 35%, #f5f0ff 65%, #f0f7ff 100%)",
@@ -386,7 +385,7 @@ export default function RopePinnedServices({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
         {/* Chapter label */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -407,21 +406,21 @@ export default function RopePinnedServices({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-20"
+          className="mb-12 sm:mb-20"
         >
-          <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-none">
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight sm:leading-none">
             What we{" "}
             <span className="bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent">
               deliver.
             </span>
           </h2>
-          <p className="mt-4 text-base text-slate-400 max-w-md font-light">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-base text-slate-500 max-w-md font-light">
             {services.length} capabilities, one vision — technology that moves your business forward.
           </p>
         </motion.div>
 
         {/* Rope rows */}
-        <div className="space-y-24">
+        <div className="space-y-16 sm:space-y-24">
           {rows.map((rowServices, rowIndex) => (
             <RopeRow key={rowIndex} rowServices={rowServices} rowIndex={rowIndex} />
           ))}

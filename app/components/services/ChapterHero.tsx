@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef } from "react";
 import {
@@ -256,13 +256,15 @@ export default function ChapterHero({
         <div className="overflow-hidden">
           <h1
             className="
-              text-6xl
+              text-[2.6rem]
+              xs:text-5xl
               sm:text-7xl
               md:text-8xl
               lg:text-9xl
               font-extrabold
               tracking-tight
-              leading-none
+              leading-[1.08]
+              sm:leading-none
               text-slate-900
             "
           >
@@ -284,7 +286,7 @@ export default function ChapterHero({
                 }}
                 className={`
                   inline-block
-                  mr-[0.25em]
+                  mr-[0.22em]
 
                   ${
                     word === "human." ||
@@ -326,14 +328,17 @@ export default function ChapterHero({
             ease: [0.22, 1, 0.36, 1],
           }}
           className="
-            mt-10
-            text-lg
+            mt-8
+            sm:mt-10
+            text-base
+            sm:text-lg
             md:text-xl
             text-slate-500
             max-w-xl
             mx-auto
             leading-relaxed
             font-light
+            px-2
           "
         >
           We build digital products that businesses
@@ -399,15 +404,23 @@ export default function ChapterHero({
         style={{
           opacity: scrollIndicatorOpacity,
         }}
+        onClick={() => {
+          document.querySelector('[data-chapter="1"]')?.scrollIntoView({ behavior: "smooth" });
+        }}
         className="
           absolute
-          bottom-10
+          bottom-6
+          sm:bottom-10
           left-1/2
           -translate-x-1/2
           flex
           flex-col
           items-center
-          gap-3
+          gap-2.5
+          cursor-pointer
+          select-none
+          transition-transform
+          hover:scale-105
         "
       >
         <motion.span
@@ -434,7 +447,7 @@ export default function ChapterHero({
 
         <motion.div
           animate={{
-            y: [0, 10, 0],
+            y: [0, 8, 0],
           }}
           transition={{
             duration: 1.8,

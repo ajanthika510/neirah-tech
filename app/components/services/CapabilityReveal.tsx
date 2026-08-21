@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
@@ -32,7 +32,7 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
     <section
       ref={ref}
       data-chapter="1"
-      className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-sky-50 via-white to-indigo-50/60 py-32"
+      className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-sky-50 via-white to-indigo-50/60 py-20 sm:py-32"
       onMouseEnter={onEnter}
     >
       {/* Background ambience */}
@@ -51,7 +51,7 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
 
       <motion.div
         style={{ opacity: sectionOpacity, y: sectionY }}
-        className="relative z-10 max-w-7xl mx-auto px-6 w-full"
+        className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 w-full"
       >
         {/* Chapter label */}
         <motion.div
@@ -59,7 +59,7 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-16 flex items-center gap-3"
+          className="mb-10 sm:mb-16 flex items-center gap-3"
         >
           <div className="h-px w-8 bg-gradient-to-r from-transparent to-indigo-400" />
           <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-indigo-500">
@@ -73,13 +73,13 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-sm font-semibold tracking-[0.25em] uppercase text-slate-400 mb-8"
+          className="text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase text-slate-400 mb-6 sm:mb-8"
         >
           Our craft spans —
         </motion.p>
 
         {/* Giant progressive text */}
-        <div className="space-y-2">
+        <div className="space-y-1 sm:space-y-2">
           {/* WE label */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -88,7 +88,7 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <span className="block text-[13px] font-bold tracking-[0.35em] uppercase text-sky-500 mb-2">
+            <span className="block text-[11px] sm:text-[13px] font-bold tracking-[0.35em] uppercase text-sky-500 mb-1 sm:mb-2">
               WE
             </span>
           </motion.div>
@@ -108,8 +108,8 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
             >
               <h2
                 className={`
-                  font-extrabold leading-[0.9] tracking-tight
-                  text-[clamp(3.5rem,10vw,10rem)]
+                  font-extrabold leading-[0.95] tracking-tight break-words
+                  text-[clamp(2.3rem,8.5vw,9rem)]
                   ${i % 2 === 0
                     ? "bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent"
                     : "text-slate-900"

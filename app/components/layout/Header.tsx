@@ -533,6 +533,7 @@ export default function Navbar() {
               ================================================== */}
 
               <div
+                onClick={openScheduler}
                 className="
                   mt-2
                   rounded-2xl
@@ -541,7 +542,10 @@ export default function Navbar() {
                   via-[#F8FAFC]
                   to-[#EEF2FF]
                   p-3
-
+                  cursor-pointer
+                  transition-all
+                  hover:scale-[1.02]
+                  active:scale-[0.98]
                   sm:p-3.5
                 "
               >
