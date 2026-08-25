@@ -1,6 +1,7 @@
 "use server";
 
-import pool, { query, initDb } from "../../lib/db";
+import { query, ensureDb } from "../../lib/db";
+import { verifyAdminAuth } from "../../lib/auth";
 import { revalidatePath } from "next/cache";
 
 export type CaseStudy = {
@@ -16,11 +17,6 @@ export type CaseStudy = {
   services: string[];
 };
 
-// Ensure DB is initialized
-async function ensureDb() {
-  await initDb();
-}
-
 export async function getCaseStudies(): Promise<CaseStudy[]> {
   await ensureDb();
   try {
@@ -33,10 +29,8 @@ export async function getCaseStudies(): Promise<CaseStudy[]> {
 }
 
 export async function createCaseStudy(data: Omit<CaseStudy, "id">, adminPassword?: string) {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   const { number, category, type, title, subtitle, description, image, year, services } = data;
   await query(
@@ -48,10 +42,8 @@ export async function createCaseStudy(data: Omit<CaseStudy, "id">, adminPassword
 }
 
 export async function updateCaseStudy(id: number, data: Partial<Omit<CaseStudy, "id">>, adminPassword?: string) {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   const { number, category, type, title, subtitle, description, image, year, services } = data;
   await query(
@@ -73,10 +65,8 @@ export async function updateCaseStudy(id: number, data: Partial<Omit<CaseStudy, 
 }
 
 export async function deleteCaseStudy(id: number, adminPassword?: string) {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   await query("DELETE FROM case_studies WHERE id = $1", [id]);
   revalidatePath("/case-studies");

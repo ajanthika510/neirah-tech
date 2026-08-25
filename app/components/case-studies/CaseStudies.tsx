@@ -141,21 +141,26 @@ function normalizeCaseStudy(
    MAIN PAGE
 ========================================================= */
 
-export default function CaseStudiesPage() {
-  const [projects, setProjects] =
-    useState<CaseStudyItem[]>([]);
+export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStudies?: any[] }) {
+  const [projects, setProjects] = useState<CaseStudyItem[]>(() => {
+    if (initialCaseStudies && initialCaseStudies.length > 0) {
+      return initialCaseStudies
+        .map((item: any, index: number) => normalizeCaseStudy(item, index))
+        .filter(Boolean) as CaseStudyItem[];
+    }
+    return [];
+  });
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(!initialCaseStudies || initialCaseStudies.length === 0);
 
-  const [error, setError] =
-    useState(false);
+  const [error, setError] = useState(false);
 
   /* =======================================================
      LOAD PROJECTS
   ======================================================= */
 
   useEffect(() => {
+    if (initialCaseStudies && initialCaseStudies.length > 0) return;
     let mounted = true;
 
     const loadCaseStudies = async () => {
@@ -1253,12 +1258,18 @@ export default function CaseStudiesPage() {
                   </p>
                 )}
 
-                <Link
+                <a
                   href={
                     featuredProject.slug
                       ? `/case-studies/${featuredProject.slug}`
-                      : "#"
+                      : "#case-studies-archive"
                   }
+                  onClick={(e) => {
+                    if (!featuredProject.slug) {
+                      e.preventDefault();
+                      document.getElementById("case-studies-archive")?.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
                   className="
                     group/link
                     mt-6
@@ -1295,7 +1306,7 @@ export default function CaseStudiesPage() {
                   >
                     <ArrowUpRight size={16} />
                   </span>
-                </Link>
+                </a>
               </div>
             </motion.div>
 
@@ -1346,9 +1357,11 @@ export default function CaseStudiesPage() {
 
       {archiveProjects.length > 0 && (
         <section
+          id="case-studies-archive"
           className="
             relative
             z-10
+            scroll-mt-24
             bg-[#EEF8FC]
             px-5
             py-28
@@ -1936,7 +1949,7 @@ function EditorialProject({
 
   const caseStudyHref = project.slug
     ? `/case-studies/${project.slug}`
-    : "#";
+    : "/contact";
 
   return (
     <motion.article

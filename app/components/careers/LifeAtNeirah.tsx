@@ -31,7 +31,7 @@ export default function LifeAtNeirah() {
   return (
     <section
       id="life-at-neirah"
-      className="relative overflow-hidden bg-white px-6 py-24 sm:px-8 lg:px-10"
+      className="relative scroll-mt-24 overflow-hidden bg-white px-6 py-24 sm:px-8 lg:px-10"
     >
       <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2">
 

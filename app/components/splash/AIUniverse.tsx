@@ -850,6 +850,8 @@ export default function AIUniverse({
 }: AIUniverseProps) {
   return (
     <Canvas
+      className="pointer-events-none"
+      style={{ pointerEvents: "none" }}
       camera={{
         position: [
           0,

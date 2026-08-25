@@ -28,22 +28,7 @@ import {
   X,
 } from "lucide-react";
 
-import { getProjects } from "../../actions/projectActions";
-
-/* =========================================================
-   TYPES
-========================================================= */
-
-type Project = {
-  id: number;
-  title: string;
-  category: string;
-  country: string;
-  countryCode: string;
-  status: "Live" | "In Development";
-  website: string;
-  description: string;
-};
+import { getProjects, type Project } from "../../actions/projectActions";
 
 /* =========================================================
    FALLBACK PROJECTS
@@ -302,21 +287,21 @@ function useResponsiveIntensity() {
    MAIN
 ========================================================= */
 
-export default function Projects() {
-  const [projectsList, setProjectsList] =
-    useState<Project[]>(fallbackProjects);
+export default function Projects({ initialProjects }: { initialProjects?: Project[] }) {
+  const [projectsList, setProjectsList] = useState<Project[]>(
+    initialProjects && initialProjects.length > 0 ? initialProjects : fallbackProjects
+  );
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialProjects || initialProjects.length === 0);
 
   const [search, setSearch] = useState("");
 
-  const [countryFilter, setCountryFilter] =
-    useState("All");
+  const [countryFilter, setCountryFilter] = useState("All");
 
-  const [categoryFilter, setCategoryFilter] =
-    useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
 
   useEffect(() => {
+    if (initialProjects && initialProjects.length > 0) return;
     let mounted = true;
 
     async function loadProjects() {

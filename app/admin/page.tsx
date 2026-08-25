@@ -397,7 +397,7 @@ export default function AdminPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/scheduler" target="_blank" className="text-xs font-semibold text-blue-600 hover:underline">
+            <Link href="/scheduler" target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-blue-600 hover:underline">
               Open Scheduler
             </Link>
             <button

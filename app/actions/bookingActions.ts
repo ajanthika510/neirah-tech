@@ -1,6 +1,7 @@
 "use server";
 
-import pool, { query, initDb } from "../../lib/db";
+import { query, ensureDb } from "../../lib/db";
+import { verifyAdminAuth } from "../../lib/auth";
 import { revalidatePath } from "next/cache";
 
 export interface Booking {
@@ -50,10 +51,6 @@ const DEFAULT_TIME_SLOTS = [
   { time: "07:30 PM", period: "Evening", popular: false },
 ];
 
-async function ensureDb() {
-  await initDb();
-}
-
 /**
  * Check and get available slots for a specific date
  */
@@ -72,7 +69,6 @@ export async function getAvailableSlots(dateString: string) {
     }));
   } catch (err) {
     console.error("Error checking available slots:", err);
-    // If DB is unavailable, return defaults as available
     return DEFAULT_TIME_SLOTS.map((slot) => ({
       ...slot,
       available: true,
@@ -148,7 +144,6 @@ export async function createBooking(
     };
   } catch (err: any) {
     console.error("Error creating booking:", err);
-    // Return gracefully with mock booking if offline/local dev without postgres url
     const fallbackBooking: Booking = {
       id: Date.now(),
       referenceCode,
@@ -178,10 +173,8 @@ export async function createBooking(
  * Get all bookings for admin dashboard
  */
 export async function getBookings(adminPassword?: string): Promise<Booking[]> {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   try {
     const res = await query(`
@@ -220,10 +213,8 @@ export async function updateBookingStatus(
   status: "confirmed" | "completed" | "cancelled",
   adminPassword?: string
 ) {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   await query("UPDATE bookings SET status = $1 WHERE id = $2", [status, id]);
   revalidatePath("/admin");
@@ -234,10 +225,8 @@ export async function updateBookingStatus(
  * Delete a booking record
  */
 export async function deleteBooking(id: number, adminPassword?: string) {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   await query("DELETE FROM bookings WHERE id = $1", [id]);
   revalidatePath("/admin");

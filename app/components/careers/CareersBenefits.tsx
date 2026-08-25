@@ -53,7 +53,7 @@ export default function CareersBenefits() {
   return (
     <section
       id="why-join"
-      className="relative bg-[#F7FAFF] px-6 py-24 sm:px-8 lg:px-10"
+      className="relative scroll-mt-24 bg-[#F7FAFF] px-6 py-24 sm:px-8 lg:px-10"
     >
       <div className="mx-auto max-w-7xl">
 

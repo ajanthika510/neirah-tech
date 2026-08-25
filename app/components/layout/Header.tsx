@@ -692,6 +692,8 @@ function NavItem({
         text-[#334155]
         transition-all
         duration-300
+        cursor-pointer
+        pointer-events-auto
 
         xl:h-[50px]
         xl:px-4
@@ -716,6 +718,7 @@ function NavItem({
           duration-300
           group-hover:scale-100
           group-hover:opacity-100
+          pointer-events-none
         "
       />
 
@@ -734,6 +737,7 @@ function NavItem({
           transition-all
           duration-300
           group-hover:w-5
+          pointer-events-none
         "
       />
 
@@ -745,6 +749,7 @@ function NavItem({
           transition-colors
           duration-300
           group-hover:text-[#2875E8]
+          pointer-events-none
         "
       >
         {label}

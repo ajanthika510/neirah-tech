@@ -22,6 +22,7 @@ import {
   Rocket,
 } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { sendContactMessage } from "../../actions/contactActions";
 
 const colors = {
   navy: "#0B1736",
@@ -34,12 +35,14 @@ const colors = {
 };
 
 const services = [
-  "Software Development",
-  "Web & Mobile Apps",
-  "Hardware Solutions",
-  "Cloud & IT Solutions",
-  "Digital Transformation",
-  "Something Else",
+  "Business Website",
+  "Mobile Apps",
+  "AI Assistant",
+  "Digital Marketing",
+  "Business Software",
+  "Consulting",
+  "Smart Devices & IoT",
+  "Innovation Lab",
 ];
 
 const fadeUp: Variants = {
@@ -92,8 +95,9 @@ const contactInfo: ContactInfo[] = [
   {
     icon: MapPin,
     title: "Our location",
-    value: "Your City, Your Country",
+    value: "Sri Lanka",
     description: "Serving clients around the world.",
+    href: "#contact-form",
   },
 ];
 
@@ -124,10 +128,25 @@ export default function Contact() {
     mouseY.set(e.clientY - rect.top);
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
     setSubmitted(true);
+
+    try {
+      await sendContactMessage({
+        name: String(formData.get("name") || ""),
+        email: String(formData.get("email") || ""),
+        company: String(formData.get("company") || ""),
+        service: selectedService,
+        message: String(formData.get("message") || ""),
+      });
+      form.reset();
+    } catch (err) {
+      console.error("Failed to submit contact form:", err);
+    }
 
     setTimeout(() => {
       setSubmitted(false);
@@ -637,8 +656,9 @@ export default function Contact() {
             <div className="absolute -inset-4 rounded-[36px] bg-gradient-to-br from-sky-200/30 via-transparent to-indigo-200/30 blur-2xl" />
 
             <form
+              id="contact-form"
               onSubmit={handleSubmit}
-              className="relative rounded-[28px] border border-white bg-white p-5 shadow-[0_25px_80px_rgba(11,23,54,.08)] sm:rounded-[32px] sm:p-8 lg:p-10"
+              className="relative scroll-mt-28 rounded-[28px] border border-white bg-white p-5 shadow-[0_25px_80px_rgba(11,23,54,.08)] sm:rounded-[32px] sm:p-8 lg:p-10"
             >
               {/* Form heading */}
 

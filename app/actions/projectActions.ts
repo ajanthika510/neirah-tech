@@ -1,6 +1,7 @@
 "use server";
 
-import pool, { query, initDb } from "../../lib/db";
+import { query, ensureDb } from "../../lib/db";
+import { verifyAdminAuth } from "../../lib/auth";
 import { revalidatePath } from "next/cache";
 
 export type Project = {
@@ -14,15 +15,12 @@ export type Project = {
   description: string;
 };
 
-// Ensure DB is initialized
-async function ensureDb() {
-  await initDb();
-}
-
 export async function getProjects(): Promise<Project[]> {
   await ensureDb();
   try {
-    const res = await query("SELECT id, title, category, country, country_code as \"countryCode\", status, website, description FROM projects ORDER BY id DESC");
+    const res = await query(
+      `SELECT id, title, category, country, country_code as "countryCode", status, website, description FROM projects ORDER BY id DESC`
+    );
     return res.rows;
   } catch (err) {
     console.error("Error fetching projects:", err);
@@ -31,10 +29,8 @@ export async function getProjects(): Promise<Project[]> {
 }
 
 export async function createProject(data: Omit<Project, "id">, adminPassword?: string) {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   const { title, category, country, countryCode, status, website, description } = data;
   await query(
@@ -46,10 +42,8 @@ export async function createProject(data: Omit<Project, "id">, adminPassword?: s
 }
 
 export async function updateProject(id: number, data: Partial<Omit<Project, "id">>, adminPassword?: string) {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   const { title, category, country, countryCode, status, website, description } = data;
   await query(
@@ -69,10 +63,8 @@ export async function updateProject(id: number, data: Partial<Omit<Project, "id"
 }
 
 export async function deleteProject(id: number, adminPassword?: string) {
+  verifyAdminAuth(adminPassword);
   await ensureDb();
-  if (adminPassword !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Unauthorized");
-  }
 
   await query("DELETE FROM projects WHERE id = $1", [id]);
   revalidatePath("/projects");

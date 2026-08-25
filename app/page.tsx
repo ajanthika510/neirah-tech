@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Header from "./components/layout/Header";
 import Hero from "./components/home/Hero";
@@ -13,18 +13,31 @@ import Testimonials from "./components/home/Testimonials";
 import SplashScreen from "./components/splash/SplashScreen";
 
 export default function Home() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(false);
+
+  useEffect(() => {
+    // Only show splash screen once per browser session
+    const hasSeen = sessionStorage.getItem("splash_seen");
+    if (!hasSeen) {
+      setShowSplash(true);
+    }
+  }, []);
+
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+    sessionStorage.setItem("splash_seen", "1");
+  };
 
   return (
     <>
       {showSplash && (
         <SplashScreen
-          onComplete={() => setShowSplash(false)}
+          onComplete={handleSplashComplete}
         />
       )}
 
       {/* Main Website */}
-      <div className="flex min-h-screen flex-col overflow-x-hidden bg-bg-deep text-text-white antialiased">
+      <div className="flex min-h-screen flex-col bg-[#F8FBFF] text-slate-900 antialiased">
         {/* Navigation */}
         <Header />
 

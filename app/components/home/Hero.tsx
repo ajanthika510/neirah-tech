@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import Image from "next/image";
+import Link from "next/link";
 import HeroBackground from "./HeroBackground";
 import SchedulerModal from "./SchedulerModal";
 
@@ -155,10 +156,10 @@ export default function Hero() {
           flex
           items-center
           justify-center
-          bg-gradient-to-br
-          from-white
-          via-sky-50
-          to-indigo-50
+          bg-gradient-to-b
+          from-[#F8FBFF]
+          via-sky-50/40
+          to-[#F8FBFF]
           overflow-hidden
         "
       >
@@ -309,6 +310,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="
+                relative z-20
                 flex flex-col sm:flex-row items-center
                 justify-center lg:justify-start gap-3 sm:gap-4
               "
@@ -316,7 +318,9 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => setSchedulerOpen(true)}
+                aria-label="Book a demo"
                 aria-haspopup="dialog"
+                aria-expanded={schedulerOpen}
                 className="
                   group relative w-full sm:w-auto
                   px-7 sm:px-8 py-3.5 sm:py-4 rounded-full
@@ -324,7 +328,10 @@ export default function Hero() {
                   text-white font-semibold overflow-hidden
                   transition-all duration-300
                   hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(14,165,233,.35)]
+                  active:translate-y-0
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2
                   flex items-center justify-center gap-2 cursor-pointer
+                  pointer-events-auto select-none
                 "
               >
                 <span
@@ -335,32 +342,28 @@ export default function Hero() {
                     pointer-events-none
                   "
                 />
-                <span className="relative">Book a Demo</span>
-                <ArrowRight className="relative w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="relative pointer-events-none">Book a Demo</span>
+                <ArrowRight className="relative w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 pointer-events-none" />
               </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  const el = document.getElementById("services");
-                  if (el) {
-                    el.scrollIntoView({ behavior: "smooth" });
-                  } else {
-                    window.location.href = "/services";
-                  }
-                }}
+              <Link
+                href="/services"
+                aria-label="Explore Solutions"
                 className="
                   group w-full sm:w-auto
                   px-7 sm:px-8 py-3.5 sm:py-4 rounded-full
                   bg-white border border-slate-200 text-slate-800
                   font-semibold shadow-sm transition-all duration-300
-                  hover:bg-slate-50 hover:-translate-y-1 hover:border-slate-300
+                  hover:bg-slate-50 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_10px_30px_rgba(15,23,42,.06)]
+                  active:translate-y-0
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2
                   flex items-center justify-center gap-2 cursor-pointer
+                  pointer-events-auto select-none
                 "
               >
-                Explore Solutions
-                <ArrowUpRight className="w-4 h-4 text-slate-500 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </button>
+                <span>Explore Solutions</span>
+                <ArrowUpRight className="w-4 h-4 text-slate-500 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 pointer-events-none" />
+              </Link>
             </motion.div>
 
             {/* TRUST STATS */}
@@ -427,7 +430,7 @@ export default function Hero() {
               </svg>
 
               {/* Secondary orbit */}
-              <div className="absolute inset-[12%] rounded-full border border-dashed border-indigo-200/50" />
+              <div className="absolute inset-[12%] rounded-full border border-dashed border-indigo-200/50 pointer-events-none" />
 
               {/* SERVICE CARDS — staggered entrance, per-service accent */}
               {services.map((item, index) => {
@@ -439,46 +442,52 @@ export default function Hero() {
                 return (
                   <div
                     key={item.name}
-                    className="absolute left-1/2 top-1/2"
+                    className="absolute left-1/2 top-1/2 pointer-events-auto"
                     style={{
                       transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
                     }}
                   >
-                    <motion.div
-                      variants={cardVariants}
-                      animate="animate"
-                      initial={{ opacity: 0, scale: 0.6 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        opacity: { duration: 0.5, delay: 0.5 + index * 0.1 },
-                        scale: {
-                          type: "spring",
-                          stiffness: 260,
-                          damping: 18,
-                          delay: 0.5 + index * 0.1,
-                        },
-                      }}
-                      whileHover={{
-                        scale: 1.08,
-                        boxShadow: `0 0 25px ${item.ring}`,
-                      }}
-                      className="
-                        flex w-[132px] sm:w-[165px] items-center gap-2 sm:gap-3
-                        rounded-xl border border-slate-200 bg-white/95
-                        p-2.5 sm:p-3.5 shadow-[0_10px_30px_rgba(15,23,42,.08)]
-                        backdrop-blur-xl transition-colors duration-300
-                        hover:border-sky-300
-                      "
+                    <Link
+                      href="/services"
+                      aria-label={`Explore ${item.name}`}
+                      className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 rounded-xl pointer-events-auto"
                     >
-                      <div className={`shrink-0 rounded-lg border p-1.5 sm:p-2 ${item.iconBg}`}>
-                        <Icon className={`w-4 h-4 ${item.accent}`} />
-                      </div>
-                      <span className="text-[10px] sm:text-xs font-semibold leading-tight tracking-wide text-slate-800">
-                        <span className="sm:hidden">{item.shortName}</span>
-                        <span className="hidden sm:block">{item.name}</span>
-                      </span>
-                    </motion.div>
+                      <motion.div
+                        variants={cardVariants}
+                        animate="animate"
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          opacity: { duration: 0.5, delay: 0.5 + index * 0.1 },
+                          scale: {
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 18,
+                            delay: 0.5 + index * 0.1,
+                          },
+                        }}
+                        whileHover={{
+                          scale: 1.08,
+                          boxShadow: `0 0 25px ${item.ring}`,
+                        }}
+                        className="
+                          flex w-[132px] sm:w-[165px] items-center gap-2 sm:gap-3
+                          rounded-xl border border-slate-200 bg-white/95
+                          p-2.5 sm:p-3.5 shadow-[0_10px_30px_rgba(15,23,42,.08)]
+                          backdrop-blur-xl transition-colors duration-300
+                          hover:border-sky-300 cursor-pointer
+                        "
+                      >
+                        <div className={`shrink-0 rounded-lg border p-1.5 sm:p-2 ${item.iconBg}`}>
+                          <Icon className={`w-4 h-4 ${item.accent}`} />
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-semibold leading-tight tracking-wide text-slate-800">
+                          <span className="sm:hidden">{item.shortName}</span>
+                          <span className="hidden sm:block">{item.name}</span>
+                        </span>
+                      </motion.div>
+                    </Link>
                   </div>
                 );
               })}
@@ -489,7 +498,7 @@ export default function Hero() {
               className="
                 absolute w-[100px] h-[100px] sm:w-40 sm:h-40 rounded-full
                 bg-white border border-sky-200 flex items-center justify-center
-                shadow-[0_0_80px_rgba(14,165,233,.25)] backdrop-blur-xl select-none
+                shadow-[0_0_80px_rgba(14,165,233,.25)] backdrop-blur-xl select-none pointer-events-none
               "
             >
               <motion.div
@@ -514,7 +523,7 @@ export default function Hero() {
                 "
               >
                 <Image
-                  src="/images/hero.png"
+                  src="/images/Neiro.png"
                   alt="Neirah Tech"
                   width={180}
                   height={180}
@@ -548,25 +557,25 @@ export default function Hero() {
         </div>
 
         {/* SCROLL CUE */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
+        <button
+          type="button"
           onClick={() => {
             document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
           }}
-          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 cursor-pointer select-none transition-transform hover:scale-105"
+          aria-label="Scroll to services"
+          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 cursor-pointer select-none transition-transform hover:scale-105 pointer-events-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 rounded-lg p-1"
         >
-          <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-slate-400">
+          <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-slate-400 pointer-events-none">
             Scroll
           </span>
           <motion.div
             animate={prefersReducedMotion ? {} : { y: [0, 6, 0] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            className="pointer-events-none"
           >
             <ChevronDown className="w-4 h-4 text-slate-400" />
           </motion.div>
-        </motion.div>
+        </button>
 
         {/* SECTION BLEND */}
         <div

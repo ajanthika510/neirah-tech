@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, ArrowUpRight } from "lucide-react";
 
@@ -9,7 +10,7 @@ export default function WhatsAppChat() {
 
   // Replace with your WhatsApp number.
   // Country code only, without + or spaces.
-  const phoneNumber = "0760041594";
+  const phoneNumber = "94760041594";
 
   const message =
     "Hi Neirah Tech! I would like to know more about your services.";
@@ -102,11 +103,19 @@ export default function WhatsAppChat() {
                       items-center
                       justify-center
                       rounded-full
-                      bg-white/15
+                      bg-white/20
+                      p-1.5
                       backdrop-blur-sm
+                      shadow-inner
                     "
                   >
-                    <MessageCircle size={23} />
+                    <Image
+                      src="/images/hero.png"
+                      alt="Neirah Tech"
+                      width={36}
+                      height={36}
+                      className="h-full w-full object-contain"
+                    />
                   </div>
 
                   <div>
@@ -230,7 +239,7 @@ export default function WhatsAppChat() {
             inset-0
             animate-ping
             rounded-full
-            bg-[#25D366]/30
+            bg-sky-400/25
           "
         />
 
@@ -248,7 +257,7 @@ export default function WhatsAppChat() {
               ? "Close WhatsApp chat"
               : "Open WhatsApp chat"
           }
-          className="
+          className={`
             relative
             flex
             h-14
@@ -256,20 +265,36 @@ export default function WhatsAppChat() {
             items-center
             justify-center
             rounded-full
-            bg-[#25D366]
-            text-white
-            shadow-[0_10px_35px_rgba(37,211,102,0.35)]
+            border
+            shadow-[0_10px_35px_rgba(14,165,233,0.35)]
             transition-all
             duration-300
-            hover:bg-[#20bd5a]
             sm:h-16
             sm:w-16
-          "
+            ${
+              open
+                ? "bg-[#0F172A] border-slate-700 text-white hover:bg-slate-800"
+                : "bg-white border-sky-200 hover:border-sky-300 hover:shadow-[0_12px_40px_rgba(14,165,233,0.45)]"
+            }
+          `}
         >
           {open ? (
             <X size={25} />
           ) : (
-            <MessageCircle size={27} />
+            <div className="relative flex h-full w-full items-center justify-center p-2 sm:p-2.5">
+              <Image
+                src="/images/Neiro.png"
+                alt="Neirah Tech Assistant"
+                width={48}
+                height={48}
+                priority
+                className="h-full w-full object-contain drop-shadow-[0_2px_8px_rgba(14,165,233,0.3)]"
+              />
+              {/* WhatsApp badge indicator */}
+              <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#25D366] text-white border-2 border-white shadow-sm">
+                <MessageCircle size={11} />
+              </span>
+            </div>
           )}
         </motion.button>
       </div>

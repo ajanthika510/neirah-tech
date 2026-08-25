@@ -18,11 +18,11 @@ export default function ApplyModal({ isOpen, onClose, role }: ApplyModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const cvInfo = cvFile ? `\nCV: ${cvFile.name}` : '';
-    const text = `Hello, I'm interested in the *${role}* position.\\nName: ${name}\\nEmail: ${email}\\nMessage: ${message}${cvInfo}`;
+    const cvInfo = cvFile ? `\nCV: ${cvFile.name}` : "";
+    const text = `Hello, I'm interested in the *${role}* position.\nName: ${name}\nEmail: ${email}\nMessage: ${message}${cvInfo}`;
     const encoded = encodeURIComponent(text);
     const url = `https://wa.me/94760041594?text=${encoded}`;
-    window.open(url, "_blank");
+    window.open(url, "_blank", "noopener,noreferrer");
     onClose();
   };
 

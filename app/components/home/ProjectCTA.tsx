@@ -229,10 +229,7 @@ export default function ProjectCTA() {
         relative
         min-h-[1100px]
         overflow-hidden
-        bg-gradient-to-br
-        from-white
-        via-sky-50
-        to-indigo-50
+        bg-[#F8FBFF]
         py-32
         flex
         items-center
@@ -343,7 +340,7 @@ export default function ProjectCTA() {
             inset-x-0
             h-48
             bg-gradient-to-b
-            from-white
+            from-[#F8FBFF]
             to-transparent
           "
         />
@@ -357,7 +354,7 @@ export default function ProjectCTA() {
             inset-x-0
             h-48
             bg-gradient-to-t
-            from-indigo-50
+            from-[#F8FBFF]
             to-transparent
           "
         />
@@ -727,83 +724,78 @@ export default function ProjectCTA() {
                   sm:flex-row
                   justify-center
                   gap-4
+                  relative z-20
                 "
               >
-                <Link href="/contact">
-                  <motion.div
-                    whileHover={{
-                      y: -5,
-                      scale: 1.02,
-                    }}
-                    whileTap={{
-                      scale: 0.97,
-                    }}
+                <Link
+                  href="/contact"
+                  className="
+                    group
+                    relative
+                    overflow-hidden
+                    w-full
+                    sm:w-auto
+                    min-w-[210px]
+                    px-8
+                    py-4
+                    rounded-full
+                    bg-gradient-to-r
+                    from-sky-500
+                    to-cyan-400
+                    text-white
+                    font-bold
+                    shadow-[0_18px_45px_rgba(14,165,233,.3)]
+                    cursor-pointer
+                    flex
+                    items-center
+                    justify-center
+                    transition-all
+                    duration-300
+                    hover:-translate-y-1
+                    hover:shadow-[0_22px_50px_rgba(14,165,233,.4)]
+                    active:translate-y-0
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
+                    pointer-events-auto
+                  "
+                >
+                  <span
                     className="
-                      group
+                      absolute
+                      inset-0
+                      bg-white/20
+                      translate-x-[-100%]
+                      group-hover:translate-x-[100%]
+                      transition-transform
+                      duration-700
+                      pointer-events-none
+                    "
+                  />
+
+                  <span
+                    className="
                       relative
-                      overflow-hidden
-                      w-full
-                      sm:w-auto
-                      min-w-[210px]
-                      px-8
-                      py-4
-                      rounded-full
-                      bg-gradient-to-r
-                      from-sky-500
-                      to-cyan-400
-                      text-white
-                      font-bold
-                      shadow-[0_18px_45px_rgba(14,165,233,.3)]
-                      cursor-pointer
                       flex
                       items-center
                       justify-center
+                      gap-3
+                      pointer-events-none
                     "
                   >
-                    <span
+                    Start Your Project
+
+                    <ArrowRight
+                      size={18}
                       className="
-                        absolute
-                        inset-0
-                        bg-white/20
-                        translate-x-[-100%]
-                        group-hover:translate-x-[100%]
+                        group-hover:translate-x-1
                         transition-transform
-                        duration-700
                       "
                     />
-
-                    <span
-                      className="
-                        relative
-                        flex
-                        items-center
-                        justify-center
-                        gap-3
-                      "
-                    >
-                      Start Your Project
-
-                      <ArrowRight
-                        size={18}
-                        className="
-                          group-hover:translate-x-1
-                          transition-transform
-                        "
-                      />
-                    </span>
-                  </motion.div>
+                  </span>
                 </Link>
 
-                <motion.button
+                <button
                   type="button"
                   onClick={() => setSchedulerOpen(true)}
-                  whileHover={{
-                    y: -5,
-                    scale: 1.02,
-                  }}
-                  whileTap={{
-                    scale: 0.97,
-                  }}
                   className="
                     group
                     w-full
@@ -820,15 +812,20 @@ export default function ProjectCTA() {
                     shadow-sm
                     hover:bg-white
                     hover:shadow-md
-                    transition
+                    hover:-translate-y-1
+                    active:translate-y-0
+                    transition-all
+                    duration-300
                     flex
                     items-center
                     justify-center
                     gap-2
                     cursor-pointer
+                    pointer-events-auto
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
                   "
                 >
-                  Book Consultation
+                  <span>Book Consultation</span>
 
                   <MoveUpRight
                     size={17}
@@ -836,10 +833,11 @@ export default function ProjectCTA() {
                       text-slate-400
                       group-hover:translate-x-0.5
                       group-hover:-translate-y-0.5
-                      transition
+                      transition-transform
+                      pointer-events-none
                     "
                   />
-                </motion.button>
+                </button>
               </div>
 
               {/* Benefits */}

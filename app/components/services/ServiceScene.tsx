@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Service } from "./types";
@@ -226,19 +227,16 @@ export default function ServiceScene({ service, index, isLast, onEnter }: Servic
               transition={{ duration: 0.8, delay: 0.7 }}
               className="mt-10"
             >
-              <motion.a
+              <Link
                 href="/contact"
-                whileHover={{ x: 6 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                className={`group inline-flex items-center gap-3 text-sm font-bold tracking-wide bg-gradient-to-r ${service.gradient} bg-clip-text text-transparent`}
+                className={`group inline-flex items-center gap-3 text-sm font-bold tracking-wide bg-gradient-to-r ${service.gradient} bg-clip-text text-transparent transition-transform duration-300 hover:translate-x-1`}
               >
                 Learn more
                 <ArrowRight
                   size={16}
                   className={`transition-transform duration-300 group-hover:translate-x-1 ${isEven ? "text-sky-500" : "text-violet-500"}`}
                 />
-              </motion.a>
+              </Link>
             </motion.div>
           </div>
         </div>

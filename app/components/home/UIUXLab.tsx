@@ -247,7 +247,7 @@ export default function UIUXLab() {
       className="
         relative
         overflow-hidden
-        bg-[#F7FBFF]
+        bg-[#F8FBFF]
         text-[#0F172A]
       "
     >
@@ -261,10 +261,7 @@ export default function UIUXLab() {
           pointer-events-none
           absolute
           -inset-[10%]
-          bg-gradient-to-br
-          from-[#F8FDFF]
-          via-[#EEF8FF]
-          to-[#F0F2FF]
+          bg-[#F8FBFF]
         "
       />
 
@@ -496,45 +493,46 @@ export default function UIUXLab() {
               interact with your business.
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href="/projects">
-                <motion.div
-                  whileHover={{
-                    y: -4,
-                    scale: 1.02,
-                  }}
-                  whileTap={{
-                    scale: 0.97,
-                  }}
-                  className="
-                    group
-                    flex
-                    items-center
-                    justify-center
-                    gap-3
-                    rounded-full
-                    bg-gradient-to-r
-                    from-sky-500
-                    to-blue-600
-                    px-7
-                    py-4
-                    font-bold
-                    text-white
-                    shadow-[0_18px_45px_rgba(14,165,233,.25)]
-                  "
-                >
-                  Explore Our Work
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row relative z-20">
+              <Link
+                href="/projects"
+                className="
+                  group
+                  flex
+                  items-center
+                  justify-center
+                  gap-3
+                  rounded-full
+                  bg-gradient-to-r
+                  from-sky-500
+                  to-blue-600
+                  px-7
+                  py-4
+                  font-bold
+                  text-white
+                  shadow-[0_18px_45px_rgba(14,165,233,.25)]
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:shadow-[0_22px_50px_rgba(14,165,233,.35)]
+                  active:translate-y-0
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
+                  cursor-pointer
+                  pointer-events-auto
+                "
+              >
+                <span>Explore Our Work</span>
 
-                  <ArrowUpRight
-                    size={19}
-                    className="
-                      transition-transform
-                      duration-300
-                      group-hover:-translate-y-1
-                      group-hover:translate-x-1
-                    "
-                  />
-                </motion.div>
+                <ArrowUpRight
+                  size={19}
+                  className="
+                    transition-transform
+                    duration-300
+                    group-hover:-translate-y-1
+                    group-hover:translate-x-1
+                    pointer-events-none
+                  "
+                />
               </Link>
 
               <button
@@ -552,9 +550,14 @@ export default function UIUXLab() {
                   font-semibold
                   text-blue-600
                   backdrop-blur-xl
-                  transition
+                  transition-all
+                  duration-300
                   hover:bg-white
+                  hover:-translate-y-0.5
+                  active:translate-y-0
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
                   cursor-pointer
+                  pointer-events-auto
                 "
               >
                 Our Process
@@ -1566,6 +1569,7 @@ function DesignJourney() {
       ref={journeyRef}
       className="
         relative
+        scroll-mt-24
         mt-40
         min-h-[1900px]
         sm:mt-52
@@ -2253,9 +2257,12 @@ function SelectedWork() {
     setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length);
   };
 
+  const touchStartTime = useRef<number>(0);
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
+    touchStartTime.current = Date.now();
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -2264,9 +2271,14 @@ function SelectedWork() {
     const touchEndY = e.changedTouches[0].clientY;
     const diffX = touchStartX.current - touchEndX;
     const diffY = (touchStartY.current || 0) - touchEndY;
+    const elapsed = Date.now() - touchStartTime.current;
 
-    // Horizontal swipe threshold 35px
-    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+    // Detect horizontal swipe if deltaX > 25px and horizontal movement exceeds vertical
+    // OR fast flick gesture
+    if (
+      (Math.abs(diffX) > 25 && Math.abs(diffX) > Math.abs(diffY)) ||
+      (Math.abs(diffX) > 15 && elapsed < 350 && Math.abs(diffX) > Math.abs(diffY))
+    ) {
       if (diffX > 0) {
         goNext();
       } else {
@@ -2652,85 +2664,6 @@ function SelectedWork() {
               transformStyle: "preserve-3d",
             }}
           >
-            {/* FLOATING DIRECT CARD ON-CARD SWAP ARROWS */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                goPrevious();
-              }}
-              aria-label="Previous project"
-              className="
-                absolute
-                left-2.5
-                sm:left-4
-                top-1/2
-                -translate-y-1/2
-                z-40
-                flex
-                h-10
-                w-10
-                sm:h-12
-                sm:w-12
-                items-center
-                justify-center
-                rounded-full
-                border
-                border-white/25
-                bg-slate-950/40
-                text-white
-                shadow-lg
-                backdrop-blur-md
-                transition-all
-                duration-200
-                hover:scale-110
-                hover:bg-sky-500/80
-                hover:border-sky-300
-                active:scale-90
-              "
-            >
-              <ArrowLeft size={18} />
-            </button>
-
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                goNext();
-              }}
-              aria-label="Next project"
-              className="
-                absolute
-                right-2.5
-                sm:right-4
-                top-1/2
-                -translate-y-1/2
-                z-40
-                flex
-                h-10
-                w-10
-                sm:h-12
-                sm:w-12
-                items-center
-                justify-center
-                rounded-full
-                border
-                border-white/25
-                bg-slate-950/40
-                text-white
-                shadow-lg
-                backdrop-blur-md
-                transition-all
-                duration-200
-                hover:scale-110
-                hover:bg-sky-500/80
-                hover:border-sky-300
-                active:scale-90
-              "
-            >
-              <ArrowRight size={18} />
-            </button>
-
             <AnimatePresence
               initial={false}
               custom={direction}
@@ -2781,19 +2714,20 @@ function SelectedWork() {
                   left: 0,
                   right: 0,
                 }}
-                dragElastic={0.2}
+                dragElastic={0.25}
+                dragSnapToOrigin={true}
                 onDragStart={() => setIsDragging(true)}
                 onDragEnd={(_, info) => {
                   setIsDragging(false);
 
                   if (
-                    info.offset.x < -30 ||
-                    info.velocity.x < -180
+                    info.offset.x < -20 ||
+                    info.velocity.x < -80
                   ) {
                     goNext();
                   } else if (
-                    info.offset.x > 30 ||
-                    info.velocity.x > 180
+                    info.offset.x > 20 ||
+                    info.velocity.x > 80
                   ) {
                     goPrevious();
                   }
@@ -2905,29 +2839,31 @@ function SelectedWork() {
                     </p>
                   </div>
 
-                  <Link href="/projects" aria-label="Explore all projects">
-                    <motion.div
-                      whileHover={{
-                        rotate: 45,
-                        scale: 1.08,
-                      }}
-                      className="
-                        flex
-                        h-11
-                        w-11
-                        items-center
-                        justify-center
-                        rounded-full
-                        border
-                        border-white/20
-                        bg-sky-950/20
-                        text-white
-                        backdrop-blur-md
-                        cursor-pointer
-                      "
-                    >
-                      <ArrowUpRight size={17} />
-                    </motion.div>
+                  <Link
+                    href="/projects"
+                    aria-label="Explore all projects"
+                    className="
+                      flex
+                      h-11
+                      w-11
+                      items-center
+                      justify-center
+                      rounded-full
+                      border
+                      border-white/20
+                      bg-sky-950/20
+                      text-white
+                      backdrop-blur-md
+                      cursor-pointer
+                      pointer-events-auto
+                      transition-all
+                      hover:scale-110
+                      hover:bg-white/20
+                      active:scale-95
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400
+                    "
+                  >
+                    <ArrowUpRight size={17} className="pointer-events-none" />
                   </Link>
                 </div>
 
@@ -3129,6 +3065,103 @@ function SelectedWork() {
                 </div>
               </motion.div>
             </AnimatePresence>
+
+            {/* FLOATING DIRECT CARD ON-CARD SWAP ARROWS (TOP LAYER) */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                goPrevious();
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+              }}
+              aria-label="Previous project"
+              className="
+                absolute
+                left-2.5
+                sm:left-4
+                top-1/2
+                -translate-y-1/2
+                z-50
+                flex
+                h-10
+                w-10
+                sm:h-12
+                sm:w-12
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-white/30
+                bg-slate-950/60
+                text-white
+                shadow-xl
+                backdrop-blur-md
+                transition-all
+                duration-200
+                hover:scale-110
+                hover:bg-sky-500
+                hover:border-sky-300
+                active:scale-90
+                cursor-pointer
+                pointer-events-auto
+              "
+              style={{
+                transform: "translateZ(80px)",
+              }}
+            >
+              <ArrowLeft size={18} />
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                goNext();
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+              }}
+              aria-label="Next project"
+              className="
+                absolute
+                right-2.5
+                sm:right-4
+                top-1/2
+                -translate-y-1/2
+                z-50
+                flex
+                h-10
+                w-10
+                sm:h-12
+                sm:w-12
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-white/30
+                bg-slate-950/60
+                text-white
+                shadow-xl
+                backdrop-blur-md
+                transition-all
+                duration-200
+                hover:scale-110
+                hover:bg-sky-500
+                hover:border-sky-300
+                active:scale-90
+                cursor-pointer
+                pointer-events-auto
+              "
+              style={{
+                transform: "translateZ(80px)",
+              }}
+            >
+              <ArrowRight size={18} />
+            </button>
           </div>
 
           <GallerySideCard
@@ -3204,8 +3237,9 @@ function SelectedWork() {
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 relative z-30">
           <motion.button
+            type="button"
             whileHover={{
               x: -4,
               scale: 1.04,
@@ -3213,7 +3247,10 @@ function SelectedWork() {
             whileTap={{
               scale: 0.92,
             }}
-            onClick={goPrevious}
+            onClick={(e) => {
+              e.stopPropagation();
+              goPrevious();
+            }}
             aria-label="Previous project"
             className="
               flex
@@ -3231,12 +3268,14 @@ function SelectedWork() {
               transition
               hover:bg-white
               hover:text-sky-600
+              cursor-pointer
             "
           >
             <ArrowLeft size={17} />
           </motion.button>
 
           <motion.button
+            type="button"
             whileHover={{
               x: 4,
               scale: 1.04,
@@ -3244,7 +3283,10 @@ function SelectedWork() {
             whileTap={{
               scale: 0.92,
             }}
-            onClick={goNext}
+            onClick={(e) => {
+              e.stopPropagation();
+              goNext();
+            }}
             aria-label="Next project"
             className="
               flex
@@ -3262,6 +3304,7 @@ function SelectedWork() {
               transition
               hover:bg-white
               hover:text-sky-600
+              cursor-pointer
             "
           >
             <ArrowRight size={17} />
@@ -3325,39 +3368,42 @@ function SelectedWork() {
           sm:mt-20
         "
       >
-        <Link href="/projects">
-          <motion.span
-            whileHover={{
-              y: -3,
-            }}
-            className="
-              group
-              inline-flex
-              items-center
-              gap-3
-              border-b
-              border-sky-400
-              pb-2
-              text-xs
-              font-bold
-              uppercase
-              tracking-[0.25em]
-              text-slate-700
-            "
-          >
-            Enter the full archive
+        <Link
+          href="/projects"
+          className="
+            group
+            inline-flex
+            items-center
+            gap-3
+            border-b
+            border-sky-400
+            pb-2
+            text-xs
+            font-bold
+            uppercase
+            tracking-[0.25em]
+            text-slate-700
+            transition-all
+            duration-300
+            hover:text-sky-600
+            hover:border-sky-600
+            cursor-pointer
+            pointer-events-auto
+          "
+        >
+          <span>Enter the full archive</span>
 
-            <ArrowUpRight
-              size={15}
-              className="
-                text-sky-500
-                transition-transform
-                duration-300
-                group-hover:-translate-y-1
-                group-hover:translate-x-1
-              "
-            />
-          </motion.span>
+          <ArrowUpRight
+            size={15}
+            className="
+              text-sky-500
+              transition-transform
+              duration-300
+              group-hover:-translate-y-1
+              group-hover:translate-x-1
+              pointer-events-none
+            "
+          />
         </Link>
       </motion.div>
     </section>

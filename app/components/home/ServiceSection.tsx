@@ -19,11 +19,14 @@ import {
 } from "framer-motion";
 
 import {
-  Brain,
-  Code2,
-  Palette,
-  Cloud,
-  Database,
+  Globe,
+  Smartphone,
+  Bot,
+  TrendingUp,
+  BarChart3,
+  ShieldCheck,
+  Cpu,
+  FlaskConical,
   Sparkles,
   Zap,
   ArrowUpRight,
@@ -36,67 +39,122 @@ import {
 const services = [
   {
     number: "01",
-    title: "AI & Intelligent Systems",
+    title: "Business Website",
+    subtitle: "Build Trust Online",
     description:
-      "We create intelligent digital experiences using AI, automation and modern machine learning technologies.",
-    tag: "AI / MACHINE LEARNING",
-    icon: Brain,
+      "Create a modern website that attracts customers and helps your business grow 24/7.",
+    tag: "WEB DESIGN & DEVELOPMENT",
+    icon: Globe,
     capabilities: [
-      "Artificial Intelligence",
-      "Machine Learning",
-      "Intelligent Automation",
+      "Professional Design",
+      "Google Friendly",
+      "Fast Loading",
+      "Mobile Responsive",
     ],
   },
   {
     number: "02",
-    title: "Web & App Development",
+    title: "Mobile Apps",
+    subtitle: "Stay Connected",
     description:
-      "High-performance websites and applications engineered for modern businesses and digital products.",
-    tag: "WEB / MOBILE",
-    icon: Code2,
+      "Allow your customers to access your services anytime from their phones.",
+    tag: "MOBILE EXPERIENCE",
+    icon: Smartphone,
     capabilities: [
-      "Web Applications",
-      "Mobile Applications",
-      "API Development",
+      "Android & iOS",
+      "iPhone & iPad",
+      "Push Notifications",
+      "Easy Updates",
     ],
   },
   {
     number: "03",
-    title: "UI/UX & Digital Experiences",
+    title: "AI Assistant",
+    subtitle: "Save Time",
     description:
-      "Human-centered interfaces and immersive digital experiences designed to make technology simple.",
-    tag: "DESIGN / EXPERIENCE",
-    icon: Palette,
+      "Automate repetitive tasks and answer customer questions instantly.",
+    tag: "INTELLIGENT AUTOMATION",
+    icon: Bot,
     capabilities: [
-      "Product Design",
-      "Design Systems",
-      "Interactive Experiences",
+      "24/7 Support",
+      "AI Chatbot",
+      "Workflow Automation",
+      "WhatsApp Integration",
     ],
   },
   {
     number: "04",
-    title: "Cloud & Backend Solutions",
+    title: "Digital Marketing",
+    subtitle: "Reach More Customers",
     description:
-      "Scalable backend systems and cloud infrastructure designed for performance, security and growth.",
-    tag: "CLOUD / BACKEND",
-    icon: Cloud,
+      "Increase visibility and attract more customers through online marketing.",
+    tag: "GROWTH & VISIBILITY",
+    icon: TrendingUp,
     capabilities: [
-      "Cloud Architecture",
-      "Backend Systems",
-      "Scalable Infrastructure",
+      "Search Engine Optimization",
+      "Facebook Ads",
+      "Google Ads",
+      "Brand Awareness",
     ],
   },
   {
     number: "05",
-    title: "Data & Automation",
+    title: "Business Software",
+    subtitle: "Manage Everything",
     description:
-      "Transform repetitive processes into intelligent workflows using data, automation and connected systems.",
-    tag: "DATA / AUTOMATION",
-    icon: Database,
+      "Track sales, inventory, customers and reports in one place.",
+    tag: "ENTERPRISE SOFTWARE",
+    icon: BarChart3,
     capabilities: [
-      "Data Platforms",
-      "Workflow Automation",
-      "Business Intelligence",
+      "Sales & Invoicing",
+      "Inventory Management",
+      "CRM & Customers",
+      "Analytics & Reports",
+    ],
+  },
+  {
+    number: "06",
+    title: "Consulting",
+    subtitle: "Expert Guidance",
+    description:
+      "Choose the right technology based on your business goals.",
+    tag: "STRATEGY & ADVISORY",
+    icon: ShieldCheck,
+    capabilities: [
+      "Strategic Planning",
+      "Tech Roadmap",
+      "Team Training",
+      "Ongoing Support",
+    ],
+  },
+  {
+    number: "07",
+    title: "Smart Devices & IoT",
+    subtitle: "Connect the Physical World",
+    description:
+      "Sensors, drones and smart devices that bring automation to farms, sites and operations.",
+    tag: "IOT & EMERGING TECH",
+    icon: Cpu,
+    capabilities: [
+      "IoT Sensors",
+      "Drone Monitoring",
+      "Smart Agriculture",
+      "Real-Time Telemetry",
+    ],
+  },
+  {
+    number: "08",
+    title: "Innovation Lab",
+    subtitle: "Built for What's Next",
+    description:
+      "We research and prototype emerging technology so your business stays ahead.",
+    tag: "RESEARCH & DEVELOPMENT",
+    icon: FlaskConical,
+    capabilities: [
+      "R&D Prototyping",
+      "Rapid MVP Builds",
+      "AI Research",
+      "Future Tech Exploration",
     ],
   },
 ];
@@ -832,88 +890,51 @@ function ServiceExperience({
 }) {
   const Icon = service.icon;
 
-  // Small breathing gap after the intro heading
-const INTRO_GAP = 0.06;
+  const serviceAreaStart = 0.08;
+  const serviceAreaEnd = 0.96;
 
-const serviceAreaStart = 0.14;
-const serviceAreaEnd = 0.96;
+  const serviceArea = serviceAreaEnd - serviceAreaStart;
+  const segment = serviceArea / services.length; // ~0.11 per service
 
-const serviceArea = serviceAreaEnd - serviceAreaStart;
-const segment = serviceArea / services.length;
+  const start = serviceAreaStart + index * segment;
+  const end = start + segment;
 
-const start = serviceAreaStart + index * segment;
-const center = start + segment / 2;
-const end = start + segment;
+  // Smooth entrance over first 20% of segment, full visibility for 60%, smooth exit over final 20%
+  const enterEnd = start + segment * 0.22;
+  const exitStart = start + segment * 0.78;
 
-  const opacity =
-    useTransform(
-      progress,
-      [
-        start,
-        start +
-          segment * 0.18,
-        center,
-        start +
-          segment * 0.8,
-        end,
-      ],
-      [
-        0,
-        0.2,
-        1,
-        1,
-        0,
-      ]
-    );
+  // For the final service (08. Innovation Lab), hold visibility through the end of the section
+  const actualExitStart = index === services.length - 1 ? 0.94 : exitStart;
+  const actualEnd = index === services.length - 1 ? 0.98 : end;
 
-  const y =
-    useTransform(
-      progress,
-      [
-        start,
-        center,
-        end,
-      ],
-      [
-        70,
-        0,
-        -70,
-      ]
-    );
+  const opacity = useTransform(
+    progress,
+    [start, enterEnd, actualExitStart, actualEnd],
+    [0, 1, 1, 0]
+  );
 
-  const scale =
-    useTransform(
-      progress,
-      [
-        start,
-        center,
-        end,
-      ],
-      [
-        0.72,
-        1,
-        0.82,
-      ]
-    );
+  const y = useTransform(
+    progress,
+    [start, enterEnd, actualExitStart, actualEnd],
+    [50, 0, 0, -50]
+  );
 
-  const rotate =
-    useTransform(
-      progress,
-      [
-        start,
-        center,
-        end,
-      ],
-      [
-        index % 2 === 0
-          ? -4
-          : 4,
-        0,
-        index % 2 === 0
-          ? 3
-          : -3,
-      ]
-    );
+  const scale = useTransform(
+    progress,
+    [start, enterEnd, actualExitStart, actualEnd],
+    [0.9, 1, 1, 0.9]
+  );
+
+  const rotate = useTransform(
+    progress,
+    [start, enterEnd, actualExitStart, actualEnd],
+    [
+      index % 2 === 0 ? -2.5 : 2.5,
+      0,
+      0,
+      index % 2 === 0 ? 2 : -2,
+    ]
+  );
 
   return (
     <motion.div
@@ -1174,31 +1195,10 @@ export default function ServicesTunnel() {
     useSpring(
       scrollYProgress,
       {
-        stiffness: 55,
-        damping: 22,
-        mass: 0.25,
+        stiffness: 200,
+        damping: 26,
+        mass: 0.08,
       }
-    );
-
-  /* =======================================================
-     STAGE OPACITY
-  ======================================================= */
-
-  const stageOpacity =
-    useTransform(
-      progress,
-      [
-        0,
-        0.01,
-        0.97,
-        1,
-      ],
-      [
-        0,
-        1,
-        1,
-        0,
-      ]
     );
 
   /* =======================================================
@@ -1210,8 +1210,8 @@ export default function ServicesTunnel() {
       progress,
       [
         0,
-        0.06,
-        0.13,
+        0.05,
+        0.11,
       ],
       [
         1,
@@ -1225,11 +1225,11 @@ export default function ServicesTunnel() {
       progress,
       [
         0,
-        0.13,
+        0.11,
       ],
       [
         0,
-        -80,
+        -50,
       ]
     );
 
@@ -1238,11 +1238,11 @@ export default function ServicesTunnel() {
       progress,
       [
         0,
-        0.13,
+        0.11,
       ],
       [
         1,
-        0.82,
+        0.9,
       ]
     );
 
@@ -1269,8 +1269,8 @@ export default function ServicesTunnel() {
       progress,
       [
         0,
-        0.05,
-        0.12,
+        0.04,
+        0.10,
       ],
       [
         1,
@@ -1285,27 +1285,25 @@ export default function ServicesTunnel() {
       ref={sectionRef}
       className="
         relative
-        h-[800vh]
-        overflow-hidden
+        h-[850vh]
         bg-[#F8FBFF]
       "
     >
 
       {/* =================================================
-          FIXED WORLD
+          STICKY WORLD
       ================================================= */}
 
-      <motion.div
+      <div
         className="
-          fixed
-          inset-0
-          z-20
+          sticky
+          top-0
+          h-screen
+          w-full
+          z-10
           overflow-hidden
+          pointer-events-none
         "
-        style={{
-          opacity:
-            stageOpacity,
-        }}
       >
 
         {/* =================================================
@@ -1316,10 +1314,7 @@ export default function ServicesTunnel() {
           className="
             absolute
             inset-0
-            bg-gradient-to-br
-            from-white
-            via-[#F8FBFF]
-            to-[#E0F2FE]
+            bg-[#F8FBFF]
           "
         />
 
@@ -1419,6 +1414,8 @@ export default function ServicesTunnel() {
         ================================================= */}
 
         <Canvas
+          className="pointer-events-none"
+          style={{ pointerEvents: "none" }}
           camera={{
             position: [
               0,
@@ -1590,6 +1587,7 @@ export default function ServicesTunnel() {
 
         <div
           className="
+            pointer-events-none
             absolute
             bottom-7
             left-1/2
@@ -1647,7 +1645,7 @@ export default function ServicesTunnel() {
               text-[#64748B]
             "
           >
-            05
+            08
           </span>
 
         </div>
@@ -1658,6 +1656,7 @@ export default function ServicesTunnel() {
 
         <motion.div
           className="
+            pointer-events-none
             absolute
             bottom-7
             right-8
@@ -1755,7 +1754,7 @@ export default function ServicesTunnel() {
           "
         />
 
-      </motion.div>
+      </div>
     </section>
   );
 }

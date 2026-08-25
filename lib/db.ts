@@ -4,7 +4,17 @@ let pool: Pool;
 
 const connectionString = process.env.DATABASE_URL;
 
-if (process.env.NODE_ENV === "production") {
+const isLocal =
+  !connectionString ||
+  connectionString.includes("localhost") ||
+  connectionString.includes("127.0.0.1") ||
+  connectionString.includes("sslmode=disable");
+
+declare global {
+  var pgPool: Pool | undefined;
+}
+
+if (process.env.NODE_ENV === "production" && !isLocal) {
   pool = new Pool({
     connectionString,
     ssl: {
@@ -13,22 +23,32 @@ if (process.env.NODE_ENV === "production") {
   });
 } else {
   // Prevent multiple pools during hot-reloads in development
-  if (!(global as any).pgPool) {
-    (global as any).pgPool = new Pool({
+  if (!globalThis.pgPool) {
+    globalThis.pgPool = new Pool({
       connectionString,
+      ssl: isLocal ? false : { rejectUnauthorized: false },
     });
   }
-  pool = (global as any).pgPool;
+  pool = globalThis.pgPool;
 }
 
 export default pool;
 
-export async function query(text: string, params?: any[]) {
+export async function query(text: string, params?: unknown[]) {
   const start = Date.now();
   const res = await pool.query(text, params);
   const duration = Date.now() - start;
   console.log("Executed query", { text, duration, rows: res.rowCount });
   return res;
+}
+
+let dbInitPromise: Promise<void> | null = null;
+
+export async function ensureDb(): Promise<void> {
+  if (!dbInitPromise) {
+    dbInitPromise = initDb();
+  }
+  return dbInitPromise;
 }
 
 // Function to initialize tables and insert seed data

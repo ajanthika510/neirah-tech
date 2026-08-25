@@ -40,21 +40,36 @@ export default function SplashScreen({
       onComplete?.();
     }, 5200);
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setExiting(true);
+        setTimeout(() => onComplete?.(), 300);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
     return () => {
       window.clearTimeout(exitTimer);
       window.clearTimeout(completeTimer);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onComplete]);
 
+  const handleSkip = () => {
+    setExiting(true);
+    setTimeout(() => onComplete?.(), 300);
+  };
+
   return (
     <motion.section
-      className="
+      className={`
         fixed
         inset-0
         z-[9999]
         overflow-hidden
         bg-[#030712]
-      "
+        ${exiting ? "pointer-events-none" : "pointer-events-auto"}
+      `}
       initial={{
         opacity: 1,
         scale: 1,
@@ -64,10 +79,20 @@ export default function SplashScreen({
         scale: exiting ? 1.06 : 1,
       }}
       transition={{
-        duration: 1,
+        duration: 0.6,
         ease: [0.76, 0, 0.24, 1],
       }}
     >
+      {/* Skip Button */}
+      <button
+        type="button"
+        onClick={handleSkip}
+        aria-label="Skip introduction"
+        className="absolute top-6 right-6 z-50 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[11px] font-medium tracking-wider uppercase text-white/80 backdrop-blur-md transition-colors hover:bg-white/20 hover:text-white cursor-pointer"
+      >
+        Skip Intro
+      </button>
+
       {/* =====================================================
           3D DIGITAL ENVIRONMENT
       ===================================================== */}

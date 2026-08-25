@@ -162,29 +162,11 @@ pointer-events-none
 
 
 <div
-
 className="
-
 absolute
-
-
 inset-0
-
-
-
-bg-gradient-to-br
-
-
-from-white
-
-
-via-sky-50
-
-
-to-indigo-50
-
+bg-[#F8FBFF]
 "
-
 />
 
 
@@ -2292,7 +2274,7 @@ inset-0
 
 
 
-bg-[radial-gradient(circle,transparent_40%,rgba(255,255,255,.75)_100%)]
+bg-[radial-gradient(circle,transparent_40%,rgba(248,251,255,0.75)_100%)]
 
 "
 
