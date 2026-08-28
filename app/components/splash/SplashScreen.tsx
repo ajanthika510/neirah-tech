@@ -78,6 +78,10 @@ export default function SplashScreen({
         opacity: exiting ? 0 : 1,
         scale: exiting ? 1.06 : 1,
       }}
+      exit={{
+        opacity: 0,
+        scale: 1.06,
+      }}
       transition={{
         duration: 0.6,
         ease: [0.76, 0, 0.24, 1],
@@ -546,14 +550,14 @@ export default function SplashScreen({
             "
             initial={{
               opacity: 0,
-              filter: "blur(8px)",
+              y: 10,
             }}
             animate={{
               opacity: exiting ? 0 : 1,
-              filter: "blur(0px)",
+              y: exiting ? -10 : 0,
             }}
             transition={{
-              duration: 0.7,
+              duration: 0.6,
               delay: 0.7,
             }}
           >

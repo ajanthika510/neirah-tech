@@ -2,6 +2,7 @@
 
 import { query, ensureDb } from "../../lib/db";
 import { verifyAdminAuth } from "../../lib/auth";
+import { TIME_SLOTS } from "../../lib/calendarUtils";
 import { revalidatePath } from "next/cache";
 
 export interface Booking {
@@ -36,21 +37,6 @@ export type CreateBookingInput = {
   notes?: string;
 };
 
-// All available default daily slots
-const DEFAULT_TIME_SLOTS = [
-  { time: "09:00 AM", period: "Morning", popular: false },
-  { time: "10:00 AM", period: "Morning", popular: true },
-  { time: "11:00 AM", period: "Morning", popular: false },
-  { time: "11:45 AM", period: "Morning", popular: false },
-  { time: "01:30 PM", period: "Afternoon", popular: false },
-  { time: "02:30 PM", period: "Afternoon", popular: true },
-  { time: "03:30 PM", period: "Afternoon", popular: false },
-  { time: "04:30 PM", period: "Afternoon", popular: true },
-  { time: "05:30 PM", period: "Evening", popular: false },
-  { time: "06:30 PM", period: "Evening", popular: true },
-  { time: "07:30 PM", period: "Evening", popular: false },
-];
-
 /**
  * Check and get available slots for a specific date
  */
@@ -63,13 +49,13 @@ export async function getAvailableSlots(dateString: string) {
     );
     const bookedTimes = new Set(res.rows.map((r) => r.booking_time));
 
-    return DEFAULT_TIME_SLOTS.map((slot) => ({
+    return TIME_SLOTS.map((slot) => ({
       ...slot,
       available: !bookedTimes.has(slot.time),
     }));
   } catch (err) {
     console.error("Error checking available slots:", err);
-    return DEFAULT_TIME_SLOTS.map((slot) => ({
+    return TIME_SLOTS.map((slot) => ({
       ...slot,
       available: true,
     }));

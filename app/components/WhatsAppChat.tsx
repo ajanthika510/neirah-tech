@@ -4,20 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, ArrowUpRight } from "lucide-react";
+import { getWhatsAppUrl } from "@/lib/utils";
 
 export default function WhatsAppChat() {
   const [open, setOpen] = useState(false);
 
-  // Replace with your WhatsApp number.
-  // Country code only, without + or spaces.
-  const phoneNumber = "94760041594";
-
-  const message =
-    "Hi Neirah Tech! I would like to know more about your services.";
-
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    message
-  )}`;
+  const message = "Hi Neirah Tech! I would like to know more about your services.";
+  const whatsappUrl = getWhatsAppUrl(message);
 
   return (
     <>

@@ -890,7 +890,7 @@ function ServiceExperience({
 }) {
   const Icon = service.icon;
 
-  const serviceAreaStart = 0.08;
+  const serviceAreaStart = 0.075;
   const serviceAreaEnd = 0.96;
 
   const serviceArea = serviceAreaEnd - serviceAreaStart;
@@ -899,13 +899,21 @@ function ServiceExperience({
   const start = serviceAreaStart + index * segment;
   const end = start + segment;
 
-  // Smooth entrance over first 20% of segment, full visibility for 60%, smooth exit over final 20%
+  // Smooth entrance over first 22% of segment, full visibility for 56%, smooth exit over final 22%
   const enterEnd = start + segment * 0.22;
   const exitStart = start + segment * 0.78;
 
   // For the final service (08. Innovation Lab), hold visibility through the end of the section
   const actualExitStart = index === services.length - 1 ? 0.94 : exitStart;
   const actualEnd = index === services.length - 1 ? 0.98 : end;
+
+  const isLeft = index % 2 === 0;
+
+  const x = useTransform(
+    progress,
+    [start, enterEnd, actualExitStart, actualEnd],
+    [isLeft ? -40 : 40, 0, 0, isLeft ? -40 : 40]
+  );
 
   const opacity = useTransform(
     progress,
@@ -916,40 +924,44 @@ function ServiceExperience({
   const y = useTransform(
     progress,
     [start, enterEnd, actualExitStart, actualEnd],
-    [50, 0, 0, -50]
+    [30, 0, 0, -30]
   );
 
   const scale = useTransform(
     progress,
     [start, enterEnd, actualExitStart, actualEnd],
-    [0.9, 1, 1, 0.9]
+    [0.94, 1, 1, 0.94]
   );
 
   const rotate = useTransform(
     progress,
     [start, enterEnd, actualExitStart, actualEnd],
     [
-      index % 2 === 0 ? -2.5 : 2.5,
+      isLeft ? -1.5 : 1.5,
       0,
       0,
-      index % 2 === 0 ? 2 : -2,
+      isLeft ? 1.5 : -1.5,
     ]
   );
 
   return (
     <motion.div
-      className="
+      className={`
         pointer-events-none
         absolute
-        left-1/2
         top-1/2
-        z-50
-        w-[min(760px,90vw)]
-        -translate-x-1/2
         -translate-y-1/2
-      "
+        z-50
+        w-[min(560px,88vw)]
+        ${
+          isLeft
+            ? "left-5 sm:left-10 md:left-16 lg:left-24 xl:left-32 text-left"
+            : "right-5 sm:right-10 md:right-16 lg:right-24 xl:right-32 text-left"
+        }
+      `}
       style={{
         opacity,
+        x,
         y,
         scale,
         rotate,
@@ -959,19 +971,18 @@ function ServiceExperience({
       {/* SOFT LIGHT */}
 
       <div
-        className="
+        className={`
           pointer-events-none
           absolute
-          left-1/2
           top-1/2
-          h-[520px]
-          w-[520px]
-          -translate-x-1/2
           -translate-y-1/2
+          ${isLeft ? "left-0 -translate-x-1/4" : "right-0 translate-x-1/4"}
+          h-[480px]
+          w-[480px]
           rounded-full
           bg-[#0EA5E9]/10
-          blur-[150px]
-        "
+          blur-[140px]
+        `}
       />
 
       <div className="relative">
@@ -980,7 +991,7 @@ function ServiceExperience({
 
         <div
           className="
-            mb-7
+            mb-6
             flex
             items-center
             gap-4
@@ -990,6 +1001,7 @@ function ServiceExperience({
             className="
               font-mono
               text-sm
+              font-bold
               tracking-[0.4em]
               text-[#2563EB]
             "
@@ -1009,8 +1021,8 @@ function ServiceExperience({
 
           <span
             className="
-              text-[9px]
-              font-semibold
+              text-[9.5px]
+              font-bold
               uppercase
               tracking-[0.3em]
               text-[#64748B]
@@ -1024,7 +1036,7 @@ function ServiceExperience({
 
         <div
           className="
-            mb-7
+            mb-6
             flex
             h-16
             w-16
@@ -1052,13 +1064,15 @@ function ServiceExperience({
         <h3
           className="
             max-w-4xl
-            text-5xl
-            font-semibold
-            leading-[0.95]
-            tracking-[-0.06em]
-            text-[#0F172A]
+            font-display
+            font-black
+            text-4xl
+            sm:text-6xl
             md:text-7xl
             lg:text-8xl
+            leading-[0.96]
+            tracking-tight
+            text-[#0F172A]
           "
         >
           {service.title}
@@ -1068,10 +1082,10 @@ function ServiceExperience({
 
         <p
           className="
-            mt-7
+            mt-6
             max-w-2xl
             text-sm
-            leading-7
+            leading-relaxed
             text-[#475569]
             md:text-lg
             md:leading-8
@@ -1084,7 +1098,7 @@ function ServiceExperience({
 
         <div
           className="
-            mt-8
+            mt-7
             flex
             flex-wrap
             gap-x-6
@@ -1100,7 +1114,7 @@ function ServiceExperience({
                   items-center
                   gap-2
                   text-[10px]
-                  font-medium
+                  font-bold
                   uppercase
                   tracking-[0.18em]
                   text-[#334155]
@@ -1126,7 +1140,7 @@ function ServiceExperience({
 
         <div
           className="
-            mt-10
+            mt-9
             flex
             items-center
             gap-5
@@ -1148,7 +1162,7 @@ function ServiceExperience({
               items-center
               gap-2
               text-[9px]
-              font-semibold
+              font-bold
               uppercase
               tracking-[0.25em]
               text-[#2563EB]
@@ -1210,10 +1224,12 @@ export default function ServicesTunnel() {
       progress,
       [
         0,
-        0.05,
-        0.11,
+        0.015,
+        0.065,
+        0.09,
       ],
       [
+        0,
         1,
         1,
         0,
@@ -1225,11 +1241,13 @@ export default function ServicesTunnel() {
       progress,
       [
         0,
-        0.11,
+        0.015,
+        0.09,
       ],
       [
+        35,
         0,
-        -50,
+        -45,
       ]
     );
 
@@ -1238,11 +1256,13 @@ export default function ServicesTunnel() {
       progress,
       [
         0,
-        0.11,
+        0.015,
+        0.09,
       ],
       [
+        0.95,
         1,
-        0.9,
+        0.92,
       ]
     );
 
@@ -1440,21 +1460,23 @@ export default function ServicesTunnel() {
         </Canvas>
 
         {/* =================================================
-            INTRO
+            INTRO (LEFT-ALIGNED EDITORIAL POSITION)
         ================================================= */}
 
         <motion.div
           className="
             pointer-events-none
             absolute
-            left-1/2
+            left-5
+            sm:left-10
+            md:left-16
+            lg:left-24
+            xl:left-32
             top-16
+            md:top-24
             z-[100]
-            w-full
-            -translate-x-1/2
-            px-6
-            text-center
-            md:top-20
+            max-w-2xl
+            text-left
           "
           style={{
             opacity:
@@ -1467,67 +1489,65 @@ export default function ServicesTunnel() {
 
           <div
             className="
-              mb-5
+              mb-4
               flex
               items-center
-              justify-center
+              justify-start
               gap-3
             "
           >
             <span
               className="
                 h-px
-                w-10
-                bg-[#0EA5E9]/40
+                w-8
+                bg-gradient-to-r
+                from-transparent
+                to-[#0EA5E9]
               "
             />
 
             <Sparkles
               className="
-                h-3
-                w-3
+                h-3.5
+                w-3.5
                 text-[#0EA5E9]
               "
             />
 
             <span
               className="
-                text-[10px]
-                font-semibold
+                text-[11px]
+                font-bold
                 uppercase
-                tracking-[0.4em]
+                tracking-[0.3em]
                 text-[#2563EB]
               "
             >
               What We Build
             </span>
 
-            <Sparkles
-              className="
-                h-3
-                w-3
-                text-[#4F46E5]
-              "
-            />
-
-            <span
+            <div
               className="
                 h-px
-                w-10
-                bg-[#4F46E5]/40
+                w-8
+                bg-gradient-to-r
+                from-[#2563EB]
+                to-transparent
               "
             />
           </div>
 
           <h2
             className="
-              text-4xl
-              font-semibold
-              leading-[0.95]
-              tracking-[-0.06em]
-              text-[#0F172A]
+              font-display
+              font-black
+              text-3xl
+              sm:text-5xl
               md:text-6xl
-              lg:text-8xl
+              lg:text-7xl
+              leading-[1.02]
+              tracking-tight
+              text-[#0F172A]
             "
           >
             Technology without
@@ -1549,13 +1569,13 @@ export default function ServicesTunnel() {
 
           <p
             className="
-              mx-auto
-              mt-5
+              mt-4
               max-w-lg
               text-xs
               leading-6
               text-[#64748B]
-              md:text-sm
+              sm:text-sm
+              font-light
             "
           >
             Explore the systems,

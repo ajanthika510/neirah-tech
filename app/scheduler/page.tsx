@@ -1,9 +1,14 @@
-"use client";
-
+import type { Metadata } from "next";
 import { Sparkles } from "lucide-react";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import BookingEngine from "../components/scheduler/BookingEngine";
+
+export const metadata: Metadata = {
+  title: "Schedule a Consultation | Neirah Tech Solution",
+  description:
+    "Reserve a 1-on-1 strategy and architecture session with our lead software engineers and AI consultants.",
+};
 
 export default function SchedulerPage() {
   return (

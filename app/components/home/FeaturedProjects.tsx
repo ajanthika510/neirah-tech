@@ -22,6 +22,7 @@ import {
   Megaphone,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Compass,
 } from "lucide-react";
 import SchedulerModal from "./SchedulerModal";
@@ -156,14 +157,13 @@ export const products: Product[] = [
     number: "07",
     id: "pothify",
     name: "Pothify",
-    category: "Delivery Management SaaS",
-    description: "Intelligent dispatch, real-time fleet routing and automated logistics infrastructure.",
-    capabilities: ["Fleet Routing", "Dispatch Automation", "Tracking"],
-    builtFor: "Restaurants, retailers, pharmacies, supermarkets, logistics companies.",
-    icon: Truck,
-    accent: "#0284C7",
-    gradient: ["#0369A1", "#0284C7"],
-    layer: "DELIVERY & MOBILITY",
+    category: "Civic Infrastructure AI",
+    description: "Computer vision platform for automated municipal road inspection and asset management.",
+    capabilities: ["Computer Vision", "GIS Mapping", "Civic AI"],
+    icon: Car,
+    accent: "#E11D48",
+    gradient: ["#BE123C", "#E11D48"],
+    layer: "PHYSICAL WORLD",
   },
 
   // 08. TRICOBITES
@@ -226,7 +226,7 @@ export default function FeaturedProjects() {
   const [schedulerService, setSchedulerService] = useState<string>("");
   const [mousePos, setMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  // Scroll depth tracking
+  // Scroll depth tracking with generous storytelling breathing room
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -235,11 +235,11 @@ export default function FeaturedProjects() {
   const maxIndex = products.length - 1;
   const rawProgress = useTransform(scrollYProgress, [0, 1], [0, maxIndex]);
 
-  // Spring physics for smooth physical inertia
+  // Spring physics for smooth physical inertia and responsive storytelling
   const smoothProgress = useSpring(rawProgress, {
-    stiffness: 65,
+    stiffness: 60,
     damping: 18,
-    mass: 0.8,
+    mass: 0.65,
     restDelta: 0.001,
   });
 
@@ -312,12 +312,14 @@ export default function FeaturedProjects() {
     }
   };
 
+  const isNearEnd = currentProgressValue >= maxIndex - 0.25;
+
   return (
     <section
       id="featured-projects"
       ref={containerRef}
       className="relative bg-[#F8FBFF] text-slate-900 select-none"
-      style={{ height: `${products.length * 70}vh` }}
+      style={{ height: `${products.length * 85}vh` }}
     >
       {/* Sticky Fullscreen 3D Discovery Viewport */}
       <div
@@ -330,19 +332,6 @@ export default function FeaturedProjects() {
         {/* Subtle Architectural Atmosphere & Gradient Aura */}
         <FeaturedBackgroundVisuals activeProduct={activeProduct} />
 
-        {/* Top Discovery Space Bar */}
-        <div className="relative z-20 w-full max-w-6xl mx-auto px-6 pt-6 flex items-center justify-between text-xs font-mono text-slate-400">
-          <div className="flex items-center gap-2 tracking-widest uppercase">
-            <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-            <span>Neirah Discovery Universe</span>
-          </div>
-
-          <div className="flex items-center gap-2 tracking-widest uppercase text-[11px]">
-            <Compass size={12} className="text-slate-400 animate-spin" style={{ animationDuration: "12s" }} />
-            <span>Depth Horizon {String(activeProductIndex + 1).padStart(2, "0")} / 10</span>
-          </div>
-        </div>
-
         {/* 3D WebGL Canvas Layer */}
         <ZAxisGalleryCanvas
           products={products}
@@ -351,7 +340,7 @@ export default function FeaturedProjects() {
           onSelectProduct={scrollToProduct}
         />
 
-        {/* Editorial Screen Typography Stage (Letter-by-letter reveal upon 3D arrival) */}
+        {/* Editorial Screen Typography Stage (Sequenced scroll-driven reveal) */}
         <ProductEditorialOverlay
           products={products}
           activeIndex={activeProductIndex}
@@ -364,7 +353,7 @@ export default function FeaturedProjects() {
         ======================================================== */}
         <div className="relative z-20 w-full max-w-5xl mx-auto px-4 pb-6 sm:pb-8 flex flex-col items-center gap-3">
           {/* Spatial Progress & Phase Number */}
-          <div className="flex items-center justify-between w-full max-w-xl px-4 py-2 font-mono text-xs text-slate-500 bg-white/80 backdrop-blur-md rounded-full border border-slate-200/70 shadow-xs">
+          <div className="flex items-center justify-between w-full max-w-xl px-4 py-2 font-mono text-xs text-slate-500 bg-white/85 backdrop-blur-md rounded-full border border-slate-200/80 shadow-sm">
             <div className="flex items-baseline gap-2">
               <span className="text-base font-black text-slate-900">
                 {String(activeProductIndex + 1).padStart(2, "0")}
@@ -400,7 +389,7 @@ export default function FeaturedProjects() {
           </div>
 
           {/* Minimalist Linear Discovery Depth Track */}
-          <div className="relative h-1 w-full max-w-xl rounded-full bg-slate-200/70 overflow-hidden">
+          <div className="relative h-1 w-full max-w-xl rounded-full bg-slate-200/80 overflow-hidden">
             <motion.div
               className="h-full rounded-full transition-colors duration-500"
               style={{
@@ -437,6 +426,23 @@ export default function FeaturedProjects() {
               );
             })}
           </div>
+
+          {/* Ending Bridge into Next Section */}
+          {isNearEnd && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="pt-2 text-center pointer-events-auto cursor-pointer flex items-center gap-1.5 text-[10px] font-bold tracking-[0.2em] uppercase text-sky-600 hover:text-sky-700"
+              onClick={() => {
+                const nextSection = document.getElementById("project-cta");
+                nextSection?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              <span>Explore The Next Chapter</span>
+              <ChevronDown size={13} className="animate-bounce" />
+            </motion.div>
+          )}
         </div>
       </div>
 

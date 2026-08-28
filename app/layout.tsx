@@ -19,6 +19,15 @@ export const metadata: Metadata = {
   title: "Neirah Tech Solution | Intelligent Software Built for Growing Businesses",
   description:
     "Neirah Tech builds high-performance ERP systems, custom AI solutions, POS systems, and cloud infrastructure for retailers, factories, and SMEs.",
+  icons: {
+    icon: [
+      { url: "/images/logo.png", type: "image/png" },
+      { url: "/images/logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/logo.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +40,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${plusJakartaSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-bg-deep text-text-white font-sans">
+      <body className="min-h-full flex flex-col bg-[#F8FBFF] text-slate-900 font-sans">
         {children}
         <WhatsAppChat />
       </body>

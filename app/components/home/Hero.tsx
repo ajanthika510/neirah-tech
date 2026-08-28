@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { useEffect, useMemo, useState, useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useInView,
+  useScroll,
+  useTransform,
+  type Variants,
+} from "framer-motion";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -19,25 +26,72 @@ import Link from "next/link";
 import HeroBackground from "./HeroBackground";
 import SchedulerModal from "./SchedulerModal";
 
+function HeroCountUp({ target }: { target: string }) {
+  const hasPlus = target.includes("+");
+  const hasPercent = target.includes("%");
+  const num = parseInt(target.replace(/[^0-9]/g, ""), 10);
+  const [display, setDisplay] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!inView || isNaN(num)) return;
+    let start = 0;
+    const duration = 1800;
+    const step = 16;
+    const increment = num / (duration / step);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= num) {
+        setDisplay(num);
+        clearInterval(timer);
+      } else {
+        setDisplay(Math.floor(start));
+      }
+    }, step);
+    return () => clearInterval(timer);
+  }, [inView, num]);
+
+  return (
+    <span ref={ref}>
+      {display}
+      {hasPlus ? "+" : ""}
+      {hasPercent ? "%" : ""}
+    </span>
+  );
+}
+
 export default function Hero() {
   const [schedulerOpen, setSchedulerOpen] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   /* ==========================================
-     RESPONSIVE ORBIT
-     Lazy-init from window on first client render so
-     the orbit doesn't briefly render at desktop radius
-     before snapping to mobile size after mount.
+     RESPONSIVE ORBIT TIERS
+     Calculates exact radius based on viewport width
+     to prevent horizontal overflow on small mobile (360px-375px)
+     while filling space elegantly on tablet & desktop.
   ========================================== */
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 640 : false
-  );
+  const [radius, setRadius] = useState(200);
 
   useEffect(() => {
+    const updateRadius = () => {
+      const w = window.innerWidth;
+      if (w < 380) {
+        setRadius(108); // Fits 320px-375px screens with 0 overflow
+      } else if (w < 640) {
+        setRadius(126); // Fits standard 380px-639px phones
+      } else if (w < 1024) {
+        setRadius(175); // Fits tablets
+      } else {
+        setRadius(200); // Desktop & wide screens
+      }
+    };
+
+    updateRadius();
     let frame: number;
     const handleResize = () => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => setIsMobile(window.innerWidth < 640));
+      frame = requestAnimationFrame(updateRadius);
     };
     window.addEventListener("resize", handleResize, { passive: true });
     return () => {
@@ -48,9 +102,6 @@ export default function Hero() {
 
   /* ==========================================
      NEIRAH SERVICE ECOSYSTEM
-     Services/capabilities, not individual products.
-     Each has its own accent so the orbit reads as
-     five distinct capabilities, not one repeated card.
   ========================================== */
   const services = useMemo(
     () => [
@@ -112,9 +163,6 @@ export default function Hero() {
     []
   );
 
-  /* Smaller radius on mobile so the orbit stays inside the viewport. */
-  const radius = isMobile ? 125 : 190;
-
   /* ==========================================
      ORBIT / CARD VARIANTS
      Typed as Variants explicitly. The reduced-motion
@@ -142,9 +190,32 @@ export default function Hero() {
         },
   };
 
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroScroll } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+
+  const heroOpacity = useTransform(
+    heroScroll,
+    [0, 0.75],
+    prefersReducedMotion ? [1, 1] : [1, 0.35]
+  );
+  const heroScale = useTransform(
+    heroScroll,
+    [0, 0.85],
+    prefersReducedMotion ? [1, 1] : [1, 0.96]
+  );
+  const heroY = useTransform(
+    heroScroll,
+    [0, 0.85],
+    prefersReducedMotion ? [0, 0] : [0, -35]
+  );
+
   return (
     <>
       <section
+        ref={heroRef}
         id="hero"
         className="
           relative
@@ -201,8 +272,7 @@ export default function Hero() {
           />
         </div>
 
-        {/* Grain — softens the aurora blobs so they read as
-            considered atmosphere, not a flat gradient asset. */}
+        {/* Grain */}
         <div
           className="absolute inset-0 opacity-[0.035] pointer-events-none mix-blend-overlay"
           style={{
@@ -222,9 +292,14 @@ export default function Hero() {
         />
 
         {/* ==========================================
-            MAIN CONTENT
+            MAIN CONTENT (SCROLL-LINKED GENTLE RETREAT)
         ========================================== */}
-        <div
+        <motion.div
+          style={{
+            opacity: heroOpacity,
+            scale: heroScale,
+            y: heroY,
+          }}
           className="
             max-w-7xl mx-auto px-5 sm:px-6
             grid grid-cols-1 lg:grid-cols-12
@@ -240,62 +315,76 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="
-                inline-flex items-center gap-2 px-3 py-1.5 rounded-full
-                bg-sky-100/80 border border-sky-200 text-sky-700
-                text-xs font-medium backdrop-blur-sm
-                shadow-[0_1px_2px_rgba(14,165,233,.08)]
-              "
+              transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-center justify-center lg:justify-start gap-3"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-500" />
+              <div className="h-px w-8 bg-gradient-to-r from-transparent to-sky-400" />
+              <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-sky-500">
+                Technology for Every Layer of Business
               </span>
-              Technology for Every Layer of Business
+              <div className="h-px w-8 bg-gradient-to-r from-sky-400 to-transparent" />
             </motion.div>
 
-            {/* HEADING */}
+            {/* HEADING (Word-by-word roll up) */}
             <div className="space-y-4">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="
-                  font-display font-extrabold
-                  text-[2.5rem] leading-[1.08]
-                  sm:text-5xl md:text-6xl
-                  text-slate-900 tracking-tight
-                "
-              >
-                Technology That
-                <br />
-                <motion.span
+              <div className="overflow-hidden">
+                <h1
                   className="
-                    inline-block bg-clip-text text-transparent
-                    bg-gradient-to-r from-sky-500 via-indigo-600 to-sky-500
-                    bg-[length:200%_auto]
-                    [text-shadow:0_2px_28px_rgba(99,102,241,.2)]
+                    font-display font-extrabold
+                    text-[2.6rem] xs:text-5xl sm:text-6xl md:text-7xl lg:text-[4.25rem]
+                    tracking-tight leading-[1.08] sm:leading-[1.04]
+                    text-slate-900
                   "
-                  animate={
-                    prefersReducedMotion
-                      ? {}
-                      : { backgroundPosition: ["0% 50%", "200% 50%"] }
-                  }
-                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
                 >
-                  Connects Business.
-                </motion.span>
-              </motion.h1>
+                  <div className="overflow-hidden block">
+                    {["Technology", "That"].map((word, i) => (
+                      <motion.span
+                        key={word}
+                        initial={{ y: "110%", opacity: 0 }}
+                        animate={{ y: "0%", opacity: 1 }}
+                        transition={{
+                          duration: 1,
+                          delay: 0.25 + i * 0.12,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="inline-block mr-[0.24em]"
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
+                  </div>
+
+                  <div className="overflow-hidden block">
+                    {["Connects", "Business."].map((word, i) => (
+                      <motion.span
+                        key={word}
+                        initial={{ y: "110%", opacity: 0 }}
+                        animate={{ y: "0%", opacity: 1 }}
+                        transition={{
+                          duration: 1,
+                          delay: 0.5 + i * 0.12,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="
+                          inline-block mr-[0.24em]
+                          bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500
+                          bg-clip-text text-transparent
+                        "
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
+                  </div>
+                </h1>
+              </div>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+                transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 className="
-                  text-slate-600 text-base sm:text-lg md:text-xl
-                  leading-relaxed max-w-xl mx-auto lg:mx-0
+                  text-slate-500 text-base sm:text-lg md:text-xl
+                  font-light leading-relaxed max-w-xl mx-auto lg:mx-0
                 "
               >
                 We design digital experiences, build intelligent software,
@@ -325,7 +414,7 @@ export default function Hero() {
                   group relative w-full sm:w-auto
                   px-7 sm:px-8 py-3.5 sm:py-4 rounded-full
                   bg-gradient-to-r from-sky-500 to-cyan-400
-                  text-white font-semibold overflow-hidden
+                  text-white font-bold tracking-wide overflow-hidden
                   transition-all duration-300
                   hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(14,165,233,.35)]
                   active:translate-y-0
@@ -353,7 +442,7 @@ export default function Hero() {
                   group w-full sm:w-auto
                   px-7 sm:px-8 py-3.5 sm:py-4 rounded-full
                   bg-white border border-slate-200 text-slate-800
-                  font-semibold shadow-sm transition-all duration-300
+                  font-bold tracking-wide shadow-sm transition-all duration-300
                   hover:bg-slate-50 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_10px_30px_rgba(15,23,42,.06)]
                   active:translate-y-0
                   focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2
@@ -366,7 +455,7 @@ export default function Hero() {
               </Link>
             </motion.div>
 
-            {/* TRUST STATS */}
+            {/* TRUST STATS WITH RUNNING NUMBERS */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -381,10 +470,10 @@ export default function Hero() {
                 <div key={stat.label} className="flex items-center gap-5 sm:gap-8">
                   {i > 0 && <div className="w-px h-8 bg-slate-300 hidden sm:block" />}
                   <div className="text-center lg:text-left">
-                    <p className="text-xl sm:text-2xl font-bold text-slate-900">
-                      {stat.value}
+                    <p className="font-display font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">
+                      <HeroCountUp target={stat.value} />
                     </p>
-                    <p className="text-[10px] sm:text-xs text-slate-500 font-medium uppercase tracking-wider">
+                    <p className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-[0.2em]">
                       {stat.label}
                     </p>
                   </div>
@@ -407,7 +496,8 @@ export default function Hero() {
               variants={orbitVariants}
               animate="animate"
               className="
-                relative w-[250px] h-[250px] sm:w-[420px] sm:h-[420px]
+                relative w-[220px] min-[380px]:w-[260px] sm:w-[440px]
+                h-[220px] min-[380px]:h-[260px] sm:h-[440px]
                 rounded-full border border-sky-200 bg-white/40 backdrop-blur-xl
                 shadow-[0_20px_80px_rgba(14,165,233,.15)]
                 flex items-center justify-center will-change-transform
@@ -472,19 +562,20 @@ export default function Hero() {
                           boxShadow: `0 0 25px ${item.ring}`,
                         }}
                         className="
-                          flex w-[132px] sm:w-[165px] items-center gap-2 sm:gap-3
-                          rounded-xl border border-slate-200 bg-white/95
-                          p-2.5 sm:p-3.5 shadow-[0_10px_30px_rgba(15,23,42,.08)]
+                          flex items-center gap-1.5 min-[380px]:gap-2 sm:gap-2.5
+                          w-max min-w-[114px] max-w-[155px] min-[400px]:min-w-[130px] min-[400px]:max-w-[180px] sm:min-w-[185px] sm:max-w-none
+                          rounded-xl sm:rounded-2xl border border-slate-200/90 bg-white/95
+                          p-1.5 min-[380px]:p-2 sm:py-2.5 sm:px-3.5 shadow-[0_10px_30px_rgba(15,23,42,.08)]
                           backdrop-blur-xl transition-colors duration-300
                           hover:border-sky-300 cursor-pointer
                         "
                       >
-                        <div className={`shrink-0 rounded-lg border p-1.5 sm:p-2 ${item.iconBg}`}>
-                          <Icon className={`w-4 h-4 ${item.accent}`} />
+                        <div className={`shrink-0 rounded-lg sm:rounded-xl border p-1 sm:p-1.5 ${item.iconBg}`}>
+                          <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${item.accent}`} />
                         </div>
-                        <span className="text-[10px] sm:text-xs font-semibold leading-tight tracking-wide text-slate-800">
-                          <span className="sm:hidden">{item.shortName}</span>
-                          <span className="hidden sm:block">{item.name}</span>
+                        <span className="text-[10px] min-[380px]:text-[11px] sm:text-xs font-bold leading-snug tracking-tight text-slate-800 whitespace-normal sm:whitespace-nowrap">
+                          <span className="min-[440px]:hidden">{item.shortName}</span>
+                          <span className="hidden min-[440px]:inline">{item.name}</span>
                         </span>
                       </motion.div>
                     </Link>
@@ -496,7 +587,7 @@ export default function Hero() {
             {/* CENTRAL NEIRAH CORE */}
             <div
               className="
-                absolute w-[100px] h-[100px] sm:w-40 sm:h-40 rounded-full
+                absolute w-[80px] h-[80px] min-[380px]:w-[100px] min-[380px]:h-[100px] sm:w-40 sm:h-40 rounded-full
                 bg-white border border-sky-200 flex items-center justify-center
                 shadow-[0_0_80px_rgba(14,165,233,.25)] backdrop-blur-xl select-none pointer-events-none
               "
@@ -509,7 +600,7 @@ export default function Hero() {
                 }
                 transition={{ duration: 4, repeat: Infinity }}
                 className="
-                  absolute inset-2 sm:inset-3 rounded-full
+                  absolute inset-1.5 min-[380px]:inset-2 sm:inset-3 rounded-full
                   bg-gradient-to-tr from-sky-300/40 via-blue-300/30 to-indigo-300/40 blur-xl
                 "
               />
@@ -517,7 +608,7 @@ export default function Hero() {
               <div
                 className="
                   relative z-10 flex items-center justify-center
-                  w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40
+                  w-20 h-20 min-[380px]:w-24 min-[380px]:h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40
                   rounded-full bg-white/80 border border-sky-200 backdrop-blur-md
                   shadow-[0_0_40px_rgba(14,165,233,.25)] overflow-hidden
                 "
@@ -529,7 +620,7 @@ export default function Hero() {
                   height={180}
                   priority
                   className="
-                    w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40
+                    w-20 h-20 min-[380px]:w-28 min-[380px]:h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40
                     object-contain drop-shadow-[0_0_25px_rgba(14,165,233,.5)]
                   "
                 />
@@ -538,23 +629,23 @@ export default function Hero() {
               <motion.div
                 animate={prefersReducedMotion ? {} : { rotate: 360 }}
                 transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                className="absolute -inset-3 sm:-inset-4 rounded-full border border-sky-300/50"
+                className="absolute -inset-2.5 min-[380px]:-inset-3 sm:-inset-4 rounded-full border border-sky-300/50"
               />
               <motion.div
                 animate={prefersReducedMotion ? {} : { rotate: -360 }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute -inset-6 sm:-inset-8 rounded-full border border-indigo-300/40"
+                className="absolute -inset-5 min-[380px]:-inset-6 sm:-inset-8 rounded-full border border-indigo-300/40"
               />
               <div
                 className={`
-                  absolute -inset-[32px] sm:-inset-[45px] rounded-full
+                  absolute -inset-[24px] min-[380px]:-inset-[32px] sm:-inset-[45px] rounded-full
                   border border-dashed border-sky-300/40
                   ${prefersReducedMotion ? "" : "animate-spin [animation-duration:15s]"}
                 `}
               />
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* SCROLL CUE */}
         <button

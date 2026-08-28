@@ -1,32 +1,32 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 
-const lines = [
-  { prefix: "WE", words: ["DESIGN"] },
-  { prefix: "", words: ["DIGITAL", "PRODUCTS"] },
-  { prefix: "", words: ["BRANDS"] },
-  { prefix: "", words: ["EXPERIENCES"] },
-  { prefix: "", words: ["SYSTEMS"] },
+const capabilitiesList = [
+  "DESIGN",
+  "DIGITAL PRODUCTS",
+  "BRANDS",
+  "EXPERIENCES",
+  "SYSTEMS",
 ];
-
-const allWords = ["DESIGN", "DIGITAL", "PRODUCTS", "BRANDS", "EXPERIENCES", "SYSTEMS"];
 
 export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 50,
+    stiffness: 60,
     damping: 20,
   });
 
-  const sectionOpacity = useTransform(smoothProgress, [0, 0.1, 0.85, 1], [0, 1, 1, 0]);
-  const sectionY = useTransform(smoothProgress, [0, 0.1], [50, 0]);
+  const sectionOpacity = useTransform(smoothProgress, [0, 0.08, 0.92, 1], [0.3, 1, 1, 0.3]);
+  const sectionY = useTransform(smoothProgress, [0, 0.08], [30, 0]);
 
   return (
     <section
@@ -38,19 +38,19 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
       {/* Background ambience */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <motion.div
-          animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.22, 0.15] }}
+          animate={prefersReducedMotion ? {} : { scale: [1, 1.1, 1], opacity: [0.15, 0.22, 0.15] }}
           transition={{ duration: 14, repeat: Infinity }}
           className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full bg-sky-200/40 blur-[100px]"
         />
         <motion.div
-          animate={{ scale: [1, 1.08, 1], opacity: [0.1, 0.18, 0.1] }}
+          animate={prefersReducedMotion ? {} : { scale: [1, 1.08, 1], opacity: [0.1, 0.18, 0.1] }}
           transition={{ duration: 18, repeat: Infinity }}
           className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-violet-200/30 blur-[120px]"
         />
       </div>
 
       <motion.div
-        style={{ opacity: sectionOpacity, y: sectionY }}
+        style={{ opacity: prefersReducedMotion ? 1 : sectionOpacity, y: prefersReducedMotion ? 0 : sectionY }}
         className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 w-full"
       >
         {/* Chapter label */}
@@ -59,7 +59,7 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-10 sm:mb-16 flex items-center gap-3"
+          className="mb-8 sm:mb-14 flex items-center gap-3"
         >
           <div className="h-px w-8 bg-gradient-to-r from-transparent to-indigo-400" />
           <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-indigo-500">
@@ -69,54 +69,52 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
 
         {/* Intro line */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
           className="text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase text-slate-400 mb-6 sm:mb-8"
         >
           Our craft spans —
         </motion.p>
 
         {/* Giant progressive text */}
-        <div className="space-y-1 sm:space-y-2">
+        <div className="space-y-2 sm:space-y-3">
           {/* WE label */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="block text-[11px] sm:text-[13px] font-bold tracking-[0.35em] uppercase text-sky-500 mb-1 sm:mb-2">
+            <span className="block text-xs sm:text-sm font-bold tracking-[0.35em] uppercase text-sky-500 mb-1">
               WE
             </span>
           </motion.div>
 
-          {allWords.map((word, i) => (
+          {capabilitiesList.map((phrase, i) => (
             <motion.div
-              key={word}
-              initial={{ opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }}
-              whileInView={{ opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }}
-              viewport={{ once: true, margin: "-5%" }}
+              key={phrase}
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
               transition={{
-                duration: 1.1,
+                duration: 0.85,
                 delay: i * 0.08,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="overflow-hidden"
             >
               <h2
                 className={`
-                  font-extrabold leading-[0.95] tracking-tight break-words
-                  text-[clamp(2.3rem,8.5vw,9rem)]
+                  font-extrabold leading-[0.96] tracking-tight break-words
+                  text-[clamp(2.3rem,8vw,8.5rem)]
                   ${i % 2 === 0
                     ? "bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent"
                     : "text-slate-900"
                   }
                 `}
               >
-                {word}
+                {phrase}
               </h2>
             </motion.div>
           ))}
@@ -124,13 +122,13 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
 
         {/* Supporting statement */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-20 max-w-lg"
+          transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-16 sm:mt-20 max-w-lg"
         >
-          <p className="text-slate-500 text-lg leading-relaxed">
+          <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
             Every solution we build is guided by one principle:{" "}
             <em className="text-slate-700 not-italic font-medium">
               technology should remove friction, not create it.
@@ -143,8 +141,8 @@ export default function CapabilityReveal({ onEnter }: { onEnter: () => void }) {
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-16 h-px max-w-xs bg-gradient-to-r from-sky-300 via-indigo-400 to-transparent origin-left"
+          transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-12 sm:mt-16 h-px max-w-xs bg-gradient-to-r from-sky-300 via-indigo-400 to-transparent origin-left"
         />
       </motion.div>
     </section>

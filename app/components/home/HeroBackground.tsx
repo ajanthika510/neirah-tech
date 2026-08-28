@@ -1,2298 +1,467 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
-
-
-const particles = [
-
-{
-x:"10%",
-y:"20%",
-size:3
-},
-
-{
-x:"20%",
-y:"70%",
-size:4
-},
-
-{
-x:"35%",
-y:"40%",
-size:2
-},
-
-{
-x:"50%",
-y:"75%",
-size:3
-},
-
-{
-x:"65%",
-y:"25%",
-size:4
-},
-
-{
-x:"78%",
-y:"60%",
-size:3
-},
-
-{
-x:"90%",
-y:"35%",
-size:2
+interface GlowBall {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  color: string;
+  alpha: number;
+  maxLife: number;
+  life: number;
 }
 
+interface BlinkSparkle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  color: string;
+  life: number;
+  maxLife: number;
+  twinkleSpeed: number;
+  twinklePhase: number;
+}
+
+interface ClickRipple {
+  x: number;
+  y: number;
+  radius: number;
+  maxRadius: number;
+  color: string;
+  alpha: number;
+}
+
+const GLOW_COLORS = [
+  "rgba(14, 165, 233, ",  // Sky 500
+  "rgba(56, 189, 248, ",  // Sky 400
+  "rgba(99, 102, 241, ",  // Indigo 500
+  "rgba(139, 92, 246, ",  // Violet 500
+  "rgba(6, 182, 212, ",   // Cyan 500
+  "rgba(255, 255, 255, ", // Pure White
 ];
 
-
-
-
-
-
-const bubbles=[
-
-{
-size:220,
-left:"5%",
-top:"20%"
-},
-
-
-{
-size:150,
-right:"12%",
-top:"30%"
-},
-
-
-{
-size:260,
-right:"15%",
-bottom:"5%"
-}
-
-
+const ambientParticles = [
+  { x: "12%", y: "22%", size: 3, delay: 0 },
+  { x: "24%", y: "68%", size: 2.5, delay: 1.2 },
+  { x: "42%", y: "38%", size: 2, delay: 0.6 },
+  { x: "58%", y: "78%", size: 3, delay: 1.8 },
+  { x: "74%", y: "24%", size: 2.5, delay: 0.9 },
+  { x: "86%", y: "58%", size: 2, delay: 2.1 },
+  { x: "92%", y: "32%", size: 3, delay: 1.5 },
 ];
 
-
-
-
-
-
-
-
-
-const aiNodes=[
-
-{
-x:"18%",
-y:"35%"
-},
-
-{
-x:"35%",
-y:"65%"
-},
-
-{
-x:"55%",
-y:"25%"
-},
-
-{
-x:"72%",
-y:"55%"
-},
-
-{
-x:"85%",
-y:"35%"
-}
-
-];
-
-
-
-
-
-
-
-
-
-export default function HeroBackground(){
-
-
-return(
-
-
-<div
-
-className="
-
-absolute
-
-inset-0
-
-
-overflow-hidden
-
-
-pointer-events-none
-
-"
-
->
-
-
-
-
-
-
-
-
-{/* =========================
-        LIGHT AI BASE
-========================= */}
-
-
-<div
-className="
-absolute
-inset-0
-bg-[#F8FBFF]
-"
-/>
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI AURORA FIELD
-========================= */}
-
-
-
-<motion.div
-
-
-animate={{
-
-scale:[1,1.15,1],
-
-rotate:[0,8,0]
-
-}}
-
-
-transition={{
-
-
-duration:35,
-
-
-repeat:Infinity,
-
-
-ease:"easeInOut"
-
-
-}}
-
-
-
-className="
-
-absolute
-
-
-inset-[-20%]
-
-"
-
-style={{
-
-
-background:`
-
-radial-gradient(
-
-circle at 15% 20%,
-
-
-rgba(14,165,233,.25),
-
-
-transparent 35%
-
-
-),
-
-
-radial-gradient(
-
-circle at 85% 20%,
-
-
-rgba(59,130,246,.22),
-
-
-transparent 35%
-
-
-),
-
-
-radial-gradient(
-
-circle at 80% 80%,
-
-
-rgba(139,92,246,.18),
-
-
-transparent 40%
-
-)
-
-`
-
-}}
-
-
-/>
-
-
-
-
-
-
-
-
-
-{/* =========================
-        CYAN AI ENERGY BLOB
-========================= */}
-
-
-
-<motion.div
-
-
-animate={{
-
-
-x:[0,120,-60,0],
-
-
-y:[0,-50,60,0],
-
-
-scale:[1,1.25,.9,1]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:22,
-
-
-repeat:Infinity,
-
-
-ease:"easeInOut"
-
-
-}}
-
-
-
-className="
-
-absolute
-
-
--left-[180px]
-
-
-top-20
-
-
-
-w-[600px]
-
-
-h-[600px]
-
-
-
-rounded-full
-
-
-
-bg-cyan-300/30
-
-
-
-blur-[180px]
-
-"
-
-/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        INDIGO AI ENERGY
-========================= */}
-
-
-
-<motion.div
-
-
-animate={{
-
-
-x:[0,-100,50,0],
-
-
-y:[0,70,-40,0],
-
-
-scale:[1,.85,1.2,1]
-
-
-}}
-
-
-transition={{
-
-
-duration:26,
-
-
-repeat:Infinity,
-
-
-ease:"easeInOut"
-
-
-}}
-
-
-
-
-className="
-
-absolute
-
-
--right-[180px]
-
-
-
-bottom-0
-
-
-
-w-[650px]
-
-
-h-[650px]
-
-
-
-rounded-full
-
-
-
-bg-indigo-300/25
-
-
-
-blur-[200px]
-
-"
-
-/>
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        CENTRAL AI CORE BLOB
-========================= */}
-
-
-
-<motion.div
-
-
-animate={{
-
-
-scale:[1,1.15,1],
-
-
-rotate:[0,180,360]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:50,
-
-
-repeat:Infinity,
-
-
-ease:"linear"
-
-
-}}
-
-
-
-className="
-
-absolute
-
-
-
-left-1/2
-
-
-top-1/2
-
-
-
--translate-x-1/2
-
-
--translate-y-1/2
-
-
-
-
-w-[420px]
-
-
-h-[420px]
-
-
-
-rounded-[45%]
-
-
-
-bg-gradient-to-br
-
-
-
-from-cyan-400/20
-
-
-
-via-blue-500/20
-
-
-
-to-purple-500/20
-
-
-
-blur-3xl
-
-
-"
-
-/>
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI ORBIT RING
-========================= */}
-
-
-
-<motion.div
-
-
-animate={{
-
-
-rotate:360
-
-
-}}
-
-
-
-transition={{
-
-
-duration:70,
-
-
-repeat:Infinity,
-
-
-ease:"linear"
-
-
-}}
-
-
-
-
-className="
-
-absolute
-
-
-left-1/2
-
-
-top-1/2
-
-
-
--translate-x-1/2
-
-
--translate-y-1/2
-
-
-
-w-[750px]
-
-
-h-[750px]
-
-
-
-rounded-full
-
-
-
-border
-
-
-border-sky-300/30
-
-"
-
-/>
-
-
-
-
-
-
-
-<motion.div
-
-
-animate={{
-
-
-rotate:-360
-
-
-}}
-
-
-
-transition={{
-
-
-duration:100,
-
-
-repeat:Infinity,
-
-
-ease:"linear"
-
-
-}}
-
-
-
-className="
-
-absolute
-
-
-left-1/2
-
-
-top-1/2
-
-
-
--translate-x-1/2
-
-
--translate-y-1/2
-
-
-
-w-[1000px]
-
-
-h-[1000px]
-
-
-
-rounded-full
-
-
-
-border
-
-
-border-indigo-300/30
-
-
-"
-
-/>
-
-
-
-
-
-
-{/* =========================
-        AI NEURAL NETWORK LINES
-========================= */}
-
-
-
-<svg
-
-className="
-
-absolute
-
-inset-0
-
-w-full
-
-h-full
-
-
-opacity-30
-
-"
-
->
-
-
-<defs>
-
-
-<linearGradient id="aiNetwork">
-
-
-<stop
-
-offset="0%"
-
-stopColor="#06B6D4"
-
-/>
-
-
-<stop
-
-offset="50%"
-
-stopColor="#3B82F6"
-
-/>
-
-
-<stop
-
-offset="100%"
-
-stopColor="#8B5CF6"
-
-/>
-
-
-</linearGradient>
-
-
-
-</defs>
-
-
-
-
-
-
-
-<motion.path
-
-
-
-d="
-
-M100 500
-
-C300 300
-
-500 600
-
-700 350
-
-S1100 250
-
-1400 450
-
-"
-
-
-
-fill="none"
-
-
-
-stroke="url(#aiNetwork)"
-
-
-
-strokeWidth="2"
-
-
-
-strokeDasharray="8 16"
-
-
-
-
-animate={{
-
-
-strokeDashoffset:[0,-300]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:14,
-
-
-repeat:Infinity,
-
-
-ease:"linear"
-
-
-}}
-
-
-/>
-
-
-
-
-
-
-
-
-
-<motion.path
-
-
-
-d="
-
-M200 200
-
-C500 450
-
-800 150
-
-1200 400
-
-S1600 200
-
-2000 350
-
-"
-
-
-
-fill="none"
-
-
-
-stroke="url(#aiNetwork)"
-
-
-
-strokeWidth="1.5"
-
-
-
-strokeDasharray="10 20"
-
-
-
-
-animate={{
-
-
-strokeDashoffset:[0,300]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:18,
-
-
-repeat:Infinity,
-
-
-ease:"linear"
-
-
-}}
-
-
-/>
-
-
-
-
-
-</svg>
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI CONNECTION DOTS
-========================= */}
-
-
-
-{
-
-aiNodes.map((node,index)=>(
-
-
-
-<motion.div
-
-
-key={index}
-
-
-
-className="
-
-absolute
-
-
-
-w-3
-
-
-h-3
-
-
-
-rounded-full
-
-
-
-bg-cyan-400
-
-
-
-shadow-[0_0_35px_rgba(34,211,238,.9)]
-
-"
-
-
-
-style={{
-
-
-left:node.x,
-
-
-top:node.y
-
-
-}}
-
-
-
-
-animate={{
-
-
-scale:[1,1.8,1],
-
-
-opacity:[.3,1,.3]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:3+index,
-
-
-repeat:Infinity,
-
-
-delay:index*.5
-
-
-}}
-
-
-
-/>
-
-
-
-))
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI DATA STREAMS
-========================= */}
-
-
-
-{
-
-
-Array.from({
-
-length:8
-
-}).map((_,index)=>(
-
-
-
-<motion.div
-
-
-key={index}
-
-
-
-className="
-
-absolute
-
-
-
-h-[2px]
-
-
-
-w-28
-
-
-
-bg-gradient-to-r
-
-
-
-from-transparent
-
-
-
-via-cyan-400
-
-
-
-to-transparent
-
-
-
-blur-sm
-
-"
-
-
-
-style={{
-
-
-top:`${20+index*8}%`
-
-
-}}
-
-
-
-animate={{
-
-
-x:[
-
-"-200px",
-
-"120vw"
-
-]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:12+index,
-
-
-repeat:Infinity,
-
-
-ease:"linear",
-
-
-delay:index
-
-
-}}
-
-
-
-/>
-
-
-))
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI CIRCUIT GRID
-========================= */}
-
-
-
-<div
-
-
-className="
-
-absolute
-
-
-right-[15%]
-
-
-top-[25%]
-
-
-
-w-48
-
-
-h-48
-
-
-
-opacity-40
-
-"
-
->
-
-
-{
-
-Array.from({
-
-length:16
-
-}).map((_,index)=>(
-
-
-<motion.div
-
-
-key={index}
-
-
-
-className="
-
-absolute
-
-
-
-w-2
-
-
-h-2
-
-
-
-rounded-full
-
-
-
-bg-blue-500
-
-
-
-shadow-[0_0_15px_rgba(59,130,246,.8)]
-
-"
-
-
-
-style={{
-
-
-left:`${(index%4)*35}px`,
-
-
-top:`${Math.floor(index/4)*35}px`
-
-
-}}
-
-
-
-animate={{
-
-
-opacity:[.2,1,.2],
-
-
-scale:[1,1.5,1]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:2,
-
-
-repeat:Infinity,
-
-
-delay:index*.12
-
-
-}}
-
-
-/>
-
-
-))
-
-}
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI FLOWING PARTICLES
-========================= */}
-
-
-
-{
-
-particles.map((p,index)=>(
-
-
-
-<motion.div
-
-
-key={index}
-
-
-
-className="
-
-absolute
-
-
-
-rounded-full
-
-
-
-bg-sky-500
-
-
-
-shadow-[0_0_25px_rgba(14,165,233,.8)]
-
-"
-
-
-
-style={{
-
-
-left:p.x,
-
-
-top:p.y,
-
-
-width:p.size,
-
-
-height:p.size
-
-
-}}
-
-
-
-animate={{
-
-
-y:[0,-60,0],
-
-
-opacity:[.2,1,.2],
-
-
-scale:[1,1.4,1]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:4+index,
-
-
-repeat:Infinity
-
-
-}}
-
-
-
-/>
-
-
-))
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        GLASS AI BUBBLES
-========================= */}
-
-
-
-{
-
-
-bubbles.map((bubble,index)=>(
-
-
-
-<motion.div
-
-
-key={index}
-
-
-
-animate={{
-
-
-y:[0,-30,0],
-
-
-scale:[1,1.05,1]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:8+index*2,
-
-
-repeat:Infinity
-
-
-}}
-
-
-
-className="
-
-absolute
-
-
-
-rounded-full
-
-
-
-border
-
-
-
-border-sky-200/50
-
-
-
-bg-white/30
-
-
-
-backdrop-blur-3xl
-
-
-
-shadow-[0_20px_60px_rgba(14,165,233,.15)]
-
-"
-
-
-
-style={{
-
-
-width:bubble.size,
-
-
-height:bubble.size,
-
-
-...bubble
-
-
-}}
-
-
-/>
-
-
-))
-
-
-}
-
-
-
-
-
-
-
-{/* =========================
-        AI HOLOGRAM GRID
-========================= */}
-
-
-
-<div
-
-
-className="
-
-absolute
-
-
-inset-0
-
-
-
-opacity-[0.08]
-
-"
-
-style={{
-
-
-backgroundImage:`
-
-
-linear-gradient(
-
-rgba(14,165,233,.25) 1px,
-
-transparent 1px
-
-),
-
-
-
-linear-gradient(
-
-90deg,
-
-rgba(14,165,233,.25) 1px,
-
-transparent 1px
-
-)
-
-
-
-`,
-
-
-
-backgroundSize:"70px 70px"
-
-
-}}
-
-
-/>
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI LIGHT BEAMS
-========================= */}
-
-
-
-{
-
-
-[20,45,70].map((x,index)=>(
-
-
-<motion.div
-
-
-
-key={index}
-
-
-
-animate={{
-
-
-opacity:[.05,.3,.05]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:5+index,
-
-
-repeat:Infinity
-
-
-}}
-
-
-
-
-className="
-
-absolute
-
-
-
-top-0
-
-
-
-h-full
-
-
-
-w-px
-
-
-
-bg-gradient-to-b
-
-
-
-from-transparent
-
-
-
-via-cyan-400
-
-
-
-to-transparent
-
-
-
-blur-sm
-
-"
-
-
-
-style={{
-
-
-left:`${x}%`
-
-
-}}
-
-
-/>
-
-
-
-))
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        MOVING AI LASER SCAN
-========================= */}
-
-
-
-<motion.div
-
-
-
-animate={{
-
-
-x:[
-
-"-100%",
-
-"200%"
-
-]
-
-}}
-
-
-
-transition={{
-
-
-duration:10,
-
-
-repeat:Infinity,
-
-
-ease:"linear"
-
-
-}}
-
-
-
-
-className="
-
-absolute
-
-
-
-top-1/3
-
-
-
-h-px
-
-
-
-w-[550px]
-
-
-
-bg-gradient-to-r
-
-
-
-from-transparent
-
-
-
-via-cyan-400
-
-
-
-to-transparent
-
-
-
-blur-sm
-
-"
-
-/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        FLOATING AI SIGNAL WAVES
-========================= */}
-
-
-
-<motion.div
-
-
-
-animate={{
-
-
-scale:[1,1.2,1],
-
-
-opacity:[.1,.35,.1]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:6,
-
-
-repeat:Infinity
-
-
-}}
-
-
-
-className="
-
-absolute
-
-
-
-left-1/2
-
-
-
-top-1/2
-
-
-
--translate-x-1/2
-
-
-
--translate-y-1/2
-
-
-
-w-[520px]
-
-
-
-h-[520px]
-
-
-
-rounded-full
-
-
-
-border
-
-
-
-border-cyan-400/20
-
-
-
-blur-sm
-
-"
-
-/>
-
-
-
-
-
-
-
-<motion.div
-
-
-
-animate={{
-
-
-scale:[1.2,1,1.2],
-
-
-opacity:[.05,.25,.05]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:8,
-
-
-repeat:Infinity
-
-
-}}
-
-
-
-className="
-
-absolute
-
-
-
-left-1/2
-
-
-
-top-1/2
-
-
-
--translate-x-1/2
-
-
-
--translate-y-1/2
-
-
-
-w-[650px]
-
-
-
-h-[650px]
-
-
-
-rounded-full
-
-
-
-border
-
-
-
-border-indigo-400/20
-
-
-
-blur-sm
-
-"
-
-/>
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI CONNECTION PATH
-========================= */}
-
-
-
-<svg
-
-
-
-className="
-
-absolute
-
-
-
-inset-0
-
-
-
-w-full
-
-
-
-h-full
-
-
-
-opacity-30
-
-"
-
-
-
->
-
-
-<defs>
-
-
-<linearGradient id="flowLine">
-
-
-<stop
-
-offset="0%"
-
-stopColor="#22D3EE"
-
-/>
-
-
-<stop
-
-offset="50%"
-
-stopColor="#3B82F6"
-
-/>
-
-
-<stop
-
-offset="100%"
-
-stopColor="#A855F7"
-
-/>
-
-
-</linearGradient>
-
-
-
-</defs>
-
-
-
-
-
-<motion.path
-
-
-d="
-
-M0 600
-
-C400 300
-
-800 700
-
-1300 350
-
-C1700 100
-
-2000 500
-
-2400 250
-
-"
-
-
-
-fill="none"
-
-
-
-stroke="url(#flowLine)"
-
-
-
-strokeWidth="2"
-
-
-
-strokeDasharray="15 20"
-
-
-
-animate={{
-
-
-strokeDashoffset:[0,-400]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:20,
-
-
-repeat:Infinity,
-
-
-ease:"linear"
-
-
-}}
-
-
-/>
-
-
-
-</svg>
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        AI PARTICLE BURSTS
-========================= */}
-
-
-
-{
-
-Array.from({
-
-length:12
-
-}).map((_,index)=>(
-
-
-<motion.span
-
-
-key={index}
-
-
-
-className="
-
-absolute
-
-
-
-w-1
-
-
-
-h-1
-
-
-
-rounded-full
-
-
-
-bg-indigo-500
-
-
-
-shadow-[0_0_15px_rgba(99,102,241,.9)]
-
-"
-
-
-
-style={{
-
-
-left:`${10+index*7}%`,
-
-
-top:`${35+(index%4)*10}%`
-
-
-}}
-
-
-
-animate={{
-
-
-y:[0,-40,0],
-
-
-opacity:[0,1,0]
-
-
-}}
-
-
-
-transition={{
-
-
-duration:3+index*.3,
-
-
-repeat:Infinity,
-
-
-delay:index*.2
-
-
-}}
-
-
-/>
-
-
-
-))
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{/* =========================
-        SOFT AI VIGNETTE
-========================= */}
-
-
-
-<div
-
-
-
-className="
-
-absolute
-
-
-
-inset-0
-
-
-
-bg-[radial-gradient(circle,transparent_40%,rgba(248,251,255,0.75)_100%)]
-
-"
-
-
-
-/>
-
-
-
-
-
-
-
-
-</div>
-
-
-);
-
-
+export default function HeroBackground() {
+  const prefersReducedMotion = useReducedMotion();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
+
+    let animId: number;
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let time = 0;
+
+    const glowBalls: GlowBall[] = [];
+    const sparkles: BlinkSparkle[] = [];
+    const ripples: ClickRipple[] = [];
+
+    const pointer = {
+      x: -999,
+      y: -999,
+      prevX: -999,
+      prevY: -999,
+      active: false,
+    };
+
+    const handleResize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = canvas.parentElement?.clientWidth || window.innerWidth;
+      height = canvas.parentElement?.clientHeight || window.innerHeight;
+
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize, { passive: true });
+
+    // Helper to spawn glow ball
+    const spawnGlowBall = (x: number, y: number, speedMult = 1, sizeMult = 1) => {
+      if (glowBalls.length > 35) return;
+      const color = GLOW_COLORS[Math.floor(Math.random() * (GLOW_COLORS.length - 1))];
+      const angle = Math.random() * Math.PI * 2;
+      const speed = (0.3 + Math.random() * 1.2) * speedMult;
+
+      glowBalls.push({
+        x: x + (Math.random() - 0.5) * 12,
+        y: y + (Math.random() - 0.5) * 12,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 0.2, // Subtle upward buoyancy
+        radius: (8 + Math.random() * 14) * sizeMult,
+        color,
+        alpha: 0.35 + Math.random() * 0.35,
+        maxLife: 45 + Math.random() * 35,
+        life: 0,
+      });
+    };
+
+    // Helper to spawn blinking sparkle
+    const spawnSparkle = (x: number, y: number, count = 1) => {
+      for (let i = 0; i < count; i++) {
+        if (sparkles.length > 50) return;
+        const color = GLOW_COLORS[Math.floor(Math.random() * GLOW_COLORS.length)];
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 0.5 + Math.random() * 2;
+
+        sparkles.push({
+          x: x + (Math.random() - 0.5) * 20,
+          y: y + (Math.random() - 0.5) * 20,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: 1.2 + Math.random() * 2.2,
+          color,
+          life: 0,
+          maxLife: 35 + Math.random() * 30,
+          twinkleSpeed: 9 + Math.random() * 15,
+          twinklePhase: Math.random() * Math.PI * 2,
+        });
+      }
+    };
+
+    // Helper to spawn click ripple burst
+    const spawnClickBurst = (x: number, y: number) => {
+      ripples.push({
+        x,
+        y,
+        radius: 6,
+        maxRadius: 75 + Math.random() * 30,
+        color: "rgba(56, 189, 248, ",
+        alpha: 0.7,
+      });
+
+      // Spawn burst of glow balls & sparkles
+      for (let i = 0; i < 4; i++) {
+        spawnGlowBall(x, y, 2.2, 1.3);
+      }
+      spawnSparkle(x, y, 7);
+    };
+
+    const updatePointer = (clientX: number, clientY: number) => {
+      const rect = canvas.getBoundingClientRect();
+      const px = clientX - rect.left;
+      const py = clientY - rect.top;
+
+      if (px >= 0 && px <= width && py >= 0 && py <= height) {
+        pointer.prevX = pointer.x === -999 ? px : pointer.x;
+        pointer.prevY = pointer.y === -999 ? py : pointer.y;
+        pointer.x = px;
+        pointer.y = py;
+        pointer.active = true;
+
+        const dist = Math.hypot(px - pointer.prevX, py - pointer.prevY);
+        if (dist > 10) {
+          if (Math.random() < 0.45) {
+            spawnGlowBall(px, py, 0.8, 1);
+          }
+          if (Math.random() < 0.65) {
+            spawnSparkle(px, py, 1);
+          }
+        }
+      } else {
+        pointer.active = false;
+      }
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      updatePointer(e.clientX, e.clientY);
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const py = e.clientY - rect.top;
+      if (px >= 0 && px <= width && py >= 0 && py <= height) {
+        spawnClickBurst(px, py);
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const t = e.touches[0];
+        updatePointer(t.clientX, t.clientY);
+      }
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const t = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const px = t.clientX - rect.left;
+        const py = t.clientY - rect.top;
+        if (px >= 0 && px <= width && py >= 0 && py <= height) {
+          updatePointer(t.clientX, t.clientY);
+          spawnClickBurst(px, py);
+        }
+      }
+    };
+
+    const onPointerLeave = () => {
+      pointer.active = false;
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
+    window.addEventListener("pointerleave", onPointerLeave);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+
+    let lastTime = performance.now();
+
+    const render = (now: number) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      time += dt;
+
+      ctx.clearRect(0, 0, width, height);
+
+      // ── 1. RENDER & UPDATE CLICK RIPPLES ──
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const r = ripples[i];
+        r.radius += (r.maxRadius - r.radius) * 0.12 + 1;
+        r.alpha *= 0.92;
+
+        if (r.alpha < 0.02 || r.radius >= r.maxRadius) {
+          ripples.splice(i, 1);
+          continue;
+        }
+
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `${r.color}${r.alpha.toFixed(3)})`;
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+      }
+
+      // ── 2. RENDER & UPDATE GLOW BALLS ──
+      for (let i = glowBalls.length - 1; i >= 0; i--) {
+        const b = glowBalls[i];
+        b.life += 1;
+        if (b.life >= b.maxLife) {
+          glowBalls.splice(i, 1);
+          continue;
+        }
+
+        b.x += b.vx;
+        b.y += b.vy;
+        b.vx *= 0.96;
+        b.vy *= 0.96;
+
+        const lifeFraction = b.life / b.maxLife;
+        const fade = Math.sin(lifeFraction * Math.PI);
+        const currentAlpha = b.alpha * fade;
+
+        // Radial diffusion gradient for soft glowing ball
+        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.radius);
+        grad.addColorStop(0, `${b.color}${currentAlpha.toFixed(3)})`);
+        grad.addColorStop(0.4, `${b.color}${(currentAlpha * 0.5).toFixed(3)})`);
+        grad.addColorStop(1, `${b.color}0)`);
+
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      // ── 3. RENDER & UPDATE BLINKING SPARKLES ──
+      for (let i = sparkles.length - 1; i >= 0; i--) {
+        const s = sparkles[i];
+        s.life += 1;
+        if (s.life >= s.maxLife) {
+          sparkles.splice(i, 1);
+          continue;
+        }
+
+        s.x += s.vx;
+        s.y += s.vy;
+        s.vx *= 0.95;
+        s.vy *= 0.95;
+
+        const lifeFraction = s.life / s.maxLife;
+        const fade = Math.sin(lifeFraction * Math.PI);
+        const blink = Math.sin(time * s.twinkleSpeed + s.twinklePhase) * 0.5 + 0.5;
+        const sparkAlpha = Math.max(0, fade * (0.35 + blink * 0.65));
+
+        // Core starlet dot
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size * (0.8 + blink * 0.4), 0, Math.PI * 2);
+        ctx.fillStyle = `${s.color}${sparkAlpha.toFixed(3)})`;
+        ctx.fill();
+
+        // Cross-flare gleam for high brightness blinks
+        if (sparkAlpha > 0.4) {
+          const gleam = s.size * 2.2;
+          ctx.strokeStyle = `${s.color}${(sparkAlpha * 0.65).toFixed(3)})`;
+          ctx.lineWidth = 0.8;
+          ctx.beginPath();
+          ctx.moveTo(s.x - gleam, s.y);
+          ctx.lineTo(s.x + gleam, s.y);
+          ctx.moveTo(s.x, s.y - gleam);
+          ctx.lineTo(s.x, s.y + gleam);
+          ctx.stroke();
+        }
+      }
+
+      animId = requestAnimationFrame(render);
+    };
+
+    animId = requestAnimationFrame(render);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointerleave", onPointerLeave);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchstart", onTouchStart);
+    };
+  }, [prefersReducedMotion]);
+
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden select-none">
+      {/* Precision Blueprint Grid */}
+      <div
+        className="absolute inset-0 opacity-[0.14]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(14,165,233,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(14,165,233,0.08) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+        }}
+      />
+
+      {/* Radial Grid Mask - softens edges */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 50% 45%, transparent 30%, #F8FBFF 100%)",
+        }}
+      />
+
+      {/* Atmospheric Ambient Glow Blobs */}
+      <motion.div
+        animate={
+          prefersReducedMotion
+            ? { x: 0, y: 0, scale: 1 }
+            : {
+                x: [0, 30, 0],
+                y: [0, -20, 0],
+                scale: [1, 1.08, 1],
+              }
+        }
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute -top-24 -left-24 h-[440px] w-[440px] rounded-full bg-sky-300/20 blur-[100px] sm:blur-[130px]"
+      />
+
+      <motion.div
+        animate={
+          prefersReducedMotion
+            ? { x: 0, y: 0, scale: 1 }
+            : {
+                x: [0, -25, 0],
+                y: [0, 35, 0],
+                scale: [1, 1.1, 1],
+              }
+        }
+        transition={{
+          duration: 22,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute top-1/4 -right-24 h-[500px] w-[500px] rounded-full bg-indigo-300/15 blur-[110px] sm:blur-[140px]"
+      />
+
+      <motion.div
+        animate={
+          prefersReducedMotion
+            ? { x: 0, y: 0, scale: 1 }
+            : {
+                x: [0, 20, 0],
+                y: [0, -25, 0],
+                scale: [1, 1.05, 1],
+              }
+        }
+        transition={{
+          duration: 16,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute bottom-12 left-1/3 h-[380px] w-[380px] rounded-full bg-cyan-200/20 blur-[100px]"
+      />
+
+      {/* Interactive Cursor/Touch Glow Balls & Blinking Sparks Canvas */}
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none z-1"
+      />
+
+      {/* Floating Micro Particles */}
+      {ambientParticles.map((p, i) => (
+        <motion.div
+          key={i}
+          animate={
+            prefersReducedMotion
+              ? { opacity: 0.4 }
+              : {
+                  y: [0, -14, 0],
+                  opacity: [0.25, 0.65, 0.25],
+                }
+          }
+          transition={{
+            duration: 4.5 + (i % 3),
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: p.delay,
+          }}
+          style={{
+            left: p.x,
+            top: p.y,
+            width: p.size,
+            height: p.size,
+          }}
+          className="absolute rounded-full bg-sky-400 shadow-[0_0_8px_rgba(14,165,233,0.7)]"
+        />
+      ))}
+
+      {/* Subtle Grain Overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.025] pointer-events-none mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }}
+      />
+    </div>
+  );
 }

@@ -21,26 +21,26 @@ const CAMERA_Z = 7.5;
 ========================================================= */
 
 const MESH_OFFSETS: [number, number, number][] = [
-  // 01. Lantriva (Left)
+  // 01. Lantriva (Object Left -> Content Right)
   [-1.7, -0.05, 0],
-  // 02. Neirah Lab (Right)
+  // 02. Neirah Lab (Object Right -> Content Left)
   [1.7, 0.1, 0],
-  // 03. Neirah IoT (Center-Low)
-  [0, -0.6, 0],
-  // 04. Neirah Drone (Upper-Left)
-  [-1.7, 0.45, 0],
-  // 05. Mugilix (Right)
-  [1.7, -0.1, 0],
-  // 06. HRVio (Center-Low)
-  [0, -0.6, 0],
-  // 07. Pothify (Left)
+  // 03. Neirah IoT (Object Left -> Content Right)
+  [-1.7, -0.05, 0],
+  // 04. Neirah Drone (Object Right -> Content Left)
+  [1.7, 0.35, 0],
+  // 05. Mugilix (Object Left -> Content Right)
+  [-1.7, -0.1, 0],
+  // 06. HRVio (Object Right -> Content Left)
+  [1.7, 0.1, 0],
+  // 07. Pothify (Object Left -> Content Right)
   [-1.7, -0.15, 0],
-  // 08. Tricobites (Upper-Right)
+  // 08. Tricobites (Object Right -> Content Left)
   [1.7, 0.25, 0],
-  // 09. Rideya (Left)
+  // 09. Rideya (Object Left -> Content Right)
   [-1.7, 0.05, 0],
-  // 10. Neirah BrandOS (Center-Low)
-  [0, -0.6, 0],
+  // 10. Neirah BrandOS (Object Right -> Content Left)
+  [1.7, -0.05, 0],
 ];
 
 /* =========================================================
@@ -541,42 +541,108 @@ function RefinedProductGeometry({
   });
 
   switch (index) {
-    // 01. LANTRIVA: Chamfered Frosted Glass Cube with Floating Gemstone
+    // 01. LANTRIVA: Cascading Holographic UI Viewport Matrix & Prismatic Optical Crystal
     case 0:
       return (
         <group>
-          <mesh>
-            <boxGeometry args={[1.7, 1.7, 1.7]} />
-            <meshPhysicalMaterial
-              color="#F0F9FF"
-              roughness={0.08}
-              transmission={0.92}
-              thickness={1.4}
-              ior={1.52}
-              transparent
-              opacity={0.88}
-              reflectivity={0.95}
-              clearcoat={1.0}
-              clearcoatRoughness={0.05}
-            />
-          </mesh>
-          <mesh>
-            <boxGeometry args={[1.72, 1.72, 1.72]} />
-            <meshBasicMaterial
-              color="#0EA5E9"
-              wireframe
-              transparent
-              opacity={0.35}
-            />
-          </mesh>
-          <mesh ref={coreRef}>
-            <octahedronGeometry args={[0.65, 0]} />
+          {/* Main Floating Glass Interface Viewport Plate (Front) */}
+          <group position={[0, 0, 0.25]} rotation={[0.08, -0.15, 0.05]}>
+            <mesh>
+              <boxGeometry args={[1.8, 1.2, 0.06]} />
+              <meshPhysicalMaterial
+                color="#E0F2FE"
+                roughness={0.06}
+                transmission={0.92}
+                thickness={0.8}
+                ior={1.5}
+                transparent
+                opacity={0.85}
+                reflectivity={0.9}
+                clearcoat={1.0}
+                clearcoatRoughness={0.04}
+              />
+            </mesh>
+            <mesh>
+              <boxGeometry args={[1.82, 1.22, 0.065]} />
+              <meshBasicMaterial
+                color="#0EA5E9"
+                wireframe
+                transparent
+                opacity={0.4}
+              />
+            </mesh>
+          </group>
+
+          {/* Secondary Stacked UI Plate (Back-Left offset) */}
+          <group position={[-0.3, 0.25, -0.25]} rotation={[-0.05, 0.12, -0.08]}>
+            <mesh>
+              <boxGeometry args={[1.5, 1.0, 0.05]} />
+              <meshPhysicalMaterial
+                color="#BAE6FD"
+                roughness={0.12}
+                transmission={0.88}
+                thickness={0.6}
+                ior={1.48}
+                transparent
+                opacity={0.7}
+                clearcoat={0.8}
+              />
+            </mesh>
+            <mesh>
+              <boxGeometry args={[1.52, 1.02, 0.055]} />
+              <meshBasicMaterial
+                color="#38BDF8"
+                wireframe
+                transparent
+                opacity={0.3}
+              />
+            </mesh>
+          </group>
+
+          {/* Tertiary Stacked UI Plate (Back-Right depth layer) */}
+          <group position={[0.35, -0.2, -0.6]} rotation={[0.1, -0.08, 0.06]}>
+            <mesh>
+              <boxGeometry args={[1.4, 0.9, 0.04]} />
+              <meshPhysicalMaterial
+                color="#7DD3FC"
+                roughness={0.15}
+                transmission={0.85}
+                thickness={0.5}
+                ior={1.45}
+                transparent
+                opacity={0.55}
+              />
+            </mesh>
+            <mesh>
+              <boxGeometry args={[1.42, 0.92, 0.045]} />
+              <meshBasicMaterial
+                color="#0284C7"
+                wireframe
+                transparent
+                opacity={0.25}
+              />
+            </mesh>
+          </group>
+
+          {/* Central Holographic Optical Prism Crystal Core */}
+          <mesh ref={coreRef} position={[0, 0, 0]}>
+            <dodecahedronGeometry args={[0.48, 0]} />
             <meshStandardMaterial
               color="#0284C7"
               emissive="#38BDF8"
-              emissiveIntensity={0.6}
-              roughness={0.15}
+              emissiveIntensity={0.8}
+              roughness={0.1}
               metalness={0.85}
+            />
+          </mesh>
+
+          {/* Orbiting Precision Reticle Ring */}
+          <mesh rotation-x={Math.PI / 2.5} rotation-y={Math.PI / 6}>
+            <torusGeometry args={[1.35, 0.018, 16, 64]} />
+            <meshBasicMaterial
+              color="#38BDF8"
+              transparent
+              opacity={0.5}
             />
           </mesh>
         </group>

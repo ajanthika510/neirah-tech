@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { getWhatsAppUrl } from "@/lib/utils";
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -20,8 +21,7 @@ export default function ApplyModal({ isOpen, onClose, role }: ApplyModalProps) {
     e.preventDefault();
     const cvInfo = cvFile ? `\nCV: ${cvFile.name}` : "";
     const text = `Hello, I'm interested in the *${role}* position.\nName: ${name}\nEmail: ${email}\nMessage: ${message}${cvInfo}`;
-    const encoded = encodeURIComponent(text);
-    const url = `https://wa.me/94760041594?text=${encoded}`;
+    const url = getWhatsAppUrl(text);
     window.open(url, "_blank", "noopener,noreferrer");
     onClose();
   };

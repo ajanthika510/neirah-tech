@@ -109,7 +109,6 @@ export default function Footer() {
 
       </div>
 
-
       {/* =====================================================
           MAIN FOOTER
       ===================================================== */}
@@ -160,7 +159,6 @@ export default function Footer() {
 
             </div>
 
-
             <motion.a
               href="https://wa.me/94760041594?text=Hello%2C%20I%20would%20like%20to%20start%20a%20conversation"
               target="_blank"
@@ -186,7 +184,6 @@ export default function Footer() {
           </div>
 
         </div>
-
 
         {/* =================================================
             FOOTER CONTENT
@@ -218,7 +215,6 @@ export default function Footer() {
               />
             </div>
 
-
               <div>
 
                 <p className="text-xl font-black tracking-tight">
@@ -236,13 +232,11 @@ export default function Footer() {
 
             </Link>
 
-
             <p className="mt-7 max-w-sm text-sm leading-7 text-slate-500">
               Technology solutions built around real business problems.
               From hardware beginnings to modern software solutions,
               we're continuing the journey.
             </p>
-
 
             {/* Social */}
 
@@ -272,7 +266,6 @@ export default function Footer() {
 
           </div>
 
-
           {/* =================================================
               COMPANY
           ================================================= */}
@@ -281,7 +274,6 @@ export default function Footer() {
             title="Company"
             links={footerLinks.company}
           />
-
 
           {/* =================================================
               SERVICES
@@ -292,7 +284,6 @@ export default function Footer() {
             links={footerLinks.services}
           />
 
-
           {/* =================================================
               CONTACT
           ================================================= */}
@@ -302,7 +293,6 @@ export default function Footer() {
             <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
               Get in touch
             </h3>
-
 
             <div className="mt-7 space-y-5">
 
@@ -330,7 +320,6 @@ export default function Footer() {
 
         </div>
 
-
         {/* =================================================
             GLOBAL PROOF
         ================================================= */}
@@ -342,7 +331,6 @@ export default function Footer() {
             <p className="text-sm text-slate-500">
               Building technology across borders.
             </p>
-
 
             <div className="flex items-center gap-7">
 
@@ -364,7 +352,6 @@ export default function Footer() {
 
         </div>
 
-
         {/* =================================================
             BOTTOM
         ================================================= */}
@@ -374,7 +361,6 @@ export default function Footer() {
           <p>
             © {new Date().getFullYear()} Neirah Tech Solutions. All rights reserved.
           </p>
-
 
           <div className="flex items-center gap-6">
             <Link
@@ -399,7 +385,6 @@ export default function Footer() {
     </footer>
   );
 }
-
 
 /* =========================================================
    FOOTER COLUMN
@@ -452,7 +437,6 @@ function FooterColumn({
   );
 }
 
-
 /* =========================================================
    SOCIAL ICON
 ========================================================= */
@@ -485,7 +469,6 @@ function SocialIcon({
   );
 }
 
-
 /* =========================================================
    CONTACT ITEM
 ========================================================= */
@@ -516,7 +499,6 @@ function ContactItem({
     </a>
   );
 }
-
 
 /* =========================================================
    PROOF

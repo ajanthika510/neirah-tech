@@ -452,8 +452,6 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
    HERO
 ========================================================= */
 
-
-
         /* =========================================================
    HERO
    Reference-inspired:
@@ -628,8 +626,7 @@ function ProjectsHero({
             font-extrabold
             tracking-[-0.065em]
             leading-[0.88]
-            
-            
+
           "
           style={{
             fontFamily: fontDisplay,
@@ -872,7 +869,6 @@ function ProjectsHero({
     </section>
   );
 }
-
 
 /* =========================================================
    SCROLL GALLERY
