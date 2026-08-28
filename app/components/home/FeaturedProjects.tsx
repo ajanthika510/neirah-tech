@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useMemo,
+} from "react";
 import dynamic from "next/dynamic";
 import {
   motion,
@@ -16,33 +22,35 @@ import {
   Plane,
   Building2,
   Users,
-  Truck,
   UtensilsCrossed,
   Car,
   Megaphone,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  Compass,
 } from "lucide-react";
+
 import SchedulerModal from "./SchedulerModal";
 import ProductEditorialOverlay from "./product/ProductEditorialOverlay";
 
-// Client-only dynamic load for WebGL Three.js Canvas
+/* =========================================================
+   CLIENT-ONLY THREE.JS CANVAS
+========================================================= */
+
 const ZAxisGalleryCanvas = dynamic(
   () => import("./product/ZAxisGalleryCanvas"),
   {
     ssr: false,
     loading: () => (
       <div className="absolute inset-0 flex items-center justify-center bg-transparent">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" />
+        <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-300 border-t-sky-500" />
       </div>
     ),
   }
 );
 
 /* =========================================================
-   10 PROPRIETARY VENTURES DATASET
+   PRODUCT TYPE
 ========================================================= */
 
 export type Product = {
@@ -54,21 +62,34 @@ export type Product = {
   description: string;
   capabilities: string[];
   builtFor?: string;
-  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
+  icon: React.ComponentType<{
+    size?: number;
+    className?: string;
+    style?: React.CSSProperties;
+  }>;
   accent: string;
   gradient: [string, string];
-  layer: "DESIGN" | "INTELLIGENCE" | "BUSINESS" | "DELIVERY & MOBILITY" | "PHYSICAL WORLD";
+  layer:
+    | "DESIGN"
+    | "INTELLIGENCE"
+    | "BUSINESS"
+    | "DELIVERY & MOBILITY"
+    | "PHYSICAL WORLD";
 };
 
+/* =========================================================
+   10 PROPRIETARY VENTURES
+========================================================= */
+
 export const products: Product[] = [
-  // 01. LANTRIVA
   {
     phase: 1,
     number: "01",
     id: "lantriva",
     name: "Lantriva",
     category: "UI/UX & Digital Experience",
-    description: "Designing memorable digital products, interfaces and scalable design systems.",
+    description:
+      "Designing memorable digital products, interfaces and scalable design systems.",
     capabilities: ["UI/UX", "Product Design", "SaaS Systems"],
     icon: Palette,
     accent: "#0EA5E9",
@@ -76,14 +97,14 @@ export const products: Product[] = [
     layer: "DESIGN",
   },
 
-  // 02. NEIRAH LAB
   {
     phase: 2,
     number: "02",
     id: "neirah-lab",
     name: "Neirah Lab",
     category: "AI, R&D & Automation",
-    description: "Building autonomous systems and machine intelligence that automate complex operations.",
+    description:
+      "Building autonomous systems and machine intelligence that automate complex operations.",
     capabilities: ["Autonomous AI", "Agentic Systems", "R&D"],
     icon: BrainCircuit,
     accent: "#6366F1",
@@ -91,14 +112,14 @@ export const products: Product[] = [
     layer: "INTELLIGENCE",
   },
 
-  // 03. NEIRAH IOT
   {
     phase: 3,
     number: "03",
     id: "neirah-iot",
     name: "Neirah IoT",
     category: "IoT, Embedded & Smart Agriculture",
-    description: "Bridging software with the physical world through telemetry devices and sensor matrices.",
+    description:
+      "Bridging software with the physical world through telemetry devices and sensor matrices.",
     capabilities: ["Embedded Hardware", "Smart Agriculture", "Telemetry"],
     icon: Cpu,
     accent: "#06B6D4",
@@ -106,14 +127,14 @@ export const products: Product[] = [
     layer: "PHYSICAL WORLD",
   },
 
-  // 04. NEIRAH DRONE
   {
     phase: 4,
     number: "04",
     id: "neirah-drone",
     name: "Neirah Drone",
     category: "Drone Engineering & Aerial Systems",
-    description: "Engineering precision aerial robotics for agricultural inspection and geospatial monitoring.",
+    description:
+      "Engineering precision aerial robotics for agricultural inspection and geospatial monitoring.",
     capabilities: ["Autonomous Flight", "Aerial Systems", "Sensors"],
     icon: Plane,
     accent: "#2563EB",
@@ -121,14 +142,14 @@ export const products: Product[] = [
     layer: "PHYSICAL WORLD",
   },
 
-  // 05. MUGILIX
   {
     phase: 5,
     number: "05",
     id: "mugilix",
     name: "Mugilix",
     category: "Business Operating System",
-    description: "A single unified platform powering enterprise resource planning, CRM, and workflow architecture.",
+    description:
+      "A single unified platform powering enterprise resource planning, CRM, and workflow architecture.",
     capabilities: ["Enterprise ERP", "Unified CRM", "Operations"],
     icon: Building2,
     accent: "#7C3AED",
@@ -136,14 +157,14 @@ export const products: Product[] = [
     layer: "BUSINESS",
   },
 
-  // 06. HRVIO
   {
     phase: 6,
     number: "06",
     id: "hrvio",
     name: "HRVio",
     category: "Human Intelligence",
-    description: "Transforming workforce data into predictive intelligence for organizational decision-making.",
+    description:
+      "Transforming workforce data into predictive intelligence for organizational decision-making.",
     capabilities: ["Workforce Analytics", "HR Intelligence", "Planning"],
     icon: Users,
     accent: "#0D9488",
@@ -151,14 +172,14 @@ export const products: Product[] = [
     layer: "INTELLIGENCE",
   },
 
-  // 07. POTHIFY
   {
     phase: 7,
     number: "07",
     id: "pothify",
     name: "Pothify",
     category: "Civic Infrastructure AI",
-    description: "Computer vision platform for automated municipal road inspection and asset management.",
+    description:
+      "Computer vision platform for automated municipal road inspection and asset management.",
     capabilities: ["Computer Vision", "GIS Mapping", "Civic AI"],
     icon: Car,
     accent: "#E11D48",
@@ -166,14 +187,14 @@ export const products: Product[] = [
     layer: "PHYSICAL WORLD",
   },
 
-  // 08. TRICOBITES
   {
     phase: 8,
     number: "08",
     id: "tricobites",
     name: "Tricobites",
     category: "Food Delivery Ecosystem",
-    description: "An integrated consumer and merchant ecosystem connecting kitchens, diners and couriers.",
+    description:
+      "An integrated consumer and merchant ecosystem connecting kitchens, diners and couriers.",
     capabilities: ["Food Ordering", "Merchant Network", "Logistics"],
     icon: UtensilsCrossed,
     accent: "#DB2777",
@@ -181,14 +202,14 @@ export const products: Product[] = [
     layer: "DELIVERY & MOBILITY",
   },
 
-  // 09. RIDEYA
   {
     phase: 9,
     number: "09",
     id: "rideya",
     name: "Rideya",
     category: "Mobility Ecosystem",
-    description: "Next-generation mobility networks facilitating multi-modal transport and smart fleet routing.",
+    description:
+      "Next-generation mobility networks facilitating multi-modal transport and smart fleet routing.",
     capabilities: ["Smart Dispatch", "Fleet Telemetry", "Payments"],
     icon: Car,
     accent: "#D97706",
@@ -196,14 +217,14 @@ export const products: Product[] = [
     layer: "DELIVERY & MOBILITY",
   },
 
-  // 10. NEIRAH BRANDOS
   {
     phase: 10,
     number: "10",
     id: "brandos",
     name: "Neirah BrandOS",
     category: "Brand & Growth Infrastructure",
-    description: "Automated omnichannel communication pipelines, brand governance and customer engagement.",
+    description:
+      "Automated omnichannel communication pipelines, brand governance and customer engagement.",
     capabilities: ["Omnichannel Growth", "Brand Governance", "Automation"],
     icon: Megaphone,
     accent: "#DC2626",
@@ -213,352 +234,1219 @@ export const products: Product[] = [
 ];
 
 /* =========================================================
-   Z-AXIS 3D PRODUCT GALLERY - MAIN DISCOVERY SPACE
+   MAIN FEATURED PROJECTS
 ========================================================= */
 
 export default function FeaturedProjects() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
 
-  const [activeProductIndex, setActiveProductIndex] = useState<number>(0);
-  const [currentProgressValue, setCurrentProgressValue] = useState<number>(0);
-  const [schedulerOpen, setSchedulerOpen] = useState<boolean>(false);
-  const [schedulerService, setSchedulerService] = useState<string>("");
-  const [mousePos, setMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [activeProductIndex, setActiveProductIndex] = useState(0);
+  const [currentProgressValue, setCurrentProgressValue] = useState(0);
 
-  // Scroll depth tracking with generous storytelling breathing room
+  const [schedulerOpen, setSchedulerOpen] = useState(false);
+  const [schedulerService, setSchedulerService] = useState("");
+
+  const [mousePos, setMousePos] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  /* =======================================================
+     RESPONSIVE DEVICE STATE
+  ======================================================= */
+
+  const [viewport, setViewport] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setViewport({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    updateViewport();
+
+    window.addEventListener("resize", updateViewport);
+
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+    };
+  }, []);
+
+  const isMobile = viewport.width > 0 && viewport.width < 640;
+
+  const isTablet =
+    viewport.width >= 640 && viewport.width < 1024;
+
+  const isDesktop = viewport.width >= 1024;
+
+  /* =======================================================
+     REDUCED MOTION
+  ======================================================= */
+
+  const [prefersReducedMotion, setPrefersReducedMotion] =
+    useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+
+    const update = () => {
+      setPrefersReducedMotion(mediaQuery.matches);
+    };
+
+    update();
+
+    mediaQuery.addEventListener("change", update);
+
+    return () => {
+      mediaQuery.removeEventListener("change", update);
+    };
+  }, []);
+
+  /* =======================================================
+     PRODUCT / SCROLL CONFIG
+  ======================================================= */
+
+  const maxIndex = products.length - 1;
+
+  /*
+   * Desktop:
+   * 850vh total storytelling space.
+   *
+   * Tablet:
+   * 900vh gives slightly more breathing room.
+   *
+   * Mobile:
+   * 1000vh gives each product enough vertical space
+   * without making transitions feel too compressed.
+   */
+
+  const sectionHeight = useMemo(() => {
+    if (isMobile) {
+      return products.length * 100;
+    }
+
+    if (isTablet) {
+      return products.length * 92;
+    }
+
+    return products.length * 85;
+  }, [isMobile, isTablet]);
+
+  /* =======================================================
+     SCROLL PROGRESS
+  ======================================================= */
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  const maxIndex = products.length - 1;
-  const rawProgress = useTransform(scrollYProgress, [0, 1], [0, maxIndex]);
+  const rawProgress = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, maxIndex]
+  );
 
-  // Spring physics for smooth physical inertia and responsive storytelling
   const smoothProgress = useSpring(rawProgress, {
-    stiffness: 60,
-    damping: 18,
-    mass: 0.65,
+    stiffness: isMobile ? 75 : 60,
+    damping: isMobile ? 22 : 18,
+    mass: isMobile ? 0.5 : 0.65,
     restDelta: 0.001,
   });
 
-  useMotionValueEvent(smoothProgress, "change", (latest) => {
-    setCurrentProgressValue(latest);
-    const rounded = Math.round(latest);
-    const clamped = Math.max(0, Math.min(maxIndex, rounded));
-    if (clamped !== activeProductIndex) {
-      setActiveProductIndex(clamped);
+  useMotionValueEvent(
+    smoothProgress,
+    "change",
+    (latest) => {
+      setCurrentProgressValue(latest);
+
+      const rounded = Math.round(latest);
+
+      const clamped = Math.max(
+        0,
+        Math.min(maxIndex, rounded)
+      );
+
+      setActiveProductIndex((previous) => {
+        if (previous === clamped) {
+          return previous;
+        }
+
+        return clamped;
+      });
     }
-  });
+  );
 
-  const activeProduct = products[activeProductIndex] || products[0];
+  const activeProduct =
+    products[activeProductIndex] || products[0];
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const { clientX, clientY, currentTarget } = e;
-    const { width, height, left, top } = currentTarget.getBoundingClientRect();
-    const x = ((clientX - left) / width) * 2 - 1;
-    const y = -(((clientY - top) / height) * 2 - 1);
-    setMousePos({ x, y });
-  }, []);
+  /* =======================================================
+     MOUSE PARALLAX
+     
+     Disabled on mobile/tablet.
+  ======================================================= */
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!isDesktop || prefersReducedMotion) {
+        return;
+      }
+
+      const {
+        clientX,
+        clientY,
+        currentTarget,
+      } = e;
+
+      const {
+        width,
+        height,
+        left,
+        top,
+      } = currentTarget.getBoundingClientRect();
+
+      const x =
+        ((clientX - left) / width) * 2 - 1;
+
+      const y =
+        -(((clientY - top) / height) * 2 - 1);
+
+      setMousePos({
+        x,
+        y,
+      });
+    },
+    [isDesktop, prefersReducedMotion]
+  );
+
+  /* =======================================================
+     SCROLL TO PRODUCT
+  ======================================================= */
 
   const scrollToProduct = useCallback(
     (index: number) => {
-      if (!containerRef.current) return;
-      const totalScrollHeight =
-        containerRef.current.scrollHeight - window.innerHeight;
+      if (!containerRef.current) {
+        return;
+      }
+
+      const clampedIndex = Math.max(
+        0,
+        Math.min(maxIndex, index)
+      );
+
+      const sectionTop =
+        containerRef.current.getBoundingClientRect()
+          .top + window.scrollY;
+
+      const sectionHeight =
+        containerRef.current.offsetHeight;
+
+      /*
+       * Sticky viewport consumes one viewport height.
+       * Calculate the actual scrollable area inside
+       * the storytelling section.
+       */
+
+      const scrollableDistance =
+        Math.max(
+          0,
+          sectionHeight - window.innerHeight
+        );
+
       const targetScroll =
-        containerRef.current.offsetTop +
-        (index / maxIndex) * totalScrollHeight;
+        sectionTop +
+        (clampedIndex / maxIndex) *
+          scrollableDistance;
 
       window.scrollTo({
         top: targetScroll,
-        behavior: "smooth",
+        behavior: prefersReducedMotion
+          ? "auto"
+          : "smooth",
       });
     },
-    [maxIndex]
+    [maxIndex, prefersReducedMotion]
   );
 
+  /* =======================================================
+     NEXT / PREVIOUS
+  ======================================================= */
+
   const handleNext = useCallback(() => {
-    const nextIdx = Math.min(maxIndex, activeProductIndex + 1);
-    scrollToProduct(nextIdx);
-  }, [activeProductIndex, maxIndex, scrollToProduct]);
+    if (activeProductIndex >= maxIndex) {
+      return;
+    }
+
+    scrollToProduct(activeProductIndex + 1);
+  }, [
+    activeProductIndex,
+    maxIndex,
+    scrollToProduct,
+  ]);
 
   const handlePrev = useCallback(() => {
-    const prevIdx = Math.max(0, activeProductIndex - 1);
-    scrollToProduct(prevIdx);
-  }, [activeProductIndex, scrollToProduct]);
-
-  const openSchedulerForProduct = useCallback((product: Product) => {
-    setSchedulerService(`Proprietary Venture: ${product.name}`);
-    setSchedulerOpen(true);
-  }, []);
-
-  const touchStartY = useRef<number>(0);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const touchEndY = e.changedTouches[0].clientY;
-    const diff = touchStartY.current - touchEndY;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
+    if (activeProductIndex <= 0) {
+      return;
     }
-  };
 
-  const isNearEnd = currentProgressValue >= maxIndex - 0.25;
+    scrollToProduct(activeProductIndex - 1);
+  }, [
+    activeProductIndex,
+    scrollToProduct,
+  ]);
+
+  /* =======================================================
+     SCHEDULER
+  ======================================================= */
+
+  const openSchedulerForProduct = useCallback(
+    (product: Product) => {
+      setSchedulerService(
+        `Proprietary Venture: ${product.name}`
+      );
+
+      setSchedulerOpen(true);
+    },
+    []
+  );
+
+  /* =======================================================
+     TOUCH HANDLING
+     
+     Important:
+     We DO NOT call preventDefault().
+     
+     Natural browser scrolling remains active.
+     Swipe detection is only used for explicit
+     next/previous product jumps when the gesture
+     is strong enough.
+  ======================================================= */
+
+  const touchStartY = useRef<number | null>(null);
+
+  const touchStartTime = useRef<number>(0);
+
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (!isMobile && !isTablet) {
+        return;
+      }
+
+      if (!e.touches[0]) {
+        return;
+      }
+
+      touchStartY.current =
+        e.touches[0].clientY;
+
+      touchStartTime.current =
+        Date.now();
+    },
+    [isMobile, isTablet]
+  );
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (!isMobile && !isTablet) {
+        return;
+      }
+
+      if (
+        touchStartY.current === null ||
+        !e.changedTouches[0]
+      ) {
+        return;
+      }
+
+      const touchEndY =
+        e.changedTouches[0].clientY;
+
+      const diff =
+        touchStartY.current - touchEndY;
+
+      const elapsed =
+        Date.now() - touchStartTime.current;
+
+      touchStartY.current = null;
+
+      /*
+       * Only treat a gesture as an explicit
+       * product navigation gesture if:
+       *
+       * - movement is large enough
+       * - gesture is reasonably quick
+       */
+
+      if (
+        Math.abs(diff) > 100 &&
+        elapsed < 700
+      ) {
+        if (diff > 0) {
+          handleNext();
+        } else {
+          handlePrev();
+        }
+      }
+    },
+    [
+      isMobile,
+      isTablet,
+      handleNext,
+      handlePrev,
+    ]
+  );
+
+  /* =======================================================
+     END DETECTION
+  ======================================================= */
+
+  const isNearEnd =
+    currentProgressValue >=
+    maxIndex - 0.25;
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <section
       id="featured-projects"
       ref={containerRef}
-      className="relative bg-[#F8FBFF] text-slate-900 select-none"
-      style={{ height: `${products.length * 85}vh` }}
+      className="
+        relative
+        w-full
+        bg-[#F8FBFF]
+        text-slate-900
+        select-none
+      "
+      style={{
+        height: `${sectionHeight}vh`,
+      }}
     >
-      {/* Sticky Fullscreen 3D Discovery Viewport */}
+      {/* =====================================================
+          STICKY FULLSCREEN VIEWPORT
+      ===================================================== */}
+
       <div
-        ref={stickyRef}
         onMouseMove={handleMouseMove}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between"
+        className="
+          sticky
+          top-0
+          h-dvh
+          min-h-[560px]
+          w-full
+          overflow-hidden
+          flex
+          flex-col
+          justify-between
+        "
+        style={{
+          touchAction: "pan-y",
+        }}
       >
-        {/* Subtle Architectural Atmosphere & Gradient Aura */}
-        <FeaturedBackgroundVisuals activeProduct={activeProduct} />
+        {/* ===================================================
+            BACKGROUND
+        =================================================== */}
 
-        {/* 3D WebGL Canvas Layer */}
+        <FeaturedBackgroundVisuals
+          activeProduct={activeProduct}
+          isMobile={isMobile}
+          isTablet={isTablet}
+          prefersReducedMotion={
+            prefersReducedMotion
+          }
+        />
+
+        {/* ===================================================
+            3D WEBGL
+        =================================================== */}
+
         <ZAxisGalleryCanvas
           products={products}
           progress={currentProgressValue}
           mousePos={mousePos}
           onSelectProduct={scrollToProduct}
+          isMobile={isMobile}
+          isTablet={isTablet}
+          isDesktop={isDesktop}
+          prefersReducedMotion={
+            prefersReducedMotion
+          }
         />
 
-        {/* Editorial Screen Typography Stage (Sequenced scroll-driven reveal) */}
+        {/* ===================================================
+            EDITORIAL CONTENT
+        =================================================== */}
+
         <ProductEditorialOverlay
           products={products}
           activeIndex={activeProductIndex}
           progress={currentProgressValue}
-          onConsult={openSchedulerForProduct}
+          onConsult={
+            openSchedulerForProduct
+          }
         />
 
-        {/* ========================================================
-            REFINED BOTTOM GALLERY DISCOVERY HUD
-        ======================================================== */}
-        <div className="relative z-20 w-full max-w-5xl mx-auto px-4 pb-6 sm:pb-8 flex flex-col items-center gap-3">
-          {/* Spatial Progress & Phase Number */}
-          <div className="flex items-center justify-between w-full max-w-xl px-4 py-2 font-mono text-xs text-slate-500 bg-white/85 backdrop-blur-md rounded-full border border-slate-200/80 shadow-sm">
-            <div className="flex items-baseline gap-2">
-              <span className="text-base font-black text-slate-900">
-                {String(activeProductIndex + 1).padStart(2, "0")}
+        {/* ===================================================
+            BOTTOM DISCOVERY HUD
+        =================================================== */}
+
+        <div
+          className="
+            relative
+            z-20
+            w-full
+            mx-auto
+            px-3
+            sm:px-4
+            pb-[max(12px,env(safe-area-inset-bottom))]
+            sm:pb-6
+            flex
+            flex-col
+            items-center
+            gap-2
+            sm:gap-3
+          "
+        >
+          {/* ===============================================
+              PRODUCT STATUS
+          =============================================== */}
+
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              w-full
+              max-w-xl
+              px-3
+              sm:px-4
+              py-1.5
+              sm:py-2
+              font-mono
+              text-[10px]
+              sm:text-xs
+              text-slate-500
+              bg-white/90
+              backdrop-blur-xl
+              rounded-full
+              border
+              border-slate-200/80
+              shadow-sm
+            "
+          >
+            <div
+              className="
+                flex
+                items-center
+                min-w-0
+                gap-1.5
+                sm:gap-2
+              "
+            >
+              <span
+                className="
+                  text-sm
+                  sm:text-base
+                  font-black
+                  text-slate-900
+                "
+              >
+                {String(
+                  activeProductIndex + 1
+                ).padStart(2, "0")}
               </span>
-              <span className="text-slate-300 font-bold">/</span>
-              <span className="text-slate-400 font-semibold">10</span>
-              <span className="font-sans font-bold text-slate-800 ml-2">
+
+              <span className="text-slate-300 font-bold">
+                /
+              </span>
+
+              <span className="text-slate-400 font-semibold">
+                10
+              </span>
+
+              <span
+                className="
+                  font-sans
+                  font-bold
+                  text-slate-800
+                  ml-1
+                  sm:ml-2
+                  truncate
+                  max-w-[120px]
+                  sm:max-w-none
+                "
+              >
                 • {activeProduct.name}
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              {/* Step Controls */}
+            {/* =============================================
+                STEP CONTROLS
+            ============================================= */}
+
+            <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={handlePrev}
-                disabled={activeProductIndex === 0}
+                disabled={
+                  activeProductIndex === 0
+                }
                 aria-label="Previous Discovery"
-                className="flex h-6 w-6 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition disabled:opacity-20 cursor-pointer"
+                className="
+                  flex
+                  h-7
+                  w-7
+                  sm:h-6
+                  sm:w-6
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  text-slate-600
+                  hover:bg-slate-100
+                  active:scale-90
+                  transition
+                  disabled:opacity-20
+                  cursor-pointer
+                  disabled:cursor-default
+                "
               >
                 <ChevronLeft size={14} />
               </button>
+
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={activeProductIndex === maxIndex}
+                disabled={
+                  activeProductIndex ===
+                  maxIndex
+                }
                 aria-label="Next Discovery"
-                className="flex h-6 w-6 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition disabled:opacity-20 cursor-pointer"
+                className="
+                  flex
+                  h-7
+                  w-7
+                  sm:h-6
+                  sm:w-6
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  text-slate-600
+                  hover:bg-slate-100
+                  active:scale-90
+                  transition
+                  disabled:opacity-20
+                  cursor-pointer
+                  disabled:cursor-default
+                "
               >
                 <ChevronRight size={14} />
               </button>
             </div>
           </div>
 
-          {/* Minimalist Linear Discovery Depth Track */}
-          <div className="relative h-1 w-full max-w-xl rounded-full bg-slate-200/80 overflow-hidden">
+          {/* ===============================================
+              PROGRESS TRACK
+          =============================================== */}
+
+          <div
+            className="
+              relative
+              h-0.5
+              sm:h-1
+              w-full
+              max-w-xl
+              rounded-full
+              bg-slate-200/80
+              overflow-hidden
+            "
+          >
             <motion.div
-              className="h-full rounded-full transition-colors duration-500"
+              className="h-full rounded-full"
               style={{
-                width: `${((currentProgressValue + 1) / products.length) * 100}%`,
-                backgroundColor: activeProduct.accent,
+                width: `${
+                  ((currentProgressValue + 1) /
+                    products.length) *
+                  100
+                }%`,
+                backgroundColor:
+                  activeProduct.accent,
+              }}
+              transition={{
+                duration: 0.3,
               }}
             />
           </div>
 
-          {/* 10 Gallery Index Pills */}
-          <div className="flex items-center justify-start sm:justify-center gap-1.5 flex-nowrap sm:flex-wrap max-w-full sm:max-w-4xl overflow-x-auto no-scrollbar py-1 px-2">
-            {products.map((p, idx) => {
-              const isSelected = activeProductIndex === idx;
+          {/* ===============================================
+              PRODUCT INDEX
+          =============================================== */}
+
+          <div
+            className="
+              flex
+              items-center
+              justify-start
+              sm:justify-center
+              gap-1
+              sm:gap-1.5
+              w-full
+              max-w-full
+              sm:max-w-4xl
+              overflow-x-auto
+              no-scrollbar
+              py-1
+              px-1
+              sm:px-2
+              overscroll-x-contain
+            "
+          >
+            {products.map((product, index) => {
+              const isSelected =
+                activeProductIndex === index;
+
               return (
                 <button
-                  key={p.id}
+                  key={product.id}
                   type="button"
-                  onClick={() => scrollToProduct(idx)}
-                  className={`flex-shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                  onClick={() =>
+                    scrollToProduct(index)
+                  }
+                  aria-label={`Go to ${product.name}`}
+                  aria-current={
                     isSelected
-                      ? "bg-slate-900 text-white shadow-xs scale-105"
-                      : "bg-white/70 border border-slate-200/70 text-slate-500 hover:bg-white hover:text-slate-900"
-                  }`}
+                      ? "step"
+                      : undefined
+                  }
+                  className={`
+                    flex
+                    shrink-0
+                    items-center
+                    gap-1
+                    px-2
+                    sm:px-2.5
+                    py-1.5
+                    sm:py-1
+                    rounded-full
+                    text-[9px]
+                    sm:text-[11px]
+                    font-bold
+                    transition-all
+                    duration-300
+                    cursor-pointer
+                    whitespace-nowrap
+                    active:scale-95
+
+                    ${
+                      isSelected
+                        ? "bg-slate-900 text-white shadow-sm scale-105"
+                        : "bg-white/75 border border-slate-200/70 text-slate-500 hover:bg-white hover:text-slate-900"
+                    }
+                  `}
                 >
                   <span
-                    className="h-1.5 w-1.5 rounded-full"
-                    style={{ backgroundColor: isSelected ? p.accent : "#94A3B8" }}
+                    className="
+                      h-1.5
+                      w-1.5
+                      rounded-full
+                      shrink-0
+                    "
+                    style={{
+                      backgroundColor:
+                        isSelected
+                          ? product.accent
+                          : "#94A3B8",
+                    }}
                   />
-                  <span>{p.number}</span>
-                  <span className="font-normal text-[10px] text-slate-400 hidden md:inline">
-                    {p.name}
+
+                  <span>
+                    {product.number}
+                  </span>
+
+                  <span
+                    className="
+                      font-normal
+                      text-[9px]
+                      sm:text-[10px]
+                      text-slate-400
+                      hidden
+                      md:inline
+                    "
+                  >
+                    {product.name}
                   </span>
                 </button>
               );
             })}
           </div>
 
-          {/* Ending Bridge into Next Section */}
+          {/* ===============================================
+              MOBILE SWIPE HINT
+          =============================================== */}
+
+          {activeProductIndex === 0 &&
+            (isMobile || isTablet) && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: 5,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 1,
+                  duration: 0.5,
+                }}
+                className="
+                  text-[9px]
+                  uppercase
+                  tracking-[0.2em]
+                  font-semibold
+                  text-slate-400
+                  pointer-events-none
+                "
+              >
+                Scroll to explore
+              </motion.div>
+            )}
+
+          {/* ===============================================
+              NEXT SECTION BRIDGE
+          =============================================== */}
+
           {isNearEnd && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="pt-2 text-center pointer-events-auto cursor-pointer flex items-center gap-1.5 text-[10px] font-bold tracking-[0.2em] uppercase text-sky-600 hover:text-sky-700"
+            <motion.button
+              type="button"
+              initial={{
+                opacity: 0,
+                y: 8,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.5,
+              }}
+              className="
+                pt-1
+                sm:pt-2
+                text-center
+                pointer-events-auto
+                cursor-pointer
+                flex
+                items-center
+                gap-1.5
+                text-[9px]
+                sm:text-[10px]
+                font-bold
+                tracking-[0.18em]
+                sm:tracking-[0.2em]
+                uppercase
+                text-sky-600
+                hover:text-sky-700
+              "
               onClick={() => {
-                const nextSection = document.getElementById("project-cta");
-                nextSection?.scrollIntoView({ behavior: "smooth" });
+                const nextSection =
+                  document.getElementById(
+                    "project-cta"
+                  );
+
+                nextSection?.scrollIntoView({
+                  behavior:
+                    prefersReducedMotion
+                      ? "auto"
+                      : "smooth",
+                });
               }}
             >
-              <span>Explore The Next Chapter</span>
-              <ChevronDown size={13} className="animate-bounce" />
-            </motion.div>
+              <span>
+                Explore The Next Chapter
+              </span>
+
+              <ChevronDown
+                size={13}
+                className={
+                  prefersReducedMotion
+                    ? ""
+                    : "animate-bounce"
+                }
+              />
+            </motion.button>
           )}
         </div>
       </div>
 
-      {/* Unified Consultation Scheduler Modal */}
+      {/* =====================================================
+          SCHEDULER
+      ===================================================== */}
+
       <SchedulerModal
         isOpen={schedulerOpen}
-        onClose={() => setSchedulerOpen(false)}
-        defaultService={schedulerService}
+        onClose={() =>
+          setSchedulerOpen(false)
+        }
+        defaultService={
+          schedulerService
+        }
       />
     </section>
   );
 }
 
 /* =========================================================
-   SUBTLE ARCHITECTURAL BACKGROUND AMBIENCE
+   BACKGROUND VISUALS
 ========================================================= */
 
 function FeaturedBackgroundVisuals({
   activeProduct,
+  isMobile,
+  isTablet,
+  prefersReducedMotion,
 }: {
   activeProduct: Product;
+  isMobile: boolean;
+  isTablet: boolean;
+  prefersReducedMotion: boolean;
 }) {
+  /*
+   * Keep decorative effects lighter on mobile.
+   * This is important for WebGL-heavy pages.
+   */
+
+  const ambientBlobSize = isMobile
+    ? "h-40 w-40"
+    : isTablet
+      ? "h-52 w-52"
+      : "h-64 w-64";
+
+  const rightBlobSize = isMobile
+    ? "h-48 w-48"
+    : isTablet
+      ? "h-60 w-60"
+      : "h-72 w-72";
+
+  const auraSize = isMobile
+    ? "h-[85vw] w-[85vw]"
+    : isTablet
+      ? "h-[520px] w-[520px]"
+      : "h-[650px] w-[650px]";
+
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden select-none">
-      {/* 1. Precision Grid */}
+    <div
+      className="
+        pointer-events-none
+        absolute
+        inset-0
+        overflow-hidden
+        select-none
+      "
+    >
+      {/* ===================================================
+          PRECISION GRID
+      =================================================== */}
+
       <div
-        className="absolute inset-0 opacity-[0.18]"
+        className="
+          absolute
+          inset-0
+          opacity-[0.15]
+          sm:opacity-[0.18]
+        "
         style={{
           backgroundImage:
             "linear-gradient(rgba(148,163,184,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.07) 1px, transparent 1px)",
-          backgroundSize: "72px 72px",
+          backgroundSize: isMobile
+            ? "48px 48px"
+            : isTablet
+              ? "60px 60px"
+              : "72px 72px",
         }}
       />
 
-      {/* 2. GLOWING SVG LASER LINES */}
-      <svg
-        className="absolute inset-0 h-full w-full opacity-40"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1440 900"
-        preserveAspectRatio="none"
-      >
-        <defs>
-          <linearGradient id="galleryLaser1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.05" />
-            <stop offset="50%" stopColor={activeProduct.accent} stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#818CF8" stopOpacity="0.05" />
-          </linearGradient>
-          <linearGradient id="galleryLaser2" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#6366F1" stopOpacity="0.05" />
-            <stop offset="50%" stopColor="#22D3EE" stopOpacity="0.65" />
-            <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.05" />
-          </linearGradient>
-          <filter id="neonLaserGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+      {/* ===================================================
+          LASER LINES
+      =================================================== */}
 
-        <motion.path
-          d="M -100 240 C 320 120, 680 380, 1100 180 C 1300 90, 1500 210, 1600 250"
-          fill="none"
-          stroke="url(#galleryLaser1)"
-          strokeWidth="2"
-          filter="url(#neonLaserGlow)"
-          animate={{ pathOffset: [0, 1] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-        />
+      {!isMobile && (
+        <svg
+          className="
+            absolute
+            inset-0
+            h-full
+            w-full
+            opacity-30
+            sm:opacity-40
+          "
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 900"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient
+              id="galleryLaser1"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
+              <stop
+                offset="0%"
+                stopColor="#38BDF8"
+                stopOpacity="0.05"
+              />
 
-        <motion.path
-          d="M -80 660 C 350 780, 780 480, 1160 720 C 1360 810, 1560 620, 1640 680"
-          fill="none"
-          stroke="url(#galleryLaser2)"
-          strokeWidth="1.5"
-          filter="url(#neonLaserGlow)"
-          animate={{ pathOffset: [1, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-        />
-      </svg>
+              <stop
+                offset="50%"
+                stopColor={
+                  activeProduct.accent
+                }
+                stopOpacity="0.7"
+              />
 
-      {/* 3. Soft Ambient Floating 3D Blobs in Periphery */}
+              <stop
+                offset="100%"
+                stopColor="#818CF8"
+                stopOpacity="0.05"
+              />
+            </linearGradient>
+
+            <linearGradient
+              id="galleryLaser2"
+              x1="100%"
+              y1="0%"
+              x2="0%"
+              y2="100%"
+            >
+              <stop
+                offset="0%"
+                stopColor="#6366F1"
+                stopOpacity="0.05"
+              />
+
+              <stop
+                offset="50%"
+                stopColor="#22D3EE"
+                stopOpacity="0.65"
+              />
+
+              <stop
+                offset="100%"
+                stopColor="#38BDF8"
+                stopOpacity="0.05"
+              />
+            </linearGradient>
+
+            <filter
+              id="neonLaserGlow"
+              x="-20%"
+              y="-20%"
+              width="140%"
+              height="140%"
+            >
+              <feGaussianBlur
+                stdDeviation="4"
+                result="blur"
+              />
+
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {!prefersReducedMotion && (
+            <>
+              <motion.path
+                d="
+                  M -100 240
+                  C 320 120,
+                  680 380,
+                  1100 180
+                  C 1300 90,
+                  1500 210,
+                  1600 250
+                "
+                fill="none"
+                stroke="url(#galleryLaser1)"
+                strokeWidth="2"
+                filter="url(#neonLaserGlow)"
+                animate={{
+                  pathOffset: [0, 1],
+                }}
+                transition={{
+                  duration: 18,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+
+              <motion.path
+                d="
+                  M -80 660
+                  C 350 780,
+                  780 480,
+                  1160 720
+                  C 1360 810,
+                  1560 620,
+                  1640 680
+                "
+                fill="none"
+                stroke="url(#galleryLaser2)"
+                strokeWidth="1.5"
+                filter="url(#neonLaserGlow)"
+                animate={{
+                  pathOffset: [1, 0],
+                }}
+                transition={{
+                  duration: 22,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+            </>
+          )}
+        </svg>
+      )}
+
+      {/* ===================================================
+          LEFT AMBIENT BLOB
+      =================================================== */}
+
       <motion.div
-        animate={{
-          x: [-15, 20, -15],
-          y: [-10, 15, -10],
-          scale: [1, 1.08, 0.95, 1],
+        animate={
+          prefersReducedMotion
+            ? undefined
+            : {
+                x: [-15, 20, -15],
+                y: [-10, 15, -10],
+                scale: [1, 1.08, 0.95, 1],
+              }
+        }
+        transition={{
+          duration: 14,
+          repeat: Infinity,
+          ease: "easeInOut",
         }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-12 -left-12 h-64 w-64 rounded-full opacity-30 blur-2xl pointer-events-none"
+        className={`
+          absolute
+          -top-8
+          -left-8
+          sm:-top-12
+          sm:-left-12
+          ${ambientBlobSize}
+          rounded-full
+          opacity-20
+          sm:opacity-30
+          blur-2xl
+          pointer-events-none
+        `}
         style={{
-          background: `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.8) 0%, ${activeProduct.accent}40 45%, transparent 75%)`,
+          background: `
+            radial-gradient(
+              circle at 35% 35%,
+              rgba(255,255,255,0.8) 0%,
+              ${activeProduct.accent}40 45%,
+              transparent 75%
+            )
+          `,
         }}
       />
+
+      {/* ===================================================
+          RIGHT AMBIENT BLOB
+      =================================================== */}
 
       <motion.div
-        animate={{
-          x: [20, -25, 20],
-          y: [15, -15, 15],
-          scale: [0.95, 1.1, 0.95],
+        animate={
+          prefersReducedMotion
+            ? undefined
+            : {
+                x: [20, -25, 20],
+                y: [15, -15, 15],
+                scale: [0.95, 1.1, 0.95],
+              }
+        }
+        transition={{
+          duration: 16,
+          repeat: Infinity,
+          ease: "easeInOut",
         }}
-        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/3 -right-16 h-72 w-72 rounded-full opacity-25 blur-3xl pointer-events-none"
+        className={`
+          absolute
+          top-1/3
+          -right-12
+          sm:-right-16
+          ${rightBlobSize}
+          rounded-full
+          opacity-15
+          sm:opacity-25
+          blur-3xl
+          pointer-events-none
+        `}
         style={{
-          background: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.8) 0%, rgba(99,102,241,0.35) 45%, transparent 75%)",
+          background:
+            "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.8) 0%, rgba(99,102,241,0.35) 45%, transparent 75%)",
         }}
       />
 
-      {/* 4. Soft Chromatic Ambient Aura Core */}
+      {/* ===================================================
+          CENTRAL AURA
+      =================================================== */}
+
       <div
-        className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-[650px] w-[650px] rounded-full opacity-12 blur-[150px] transition-colors duration-1000 pointer-events-none"
+        className={`
+          absolute
+          top-1/2
+          left-1/2
+          -translate-x-1/2
+          -translate-y-1/2
+          ${auraSize}
+          rounded-full
+          opacity-[0.08]
+          sm:opacity-[0.12]
+          blur-[100px]
+          sm:blur-[150px]
+          transition-colors
+          duration-1000
+          pointer-events-none
+        `}
         style={{
-          backgroundColor: activeProduct.accent,
+          backgroundColor:
+            activeProduct.accent,
         }}
       />
+
+      {/* ===================================================
+          MOBILE VIGNETTE
+      =================================================== */}
+
+      {isMobile && (
+        <div
+          className="
+            absolute
+            inset-0
+            bg-gradient-to-b
+            from-white/10
+            via-transparent
+            to-white/20
+          "
+        />
+      )}
     </div>
   );
 }
