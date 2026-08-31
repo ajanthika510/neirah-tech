@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -51,20 +51,47 @@ export default function BookingEngine({
   // Wizard step: 1: Service & Duration, 2: Calendar & Time, 3: Attendee Details, 4: Confirmation
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
+  const initialDateInfo = useMemo(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const yyyy = tomorrow.getFullYear();
+    const mm = String(tomorrow.getMonth() + 1).padStart(2, "0");
+    const dd = String(tomorrow.getDate()).padStart(2, "0");
+    return {
+      formatted: `${yyyy}-${mm}-${dd}`,
+      month: tomorrow.getMonth(),
+      year: tomorrow.getFullYear(),
+    };
+  }, []);
+
+  const initialTimezone = useMemo(() => {
+    if (typeof window === "undefined") return "UTC";
+    try {
+      const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (userTz) {
+        const match = TIMEZONES.find((t) => t.value === userTz);
+        return match ? match.value : userTz;
+      }
+    } catch {
+      // fallback
+    }
+    return "UTC";
+  }, []);
+
   // Form selections
   const [selectedService, setSelectedService] = useState<string>(
     defaultService || "AI & Intelligent Automation"
   );
   const [duration, setDuration] = useState<number>(30);
-  const [timezone, setTimezone] = useState<string>("UTC");
-  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [timezone, setTimezone] = useState<string>(initialTimezone);
+  const [selectedDate, setSelectedDate] = useState<string>(initialDateInfo.formatted);
   const [selectedTime, setSelectedTime] = useState<string>("10:00 AM");
   const [platform, setPlatform] = useState<string>("Google Meet");
 
   // Calendar state
   const today = useMemo(() => new Date(), []);
-  const [currentMonth, setCurrentMonth] = useState<number>(today.getMonth());
-  const [currentYear, setCurrentYear] = useState<number>(today.getFullYear());
+  const [currentMonth, setCurrentMonth] = useState<number>(initialDateInfo.month);
+  const [currentYear, setCurrentYear] = useState<number>(initialDateInfo.year);
 
   // Attendee info
   const [formData, setFormData] = useState({
@@ -81,35 +108,6 @@ export default function BookingEngine({
   const [serverError, setServerError] = useState<string | null>(null);
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);
-
-  // Auto-detect timezone
-  useEffect(() => {
-    try {
-      const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      if (userTz) {
-        const match = TIMEZONES.find((t) => t.value === userTz);
-        if (match) setTimezone(match.value);
-        else setTimezone(userTz);
-      }
-    } catch {
-      setTimezone("UTC");
-    }
-  }, []);
-
-  // Pre-select tomorrow or first valid date
-  useEffect(() => {
-    if (!selectedDate) {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const yyyy = tomorrow.getFullYear();
-      const mm = String(tomorrow.getMonth() + 1).padStart(2, "0");
-      const dd = String(tomorrow.getDate()).padStart(2, "0");
-      const formatted = `${yyyy}-${mm}-${dd}`;
-      setSelectedDate(formatted);
-      setCurrentMonth(tomorrow.getMonth());
-      setCurrentYear(tomorrow.getFullYear());
-    }
-  }, [selectedDate]);
 
   const daysInMonth = useMemo(() => {
     return new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -341,7 +339,7 @@ export default function BookingEngine({
                   key={s.num}
                   type="button"
                   onClick={() => {
-                    if (step > s.num) setStep(s.num as any);
+                    if (step > s.num) setStep(s.num as 1 | 2 | 3 | 4);
                   }}
                   disabled={step < s.num}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${

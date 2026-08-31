@@ -19,6 +19,127 @@ interface AIUniverseProps {
    PARTICLE SYSTEM
 ============================================================ */
 
+function createParticleData() {
+  const positions = new Float32Array(
+    PARTICLE_COUNT * 3
+  );
+
+  const velocities = new Float32Array(
+    PARTICLE_COUNT * 3
+  );
+
+  const targets = new Float32Array(
+    PARTICLE_COUNT * 3
+  );
+
+  const phases = new Float32Array(
+    PARTICLE_COUNT
+  );
+
+  const radii = new Float32Array(
+    PARTICLE_COUNT
+  );
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const i3 = i * 3;
+
+    const radius =
+      0.9 + Math.random() * 2.7;
+
+    const theta =
+      Math.random() *
+      Math.PI *
+      2;
+
+    const phi =
+      Math.acos(
+        2 * Math.random() - 1
+      );
+
+    positions[i3] =
+      radius *
+      Math.sin(phi) *
+      Math.cos(theta);
+
+    positions[i3 + 1] =
+      radius *
+      Math.sin(phi) *
+      Math.sin(theta);
+
+    positions[i3 + 2] =
+      radius *
+      Math.cos(phi);
+
+    velocities[i3] =
+      (Math.random() - 0.5) *
+      0.002;
+
+    velocities[i3 + 1] =
+      (Math.random() - 0.5) *
+      0.002;
+
+    velocities[i3 + 2] =
+      (Math.random() - 0.5) *
+      0.002;
+
+    /*
+     * Target forms an abstract
+     * computational / neural structure.
+     */
+
+    const layer =
+      Math.floor(
+        Math.random() * 6
+      );
+
+    const layerRadius =
+      0.35 +
+      layer * 0.16 +
+      Math.random() * 0.12;
+
+    const angle =
+      Math.random() *
+      Math.PI *
+      2;
+
+    const vertical =
+      (Math.random() - 0.5) *
+      1.8;
+
+    targets[i3] =
+      Math.cos(angle) *
+      layerRadius;
+
+    targets[i3 + 1] =
+      vertical;
+
+    targets[i3 + 2] =
+      Math.sin(angle) *
+      layerRadius;
+
+    phases[i] =
+      Math.random() *
+      Math.PI *
+      2;
+
+    radii[i] = radius;
+  }
+
+  const linePositions =
+    new Float32Array(
+      CONNECTION_COUNT * 6
+    );
+
+  return {
+    positions,
+    velocities,
+    targets,
+    phases,
+    radii,
+    linePositions,
+  };
+}
+
 function ParticleField({
   exiting = false,
 }: {
@@ -30,130 +151,7 @@ function ParticleField({
   const lineRef =
     useRef<THREE.LineSegments>(null);
 
-  const data = useMemo(() => {
-    const positions = new Float32Array(
-      PARTICLE_COUNT * 3
-    );
-
-    const velocities = new Float32Array(
-      PARTICLE_COUNT * 3
-    );
-
-    const targets = new Float32Array(
-      PARTICLE_COUNT * 3
-    );
-
-    const phases = new Float32Array(
-      PARTICLE_COUNT
-    );
-
-    const radii = new Float32Array(
-      PARTICLE_COUNT
-    );
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const i3 = i * 3;
-
-      const radius =
-        0.9 + Math.random() * 2.7;
-
-      const theta =
-        Math.random() *
-        Math.PI *
-        2;
-
-      const phi =
-        Math.acos(
-          2 * Math.random() - 1
-        );
-
-      positions[i3] =
-        radius *
-        Math.sin(phi) *
-        Math.cos(theta);
-
-      positions[i3 + 1] =
-        radius *
-        Math.sin(phi) *
-        Math.sin(theta);
-
-      positions[i3 + 2] =
-        radius *
-        Math.cos(phi);
-
-      velocities[i3] =
-        (Math.random() - 0.5) *
-        0.002;
-
-      velocities[i3 + 1] =
-        (Math.random() - 0.5) *
-        0.002;
-
-      velocities[i3 + 2] =
-        (Math.random() - 0.5) *
-        0.002;
-
-      /*
-       * Target forms an abstract
-       * computational / neural structure.
-       */
-
-      const layer =
-        Math.floor(
-          Math.random() * 6
-        );
-
-      const layerRadius =
-        0.35 +
-        layer * 0.16 +
-        Math.random() * 0.12;
-
-      const angle =
-        Math.random() *
-        Math.PI *
-        2;
-
-      const vertical =
-        (Math.random() - 0.5) *
-        1.8;
-
-      targets[i3] =
-        Math.cos(angle) *
-        layerRadius;
-
-      targets[i3 + 1] =
-        vertical;
-
-      targets[i3 + 2] =
-        Math.sin(angle) *
-        layerRadius;
-
-      phases[i] =
-        Math.random() *
-        Math.PI *
-        2;
-
-      radii[i] = radius;
-    }
-
-    /*
-     * Line geometry.
-     */
-
-    const linePositions =
-      new Float32Array(
-        CONNECTION_COUNT * 6
-      );
-
-    return {
-      positions,
-      velocities,
-      targets,
-      phases,
-      radii,
-      linePositions,
-    };
-  }, []);
+  const data = useMemo(() => createParticleData(), []);
 
   useFrame((state) => {
     if (!pointsRef.current) return;
@@ -724,47 +722,29 @@ function ScanningRings({
    DATA NODES
 ============================================================ */
 
+function createDataNodesData() {
+  return Array.from({ length: 24 }, () => {
+    const radius = 0.7 + Math.random() * 1.1;
+    const angle = Math.random() * Math.PI * 2;
+    const height = (Math.random() - 0.5) * 1.8;
+
+    return {
+      position: [
+        Math.cos(angle) * radius,
+        height,
+        Math.sin(angle) * radius,
+      ] as [number, number, number],
+      delay: Math.random() * 2,
+    };
+  });
+}
+
 function DataNodes({
   exiting = false,
 }: {
   exiting?: boolean;
 }) {
-  const nodes = useMemo(() => {
-    return Array.from(
-      { length: 24 },
-      (_, i) => {
-        const radius =
-          0.7 +
-          Math.random() *
-            1.1;
-
-        const angle =
-          Math.random() *
-          Math.PI *
-          2;
-
-        const height =
-          (Math.random() - 0.5) *
-          1.8;
-
-        return {
-          position: [
-            Math.cos(angle) *
-              radius,
-            height,
-            Math.sin(angle) *
-              radius,
-          ] as [
-            number,
-            number,
-            number
-          ],
-          delay:
-            Math.random() * 2,
-        };
-      }
-    );
-  }, []);
+  const nodes = useMemo(() => createDataNodesData(), []);
 
   return (
     <group>

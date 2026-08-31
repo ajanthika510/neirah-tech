@@ -17,6 +17,7 @@ import {
 
 import { useEffect, useRef, useState } from "react";
 import { getCaseStudies } from "../../actions/caseStudyActions";
+import RevealText from "../ui/RevealText";
 
 /* =========================================================
    TYPES
@@ -81,7 +82,7 @@ function formatProjectNumber(value: unknown, fallback: number) {
 }
 
 function normalizeCaseStudy(
-  item: any,
+  item: Record<string, unknown> | null | undefined,
   index: number
 ): CaseStudyItem {
   return {
@@ -93,32 +94,32 @@ function normalizeCaseStudy(
     ),
 
     category:
-      item?.category ||
-      item?.industry ||
+      (item?.category as string) ||
+      (item?.industry as string) ||
       "Digital",
 
     type:
-      item?.type ||
-      item?.projectType ||
+      (item?.type as string) ||
+      (item?.projectType as string) ||
       "Web Project",
 
     title:
-      item?.title ||
-      item?.name ||
+      (item?.title as string) ||
+      (item?.name as string) ||
       "Untitled Project",
 
     subtitle:
-      item?.subtitle ||
-      item?.shortDescription ||
+      (item?.subtitle as string) ||
+      (item?.shortDescription as string) ||
       "",
 
     description:
-      item?.description ||
+      (item?.description as string) ||
       "",
 
     image:
-      item?.image ||
-      item?.imageUrl ||
+      (item?.image as string) ||
+      (item?.imageUrl as string) ||
       "/images/case-studies/default.jpg",
 
     year: String(
@@ -141,11 +142,11 @@ function normalizeCaseStudy(
    MAIN PAGE
 ========================================================= */
 
-export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStudies?: any[] }) {
+export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStudies?: Record<string, unknown>[] }) {
   const [projects, setProjects] = useState<CaseStudyItem[]>(() => {
     if (initialCaseStudies && initialCaseStudies.length > 0) {
       return initialCaseStudies
-        .map((item: any, index: number) => normalizeCaseStudy(item, index))
+        .map((item: Record<string, unknown>, index: number) => normalizeCaseStudy(item, index))
         .filter(Boolean) as CaseStudyItem[];
     }
     return [];
@@ -175,8 +176,8 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
         if (Array.isArray(data)) {
           const normalizedProjects =
             data
-              .map((item: any, index: number) =>
-                normalizeCaseStudy(item, index)
+              .map((item: unknown, index: number) =>
+                normalizeCaseStudy(item as Record<string, unknown>, index)
               )
               .sort((a, b) => {
                 const aNumber = Number(a.number);
@@ -220,7 +221,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [initialCaseStudies]);
 
   /* =======================================================
      CURSOR GLOW
@@ -777,19 +778,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
 
               {/* H1 */}
 
-              <motion.h1
-                initial={{
-                  opacity: 0,
-                  y: 60,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 1,
-                  ease,
-                }}
+              <h1
                 className="
                   max-w-5xl
                   text-[clamp(3rem,7vw,6.8rem)]
@@ -799,7 +788,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
                   text-[#0F172A]
                 "
               >
-                Digital
+                <RevealText text="Digital" mode="viewport" stagger={0.09} duration={0.65} blurAmount={8} />
 
                 <br />
 
@@ -813,13 +802,13 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
                     text-transparent
                   "
                 >
-                  experiences
+                  <RevealText text="experiences" mode="viewport" delay={0.2} stagger={0.09} duration={0.65} blurAmount={8} />
                 </span>
 
                 <br />
 
-                that move.
-              </motion.h1>
+                <RevealText text="that move." mode="viewport" delay={0.4} stagger={0.09} duration={0.65} blurAmount={8} />
+              </h1>
             </div>
 
             {/* RIGHT */}
@@ -1768,7 +1757,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
                 lg:text-[6.2rem]
               "
             >
-              Let's build
+              Let&apos;s build
 
               <br />
 
@@ -1805,7 +1794,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
             >
               Have a business idea, website
               redesign or digital product in mind?
-              Let's turn it into an experience
+              Let&apos;s turn it into an experience
               people remember.
             </p>
 

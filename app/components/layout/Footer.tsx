@@ -137,7 +137,7 @@ export default function Footer() {
                 />
 
                 <span className="text-xs font-bold tracking-[0.2em] text-sky-300">
-                  LET'S BUILD SOMETHING
+                  LET&apos;S BUILD SOMETHING
                 </span>
 
               </div>
@@ -147,13 +147,13 @@ export default function Footer() {
                 Have a problem?
 
                 <span className="block bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
-                  Let's start a conversation.
+                  Let&apos;s start a conversation.
                 </span>
 
               </h2>
 
               <p className="mt-5 max-w-xl leading-7 text-slate-400">
-                Tell us what you're trying to solve. We'll help you explore
+                Tell us what you&apos;re trying to solve. We&apos;ll help you explore
                 the right technology and turn the idea into something useful.
               </p>
 
@@ -235,7 +235,7 @@ export default function Footer() {
             <p className="mt-7 max-w-sm text-sm leading-7 text-slate-500">
               Technology solutions built around real business problems.
               From hardware beginnings to modern software solutions,
-              we're continuing the journey.
+              we&apos;re continuing the journey.
             </p>
 
             {/* Social */}

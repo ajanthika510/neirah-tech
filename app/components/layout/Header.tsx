@@ -33,12 +33,13 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      const isScrolled = window.scrollY > 30;
+      setScrolled((prev) => (prev === isScrolled ? prev : isScrolled));
     };
 
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -592,7 +593,7 @@ export default function Navbar() {
                         sm:text-xs
                       "
                     >
-                      Let's connect
+                      Let&apos;s connect
                     </p>
 
                     <p

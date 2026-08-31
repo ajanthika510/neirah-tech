@@ -86,7 +86,7 @@ function HeroFlowFieldComponent({
     let height = 0;
     let dpr = 1;
     let particles: Particle[] = [];
-    let sparkles: Sparkle[] = [];
+    const sparkles: Sparkle[] = [];
     let time = 0;
 
     // Interactive pointer state (mouse & touch)

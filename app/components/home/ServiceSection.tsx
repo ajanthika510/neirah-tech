@@ -5,7 +5,6 @@ import { useMemo, useRef } from "react";
 import {
   Canvas,
   useFrame,
-  useThree,
 } from "@react-three/fiber";
 
 import * as THREE from "three";
@@ -160,7 +159,7 @@ const services = [
 ];
 
 /* =========================================================
-   HERO / PROJECT COLOR SYSTEM
+   COLOR SYSTEM
 ========================================================= */
 
 const COLORS = {
@@ -190,10 +189,6 @@ function OrganicTunnel({
 }) {
   const group = useRef<THREE.Group>(null);
 
-  /* =======================================================
-     MAIN ORGANIC ROOT
-  ======================================================= */
-
   const mainCurve = useMemo(() => {
     const points: THREE.Vector3[] = [];
 
@@ -210,9 +205,7 @@ function OrganicTunnel({
         Math.cos(t * Math.PI * 1.6) * 2.3 +
         Math.sin(t * Math.PI * 4) * 0.8;
 
-      points.push(
-        new THREE.Vector3(x, y, z)
-      );
+      points.push(new THREE.Vector3(x, y, z));
     }
 
     return new THREE.CatmullRomCurve3(
@@ -223,25 +216,18 @@ function OrganicTunnel({
     );
   }, []);
 
-  /* =======================================================
-     ORGANIC BRANCHES
-  ======================================================= */
-
   const branchCurves = useMemo(() => {
     const curves: THREE.CatmullRomCurve3[] = [];
 
     for (let branch = 0; branch < 22; branch++) {
       const points: THREE.Vector3[] = [];
 
-      const side =
-        branch % 2 === 0 ? 1 : -1;
+      const side = branch % 2 === 0 ? 1 : -1;
 
-      const startZ =
-        -branch * 3.1;
+      const startZ = -branch * 3.1;
 
       const startX =
-        side *
-        (4.5 + (branch % 4) * 1.25);
+        side * (4.5 + (branch % 4) * 1.25);
 
       const startY =
         ((branch % 5) - 2) * 1.25;
@@ -251,35 +237,25 @@ function OrganicTunnel({
 
         const z =
           startZ -
-          t *
-            (8 +
-              (branch % 3) * 3.5);
+          t * (8 + (branch % 3) * 3.5);
 
         const x =
           startX +
           side *
             Math.sin(t * Math.PI) *
             (4.5 + branch * 0.13) +
-          Math.sin(
-            t * 8 + branch
-          ) *
-            0.75;
+          Math.sin(t * 8 + branch) * 0.75;
 
         const y =
           startY +
           Math.cos(
-            t * Math.PI * 1.5 +
-              branch
+            t * Math.PI * 1.5 + branch
           ) *
             1.5 *
             t;
 
         points.push(
-          new THREE.Vector3(
-            x,
-            y,
-            z
-          )
+          new THREE.Vector3(x, y, z)
         );
       }
 
@@ -295,10 +271,6 @@ function OrganicTunnel({
 
     return curves;
   }, []);
-
-  /* =======================================================
-     LARGE FLOWING ROOT LOOPS
-  ======================================================= */
 
   const flowingCurves = useMemo(() => {
     const curves: THREE.CatmullRomCurve3[] = [];
@@ -323,8 +295,7 @@ function OrganicTunnel({
           i * 0.52;
 
         const x =
-          Math.cos(angle) *
-          radius;
+          Math.cos(angle) * radius;
 
         const y =
           Math.sin(angle) *
@@ -332,11 +303,7 @@ function OrganicTunnel({
           0.65;
 
         points.push(
-          new THREE.Vector3(
-            x,
-            y,
-            z
-          )
+          new THREE.Vector3(x, y, z)
         );
       }
 
@@ -353,38 +320,24 @@ function OrganicTunnel({
     return curves;
   }, []);
 
-  /* =======================================================
-     ANIMATION
-  ======================================================= */
-
   useFrame(() => {
     if (!group.current) return;
 
     const p = progress.get();
 
     group.current.rotation.z =
-      Math.sin(
-        p * Math.PI * 2
-      ) * 0.12;
+      Math.sin(p * Math.PI * 2) * 0.12;
 
     group.current.rotation.x =
-      Math.cos(
-        p * Math.PI * 1.5
-      ) * 0.07;
+      Math.cos(p * Math.PI * 1.5) * 0.07;
 
     group.current.rotation.y =
-      Math.sin(
-        p * Math.PI * 1.3
-      ) * 0.08;
+      Math.sin(p * Math.PI * 1.3) * 0.08;
   });
 
   return (
     <group ref={group}>
-
-      {/* =================================================
-          MAIN DARK ROOT
-      ================================================= */}
-
+      {/* MAIN ROOT */}
       <mesh>
         <tubeGeometry
           args={[
@@ -403,10 +356,7 @@ function OrganicTunnel({
         />
       </mesh>
 
-      {/* =================================================
-          MAIN BLUE GLOW
-      ================================================= */}
-
+      {/* BLUE GLOW */}
       <mesh>
         <tubeGeometry
           args={[
@@ -422,20 +372,14 @@ function OrganicTunnel({
           color={COLORS.sky}
           transparent
           opacity={0.07}
-          blending={
-            THREE.AdditiveBlending
-          }
+          blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </mesh>
 
-      {/* =================================================
-          ROOT BRANCHES
-      ================================================= */}
-
+      {/* BRANCHES */}
       {branchCurves.map(
         (curve, index) => {
-
           const color =
             index % 4 === 0
               ? COLORS.dark
@@ -446,20 +390,14 @@ function OrganicTunnel({
               : COLORS.indigo;
 
           return (
-            <group
-              key={`branch-${index}`}
-            >
-
-              {/* CORE LINE */}
-
+            <group key={`branch-${index}`}>
               <mesh>
                 <tubeGeometry
                   args={[
                     curve,
                     80,
                     0.025 +
-                      (index % 3) *
-                        0.015,
+                      (index % 3) * 0.015,
                     6,
                     false,
                   ]}
@@ -475,8 +413,6 @@ function OrganicTunnel({
                   }
                 />
               </mesh>
-
-              {/* SOFT GLOW */}
 
               <mesh>
                 <tubeGeometry
@@ -503,28 +439,21 @@ function OrganicTunnel({
                   depthWrite={false}
                 />
               </mesh>
-
             </group>
           );
         }
       )}
 
-      {/* =================================================
-          LARGE ORGANIC RINGS
-      ================================================= */}
-
+      {/* FLOWING RINGS */}
       {flowingCurves.map(
         (curve, index) => (
-          <mesh
-            key={`flow-${index}`}
-          >
+          <mesh key={`flow-${index}`}>
             <tubeGeometry
               args={[
                 curve,
                 150,
                 0.022 +
-                  (index % 2) *
-                    0.018,
+                  (index % 2) * 0.018,
                 6,
                 false,
               ]}
@@ -549,17 +478,8 @@ function OrganicTunnel({
         )
       )}
 
-      {/* =================================================
-          DEEP CORE
-      ================================================= */}
-
-      <mesh
-        position={[
-          0,
-          0,
-          -67,
-        ]}
-      >
+      {/* CORE */}
+      <mesh position={[0, 0, -67]}>
         <sphereGeometry
           args={[1.1, 32, 32]}
         />
@@ -569,13 +489,7 @@ function OrganicTunnel({
         />
       </mesh>
 
-      <mesh
-        position={[
-          0,
-          0,
-          -67,
-        ]}
-      >
+      <mesh position={[0, 0, -67]}>
         <sphereGeometry
           args={[3.4, 32, 32]}
         />
@@ -584,13 +498,10 @@ function OrganicTunnel({
           color={COLORS.sky}
           transparent
           opacity={0.07}
-          blending={
-            THREE.AdditiveBlending
-          }
+          blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </mesh>
-
     </group>
   );
 }
@@ -604,33 +515,24 @@ function TunnelBlobs({
 }: {
   progress: MotionValue<number>;
 }) {
-  const group =
-    useRef<THREE.Group>(null);
+  const group = useRef<THREE.Group>(null);
 
   const blobs = useMemo(() => {
     return Array.from(
       { length: 38 },
       (_, i) => ({
         x:
-          Math.sin(i * 1.91) *
-            10 +
-          Math.cos(i * 0.7) *
-            3,
+          Math.sin(i * 1.91) * 10 +
+          Math.cos(i * 0.7) * 3,
 
         y:
-          Math.cos(i * 1.37) *
-            7 +
-          Math.sin(i * 0.4) *
-            2,
+          Math.cos(i * 1.37) * 7 +
+          Math.sin(i * 0.4) * 2,
 
-        z:
-          -4 -
-          i * 2.15,
+        z: -4 - i * 2.15,
 
         scale:
-          0.12 +
-          (i % 5) *
-            0.07,
+          0.12 + (i % 5) * 0.07,
       })
     );
   }, []);
@@ -641,17 +543,14 @@ function TunnelBlobs({
     const p = progress.get();
 
     group.current.rotation.z =
-      state.clock.elapsedTime *
-      0.03;
+      state.clock.elapsedTime * 0.03;
 
     group.current.rotation.y =
       Math.sin(
-        state.clock.elapsedTime *
-          0.15
+        state.clock.elapsedTime * 0.15
       ) * 0.1;
 
-    group.current.position.z =
-      p * 16;
+    group.current.position.z = p * 16;
   });
 
   return (
@@ -668,7 +567,7 @@ function TunnelBlobs({
             scale={blob.scale}
           >
             <sphereGeometry
-              args={[1, 16, 16]}
+              args={[1, 12, 12]}
             />
 
             <meshBasicMaterial
@@ -696,65 +595,40 @@ function TunnelBlobs({
 }
 
 /* =========================================================
-   PARTICLE FIELD
+   PARTICLES
 ========================================================= */
+
+function createTunnelDustPositions() {
+  const array = new Float32Array(1200 * 3);
+
+  for (let i = 0; i < 1200; i++) {
+    const i3 = i * 3;
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 4 + Math.random() * 18;
+
+    array[i3] = Math.cos(angle) * radius;
+    array[i3 + 1] = Math.sin(angle) * radius * 0.7;
+    array[i3 + 2] = -Math.random() * 85;
+  }
+
+  return array;
+}
 
 function TunnelParticles({
   progress,
 }: {
   progress: MotionValue<number>;
 }) {
-  const pointsRef =
-    useRef<THREE.Points>(null);
-
-  const positions = useMemo(() => {
-    const array =
-      new Float32Array(
-        1700 * 3
-      );
-
-    for (
-      let i = 0;
-      i < 1700;
-      i++
-    ) {
-      const i3 = i * 3;
-
-      const angle =
-        Math.random() *
-        Math.PI *
-        2;
-
-      const radius =
-        4 +
-        Math.random() * 18;
-
-      array[i3] =
-        Math.cos(angle) *
-        radius;
-
-      array[i3 + 1] =
-        Math.sin(angle) *
-        radius *
-        0.7;
-
-      array[i3 + 2] =
-        -Math.random() *
-        85;
-    }
-
-    return array;
-  }, []);
+  const pointsRef = useRef<THREE.Points>(null);
+  const positions = useMemo(() => createTunnelDustPositions(), []);
 
   useFrame((state) => {
-    if (!pointsRef.current)
-      return;
+    if (!pointsRef.current) return;
 
     const p = progress.get();
 
     pointsRef.current.rotation.z =
-      state.clock.elapsedTime *
-      0.012;
+      state.clock.elapsedTime * 0.012;
 
     pointsRef.current.position.z =
       p * 28;
@@ -765,13 +639,8 @@ function TunnelParticles({
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          args={[
-            positions,
-            3,
-          ]}
-          count={
-            positions.length / 3
-          }
+          args={[positions, 3]}
+          count={positions.length / 3}
           itemSize={3}
         />
       </bufferGeometry>
@@ -782,9 +651,7 @@ function TunnelParticles({
         transparent
         opacity={0.5}
         sizeAttenuation
-        blending={
-          THREE.AdditiveBlending
-        }
+        blending={THREE.AdditiveBlending}
         depthWrite={false}
       />
     </points>
@@ -792,7 +659,7 @@ function TunnelParticles({
 }
 
 /* =========================================================
-   3D TUNNEL WORLD
+   TUNNEL SCENE
 ========================================================= */
 
 function TunnelScene({
@@ -800,83 +667,60 @@ function TunnelScene({
 }: {
   progress: MotionValue<number>;
 }) {
-  const { camera } =
-    useThree();
-
-  useFrame(() => {
+  useFrame((state) => {
     const p = progress.get();
 
-    const targetZ =
-      4 -
-      p * 65;
+    const targetZ = 4 - p * 65;
 
     const targetX =
-      Math.sin(
-        p * Math.PI * 2
-      ) * 2.2;
+      Math.sin(p * Math.PI * 2) * 2.2;
 
     const targetY =
-      Math.cos(
-        p * Math.PI * 1.5
-      ) * 1.5;
+      Math.cos(p * Math.PI * 1.5) * 1.5;
 
-    camera.position.x +=
-      (targetX -
-        camera.position.x) *
+    state.camera.position.x +=
+      (targetX - state.camera.position.x) *
       0.035;
 
-    camera.position.y +=
-      (targetY -
-        camera.position.y) *
+    state.camera.position.y +=
+      (targetY - state.camera.position.y) *
       0.035;
 
-    camera.position.z +=
-      (targetZ -
-        camera.position.z) *
+    state.camera.position.z +=
+      (targetZ - state.camera.position.z) *
       0.035;
 
-    camera.rotation.z +=
+    state.camera.rotation.z +=
       (
-        Math.sin(
-          p * Math.PI * 2
-        ) *
+        Math.sin(p * Math.PI * 2) *
           0.045 -
-        camera.rotation.z
+        state.camera.rotation.z
       ) * 0.03;
 
-    camera.rotation.y +=
+    state.camera.rotation.y +=
       (
-        Math.sin(
-          p * Math.PI * 1.6
-        ) *
+        Math.sin(p * Math.PI * 1.6) *
           0.04 -
-        camera.rotation.y
+        state.camera.rotation.y
       ) * 0.03;
   });
 
   return (
     <>
-      <OrganicTunnel
-        progress={progress}
-      />
+      <OrganicTunnel progress={progress} />
 
-      <TunnelBlobs
-        progress={progress}
-      />
+      <TunnelBlobs progress={progress} />
 
-      <TunnelParticles
-        progress={progress}
-      />
+      <TunnelParticles progress={progress} />
 
-      <ambientLight
-        intensity={0.25}
-      />
+      <ambientLight intensity={0.25} />
     </>
   );
 }
 
 /* =========================================================
-   SERVICE CONTENT
+   SERVICE EXPERIENCE
+   CENTERED ON ALL DEVICES
 ========================================================= */
 
 function ServiceExperience({
@@ -893,72 +737,114 @@ function ServiceExperience({
   const serviceAreaStart = 0.075;
   const serviceAreaEnd = 0.96;
 
-  const serviceArea = serviceAreaEnd - serviceAreaStart;
-  const segment = serviceArea / services.length; // ~0.11 per service
+  const serviceArea =
+    serviceAreaEnd -
+    serviceAreaStart;
 
-  const start = serviceAreaStart + index * segment;
+  const segment =
+    serviceArea / services.length;
+
+  const start =
+    serviceAreaStart +
+    index * segment;
+
   const end = start + segment;
 
-  // Smooth entrance over first 22% of segment, full visibility for 56%, smooth exit over final 22%
-  const enterEnd = start + segment * 0.22;
-  const exitStart = start + segment * 0.78;
+  const enterEnd =
+    start + segment * 0.22;
 
-  // For the final service (08. Innovation Lab), hold visibility through the end of the section
-  const actualExitStart = index === services.length - 1 ? 0.94 : exitStart;
-  const actualEnd = index === services.length - 1 ? 0.98 : end;
+  const exitStart =
+    start + segment * 0.78;
 
-  const isLeft = index % 2 === 0;
+  const actualExitStart =
+    index === services.length - 1
+      ? 0.94
+      : exitStart;
+
+  const actualEnd =
+    index === services.length - 1
+      ? 0.98
+      : end;
+
+  /* -----------------------------------------
+     ANIMATION
+  ----------------------------------------- */
 
   const x = useTransform(
     progress,
-    [start, enterEnd, actualExitStart, actualEnd],
-    [isLeft ? -40 : 40, 0, 0, isLeft ? -40 : 40]
+    [
+      start,
+      enterEnd,
+      actualExitStart,
+      actualEnd,
+    ],
+    [-30, 0, 0, 30]
   );
 
   const opacity = useTransform(
     progress,
-    [start, enterEnd, actualExitStart, actualEnd],
+    [
+      start,
+      enterEnd,
+      actualExitStart,
+      actualEnd,
+    ],
     [0, 1, 1, 0]
   );
 
   const y = useTransform(
     progress,
-    [start, enterEnd, actualExitStart, actualEnd],
-    [30, 0, 0, -30]
+    [
+      start,
+      enterEnd,
+      actualExitStart,
+      actualEnd,
+    ],
+    [25, 0, 0, -25]
   );
 
   const scale = useTransform(
     progress,
-    [start, enterEnd, actualExitStart, actualEnd],
-    [0.94, 1, 1, 0.94]
+    [
+      start,
+      enterEnd,
+      actualExitStart,
+      actualEnd,
+    ],
+    [0.96, 1, 1, 0.96]
   );
 
   const rotate = useTransform(
     progress,
-    [start, enterEnd, actualExitStart, actualEnd],
     [
-      isLeft ? -1.5 : 1.5,
-      0,
-      0,
-      isLeft ? 1.5 : -1.5,
-    ]
+      start,
+      enterEnd,
+      actualExitStart,
+      actualEnd,
+    ],
+    [-1, 0, 0, 1]
   );
 
   return (
     <motion.div
-      className={`
+      className="
         pointer-events-none
         absolute
+        left-1/2
         top-1/2
-        -translate-y-1/2
         z-50
-        w-[min(560px,88vw)]
-        ${
-          isLeft
-            ? "left-5 sm:left-10 md:left-16 lg:left-24 xl:left-32 text-left"
-            : "right-5 sm:right-10 md:right-16 lg:right-24 xl:right-32 text-left"
-        }
-      `}
+
+        w-[calc(100%-2rem)]
+        sm:w-[calc(100%-4rem)]
+        md:w-[min(700px,calc(100%-5rem))]
+        lg:w-[min(760px,82vw)]
+        xl:w-[min(820px,78vw)]
+
+        -translate-x-1/2
+        -translate-y-1/2
+
+        text-center
+      "
       style={{
         opacity,
         x,
@@ -967,42 +853,68 @@ function ServiceExperience({
         rotate,
       }}
     >
-
-      {/* SOFT LIGHT */}
+      {/* -----------------------------------------
+          SOFT LIGHT
+      ----------------------------------------- */}
 
       <div
-        className={`
+        className="
           pointer-events-none
           absolute
+          left-1/2
           top-1/2
+          -translate-x-1/2
           -translate-y-1/2
-          ${isLeft ? "left-0 -translate-x-1/4" : "right-0 translate-x-1/4"}
-          h-[480px]
-          w-[480px]
+
+          h-[260px]
+          w-[260px]
+
+          sm:h-[340px]
+          sm:w-[340px]
+
+          md:h-[440px]
+          md:w-[440px]
+
+          lg:h-[520px]
+          lg:w-[520px]
+
           rounded-full
+
           bg-[#0EA5E9]/10
-          blur-[140px]
-        `}
+
+          blur-[100px]
+          sm:blur-[120px]
+          lg:blur-[140px]
+        "
       />
 
-      <div className="relative">
-
-        {/* NUMBER */}
+      <div className="relative z-10 flex flex-col items-center">
+        {/* -----------------------------------------
+            NUMBER + TAG
+        ----------------------------------------- */}
 
         <div
           className="
-            mb-6
+            mb-4
+            sm:mb-5
+
             flex
             items-center
-            gap-4
+            justify-center
+
+            gap-2.5
+            sm:gap-3
           "
         >
           <span
             className="
               font-mono
-              text-sm
+              text-[10px]
+              sm:text-xs
+
               font-bold
-              tracking-[0.4em]
+              tracking-[0.3em]
+
               text-[#2563EB]
             "
           >
@@ -1012,7 +924,9 @@ function ServiceExperience({
           <span
             className="
               h-px
-              w-16
+              w-7
+              sm:w-10
+
               bg-gradient-to-r
               from-[#0EA5E9]
               to-transparent
@@ -1021,88 +935,188 @@ function ServiceExperience({
 
           <span
             className="
-              text-[9.5px]
+              text-[7px]
+              sm:text-[8px]
+              md:text-[9px]
+
               font-bold
               uppercase
-              tracking-[0.3em]
+
+              tracking-[0.18em]
+
               text-[#64748B]
             "
           >
             {service.tag}
           </span>
+
+          <span
+            className="
+              h-px
+              w-7
+              sm:w-10
+
+              bg-gradient-to-l
+              from-[#0EA5E9]
+              to-transparent
+            "
+          />
         </div>
 
-        {/* ICON */}
+        {/* -----------------------------------------
+            ICON
+        ----------------------------------------- */}
 
         <div
           className="
-            mb-6
+            mb-4
+            sm:mb-5
+
             flex
-            h-16
-            w-16
+            h-12
+            w-12
+
+            sm:h-14
+            sm:w-14
+
+            md:h-16
+            md:w-16
+
             items-center
             justify-center
+
             rounded-2xl
+
             border
             border-[#0EA5E9]/20
-            bg-white/80
+
+            bg-white/85
+
             shadow-[0_15px_50px_rgba(14,165,233,0.16)]
+
             backdrop-blur-xl
           "
         >
           <Icon
             className="
-              h-7
-              w-7
+              h-5
+              w-5
+
+              sm:h-6
+              sm:w-6
+
+              md:h-7
+              md:w-7
+
               text-[#0EA5E9]
             "
           />
         </div>
 
-        {/* TITLE */}
+        {/* -----------------------------------------
+            TITLE
+        ----------------------------------------- */}
 
         <h3
           className="
-            max-w-4xl
+            max-w-[90vw]
+            sm:max-w-[680px]
+            md:max-w-[760px]
+            lg:max-w-[800px]
+
             font-display
             font-black
-            text-4xl
-            sm:text-6xl
-            md:text-7xl
-            lg:text-8xl
-            leading-[0.96]
+
+            text-[2.15rem]
+            leading-[0.95]
+
             tracking-tight
+
             text-[#0F172A]
+
+            sm:text-4xl
+            md:text-5xl
+            lg:text-6xl
+            xl:text-7xl
           "
         >
           {service.title}
         </h3>
 
-        {/* DESCRIPTION */}
+        {/* -----------------------------------------
+            SUBTITLE
+        ----------------------------------------- */}
 
         <p
           className="
-            mt-6
-            max-w-2xl
-            text-sm
-            leading-relaxed
+            mt-2
+
+            text-[10px]
+            sm:text-xs
+            md:text-sm
+
+            font-bold
+            uppercase
+
+            tracking-[0.18em]
+
+            text-[#2563EB]
+          "
+        >
+          {service.subtitle}
+        </p>
+
+        {/* -----------------------------------------
+            DESCRIPTION
+        ----------------------------------------- */}
+
+        <p
+          className="
+            mx-auto
+
+            mt-3
+            sm:mt-4
+
+            max-w-[300px]
+            sm:max-w-[480px]
+            md:max-w-[560px]
+
+            text-[11px]
+            leading-5
+
+            sm:text-sm
+            sm:leading-6
+
+            md:text-base
+            md:leading-7
+
             text-[#475569]
-            md:text-lg
-            md:leading-8
           "
         >
           {service.description}
         </p>
 
-        {/* CAPABILITIES */}
+        {/* -----------------------------------------
+            CAPABILITIES
+        ----------------------------------------- */}
 
         <div
           className="
-            mt-7
+            mt-4
+            sm:mt-5
+
             flex
+            max-w-[620px]
+
             flex-wrap
-            gap-x-6
-            gap-y-3
+            items-center
+            justify-center
+
+            gap-x-3
+            gap-y-2
+
+            sm:gap-x-5
+            sm:gap-y-2.5
           "
         >
           {service.capabilities.map(
@@ -1112,21 +1126,34 @@ function ServiceExperience({
                 className="
                   flex
                   items-center
-                  gap-2
-                  text-[10px]
+                  justify-center
+                  gap-1.5
+
+                  text-[7px]
+                  sm:text-[8px]
+                  md:text-[9px]
+
                   font-bold
                   uppercase
-                  tracking-[0.18em]
+
+                  tracking-[0.1em]
+                  sm:tracking-[0.14em]
+
                   text-[#334155]
                 "
               >
                 <span
                   className="
-                    h-1.5
-                    w-1.5
+                    h-1
+                    w-1
+
+                    shrink-0
+
                     rounded-full
+
                     bg-[#0EA5E9]
-                    shadow-[0_0_12px_rgba(14,165,233,0.6)]
+
+                    shadow-[0_0_10px_rgba(14,165,233,0.6)]
                   "
                 />
 
@@ -1136,23 +1163,31 @@ function ServiceExperience({
           )}
         </div>
 
-        {/* BOTTOM LINE */}
+        {/* -----------------------------------------
+            BOTTOM SIGNAL
+        ----------------------------------------- */}
 
         <div
           className="
-            mt-9
+            mt-5
+            sm:mt-6
+
             flex
             items-center
-            gap-5
+            justify-center
+
+            gap-3
           "
         >
           <div
             className="
               h-px
-              w-24
+              w-8
+              sm:w-12
+
               bg-gradient-to-r
-              from-[#0EA5E9]
-              to-transparent
+              from-transparent
+              to-[#0EA5E9]
             "
           />
 
@@ -1160,28 +1195,45 @@ function ServiceExperience({
             className="
               flex
               items-center
-              gap-2
-              text-[9px]
+              gap-1.5
+
+              text-[7px]
+              sm:text-[8px]
+
               font-bold
               uppercase
-              tracking-[0.25em]
+
+              tracking-[0.18em]
+
               text-[#2563EB]
             "
           >
             <Zap className="h-3 w-3" />
 
-            Digital capability
+            Digital Capability
           </div>
 
           <ArrowUpRight
             className="
-              h-4
-              w-4
+              h-3
+              w-3
+
               text-[#4F46E5]
             "
           />
-        </div>
 
+          <div
+            className="
+              h-px
+              w-8
+              sm:w-12
+
+              bg-gradient-to-l
+              from-transparent
+              to-[#0EA5E9]
+            "
+          />
+        </div>
       </div>
     </motion.div>
   );
@@ -1195,75 +1247,48 @@ export default function ServicesTunnel() {
   const sectionRef =
     useRef<HTMLDivElement>(null);
 
-  const {
-    scrollYProgress,
-  } = useScroll({
-    target: sectionRef,
-    offset: [
-      "start start",
-      "end end",
-    ],
-  });
+  const { scrollYProgress } =
+    useScroll({
+      target: sectionRef,
+      offset: [
+        "start start",
+        "end end",
+      ],
+    });
 
-  const progress =
-    useSpring(
-      scrollYProgress,
-      {
-        stiffness: 200,
-        damping: 26,
-        mass: 0.08,
-      }
-    );
+  const progress = useSpring(
+    scrollYProgress,
+    {
+      stiffness: 140,
+      damping: 26,
+      mass: 0.5,
+      restDelta: 0.001,
+    }
+  );
 
   /* =======================================================
-     INTRO
+     INTRO ANIMATION
   ======================================================= */
 
   const headingOpacity =
     useTransform(
       progress,
-      [
-        0,
-        0.015,
-        0.065,
-        0.09,
-      ],
-      [
-        0,
-        1,
-        1,
-        0,
-      ]
+      [0, 0.015, 0.065, 0.09],
+      [0, 1, 1, 0]
     );
 
   const headingY =
     useTransform(
       progress,
-      [
-        0,
-        0.015,
-        0.09,
-      ],
-      [
-        35,
-        0,
-        -45,
-      ]
+      [0, 0.015, 0.09],
+      [35, 0, -45]
     );
 
   const headingScale =
     useTransform(
       progress,
-      [
-        0,
-        0.015,
-        0.09,
-      ],
-      [
-        0.95,
-        1,
-        0.92,
-      ]
+      [0, 0.015, 0.09],
+      [0.95, 1, 0.92]
     );
 
   /* =======================================================
@@ -1274,10 +1299,7 @@ export default function ServicesTunnel() {
     useTransform(
       progress,
       [0, 1],
-      [
-        "0%",
-        "100%",
-      ]
+      ["0%", "100%"]
     );
 
   /* =======================================================
@@ -1287,16 +1309,8 @@ export default function ServicesTunnel() {
   const hintOpacity =
     useTransform(
       progress,
-      [
-        0,
-        0.04,
-        0.10,
-      ],
-      [
-        1,
-        1,
-        0,
-      ]
+      [0, 0.04, 0.1],
+      [1, 1, 0]
     );
 
   return (
@@ -1306,10 +1320,10 @@ export default function ServicesTunnel() {
       className="
         relative
         h-[850vh]
+
         bg-[#F8FBFF]
       "
     >
-
       {/* =================================================
           STICKY WORLD
       ================================================= */}
@@ -1318,74 +1332,83 @@ export default function ServicesTunnel() {
         className="
           sticky
           top-0
+
           h-screen
           w-full
+
           z-10
+
           overflow-hidden
+
           pointer-events-none
         "
       >
-
-        {/* =================================================
-            LIGHT HERO-CONSISTENT BACKGROUND
-        ================================================= */}
-
+        {/* BASE */}
         <div
           className="
             absolute
             inset-0
+
             bg-[#F8FBFF]
           "
         />
 
-        {/* =================================================
-            TOP BLUE ATMOSPHERE
-        ================================================= */}
-
+        {/* TOP ATMOSPHERE */}
         <div
           className="
             pointer-events-none
+
             absolute
+
             left-1/2
             top-[-15vh]
-            h-[55vh]
-            w-[80vw]
+
+            h-[45vh]
+            w-[100vw]
+
+            sm:h-[55vh]
+            sm:w-[80vw]
+
             -translate-x-1/2
+
             rounded-full
+
             bg-[#0EA5E9]/10
-            blur-[160px]
+
+            blur-[120px]
+            sm:blur-[160px]
           "
         />
 
-        {/* =================================================
-            CYAN ATMOSPHERE
-        ================================================= */}
-
+        {/* CYAN ATMOSPHERE */}
         <motion.div
           className="
             pointer-events-none
+
             absolute
+
             left-1/2
             top-1/2
-            h-[50vh]
-            w-[50vw]
+
+            h-[45vh]
+            w-[90vw]
+
+            sm:h-[50vh]
+            sm:w-[50vw]
+
             -translate-x-1/2
             -translate-y-1/2
+
             rounded-full
+
             bg-[#22D3EE]/10
-            blur-[130px]
+
+            blur-[110px]
+            sm:blur-[130px]
           "
           animate={{
-            scale: [
-              1,
-              1.2,
-              1,
-            ],
-            opacity: [
-              0.25,
-              0.5,
-              0.25,
-            ],
+            scale: [1, 1.2, 1],
+            opacity: [0.25, 0.5, 0.25],
           }}
           transition={{
             duration: 7,
@@ -1394,33 +1417,32 @@ export default function ServicesTunnel() {
           }}
         />
 
-        {/* =================================================
-            INDIGO ATMOSPHERE
-        ================================================= */}
-
+        {/* INDIGO ATMOSPHERE */}
         <motion.div
           className="
             pointer-events-none
+
             absolute
+
             bottom-[-20vh]
             right-[-10vw]
-            h-[55vh]
-            w-[55vw]
+
+            h-[45vh]
+            w-[75vw]
+
+            sm:h-[55vh]
+            sm:w-[55vw]
+
             rounded-full
+
             bg-[#4F46E5]/8
-            blur-[150px]
+
+            blur-[120px]
+            sm:blur-[150px]
           "
           animate={{
-            x: [
-              0,
-              -40,
-              0,
-            ],
-            y: [
-              0,
-              -25,
-              0,
-            ],
+            x: [0, -40, 0],
+            y: [0, -25, 0],
           }}
           transition={{
             duration: 10,
@@ -1430,23 +1452,21 @@ export default function ServicesTunnel() {
         />
 
         {/* =================================================
-            THREE.JS WORLD
+            THREE JS
         ================================================= */}
 
         <Canvas
           className="pointer-events-none"
-          style={{ pointerEvents: "none" }}
+          style={{
+            pointerEvents: "none",
+          }}
           camera={{
-            position: [
-              0,
-              0,
-              4,
-            ],
+            position: [0, 0, 4],
             fov: 55,
             near: 0.1,
             far: 200,
           }}
-          dpr={[1, 2]}
+          dpr={[1, 1.5]}
           gl={{
             antialias: true,
             alpha: true,
@@ -1460,46 +1480,60 @@ export default function ServicesTunnel() {
         </Canvas>
 
         {/* =================================================
-            INTRO (LEFT-ALIGNED EDITORIAL POSITION)
+            INTRO
         ================================================= */}
 
         <motion.div
           className="
             pointer-events-none
+
             absolute
-            left-5
-            sm:left-10
-            md:left-16
-            lg:left-24
-            xl:left-32
-            top-16
-            md:top-24
+
+            left-1/2
+
+            top-14
+            sm:top-16
+            md:top-20
+            lg:top-24
+
             z-[100]
+
+            w-[calc(100%-2rem)]
+            sm:w-[calc(100%-4rem)]
+
             max-w-2xl
-            text-left
+
+            -translate-x-1/2
+
+            text-center
           "
           style={{
-            opacity:
-              headingOpacity,
+            opacity: headingOpacity,
             y: headingY,
-            scale:
-              headingScale,
+            scale: headingScale,
           }}
         >
+          {/* LABEL */}
 
           <div
             className="
-              mb-4
+              mb-3
+              sm:mb-4
+
               flex
               items-center
-              justify-start
-              gap-3
+              justify-center
+
+              gap-2
+              sm:gap-3
             "
           >
             <span
               className="
                 h-px
-                w-8
+                w-5
+                sm:w-8
+
                 bg-gradient-to-r
                 from-transparent
                 to-[#0EA5E9]
@@ -1508,28 +1542,36 @@ export default function ServicesTunnel() {
 
             <Sparkles
               className="
-                h-3.5
-                w-3.5
+                h-3
+                w-3
+
                 text-[#0EA5E9]
               "
             />
 
             <span
               className="
-                text-[11px]
+                text-[8px]
+                sm:text-[10px]
+
                 font-bold
                 uppercase
-                tracking-[0.3em]
+
+                tracking-[0.22em]
+                sm:tracking-[0.3em]
+
                 text-[#2563EB]
               "
             >
               What We Build
             </span>
 
-            <div
+            <span
               className="
                 h-px
-                w-8
+                w-5
+                sm:w-8
+
                 bg-gradient-to-r
                 from-[#2563EB]
                 to-transparent
@@ -1537,17 +1579,23 @@ export default function ServicesTunnel() {
             />
           </div>
 
+          {/* HEADING */}
+
           <h2
             className="
               font-display
               font-black
-              text-3xl
-              sm:text-5xl
-              md:text-6xl
-              lg:text-7xl
-              leading-[1.02]
+
+              text-[1.8rem]
+              leading-[1]
+
               tracking-tight
+
               text-[#0F172A]
+
+              sm:text-4xl
+              md:text-5xl
+              lg:text-6xl
             "
           >
             Technology without
@@ -1555,10 +1603,13 @@ export default function ServicesTunnel() {
             <span
               className="
                 block
+
                 bg-gradient-to-r
+
                 from-[#0EA5E9]
                 via-[#22D3EE]
                 to-[#4F46E5]
+
                 bg-clip-text
                 text-transparent
               "
@@ -1567,23 +1618,33 @@ export default function ServicesTunnel() {
             </span>
           </h2>
 
+          {/* DESCRIPTION */}
+
           <p
             className="
-              mt-4
-              max-w-lg
-              text-xs
-              leading-6
+              mx-auto
+
+              mt-2
+              sm:mt-3
+
+              max-w-md
+
+              text-[10px]
+              leading-4
+
+              sm:text-xs
+              sm:leading-5
+
               text-[#64748B]
-              sm:text-sm
+
               font-light
             "
           >
             Explore the systems,
-            experiences and
-            technologies that power
-            modern digital products.
+            experiences and technologies
+            that power modern digital
+            products.
           </p>
-
         </motion.div>
 
         {/* =================================================
@@ -1608,23 +1669,39 @@ export default function ServicesTunnel() {
         <div
           className="
             pointer-events-none
+
             absolute
-            bottom-7
+
+            bottom-5
+            sm:bottom-7
+
             left-1/2
+
             z-[150]
+
             flex
-            w-[min(520px,75vw)]
+
+            w-[calc(100%-3rem)]
+
+            sm:w-[min(520px,75vw)]
+
             -translate-x-1/2
+
             items-center
-            gap-4
+
+            gap-3
+            sm:gap-4
           "
         >
-
           <span
             className="
               font-mono
-              text-[9px]
+
+              text-[8px]
+              sm:text-[9px]
+
               tracking-widest
+
               text-[#64748B]
             "
           >
@@ -1634,9 +1711,13 @@ export default function ServicesTunnel() {
           <div
             className="
               relative
+
               h-px
+
               flex-1
+
               overflow-hidden
+
               bg-[#CBD5E1]
             "
           >
@@ -1645,14 +1726,15 @@ export default function ServicesTunnel() {
                 absolute
                 inset-y-0
                 left-0
+
                 bg-gradient-to-r
+
                 from-[#0EA5E9]
                 via-[#22D3EE]
                 to-[#4F46E5]
               "
               style={{
-                width:
-                  progressWidth,
+                width: progressWidth,
               }}
             />
           </div>
@@ -1660,14 +1742,17 @@ export default function ServicesTunnel() {
           <span
             className="
               font-mono
-              text-[9px]
+
+              text-[8px]
+              sm:text-[9px]
+
               tracking-widest
+
               text-[#64748B]
             "
           >
             08
           </span>
-
         </div>
 
         {/* =================================================
@@ -1677,26 +1762,35 @@ export default function ServicesTunnel() {
         <motion.div
           className="
             pointer-events-none
+
             absolute
+
             bottom-7
             right-8
+
             z-[150]
+
             hidden
+
             items-center
+
             gap-3
+
             md:flex
           "
           style={{
-            opacity:
-              hintOpacity,
+            opacity: hintOpacity,
           }}
         >
           <span
             className="
               text-[9px]
+
               font-medium
               uppercase
+
               tracking-[0.3em]
+
               text-[#64748B]
             "
           >
@@ -1704,15 +1798,9 @@ export default function ServicesTunnel() {
           </span>
 
           <motion.span
-            className="
-              text-[#0EA5E9]
-            "
+            className="text-[#0EA5E9]"
             animate={{
-              y: [
-                0,
-                6,
-                0,
-              ],
+              y: [0, 6, 0],
             }}
             transition={{
               duration: 1.4,
@@ -1723,57 +1811,67 @@ export default function ServicesTunnel() {
           </motion.span>
         </motion.div>
 
-        {/* =================================================
-            SOFT VIGNETTE
-        ================================================= */}
+        {/* VIGNETTE */}
 
         <div
           className="
             pointer-events-none
+
             absolute
             inset-0
+
             z-[120]
-            bg-[radial-gradient(circle_at_center,transparent_35%,rgba(226,232,240,0.18)_75%,rgba(203,213,225,0.35)_100%)]
+
+            bg-[radial-gradient(circle_at_center,transparent_30%,rgba(226,232,240,0.15)_70%,rgba(203,213,225,0.30)_100%)]
           "
         />
 
-        {/* =================================================
-            TOP BLEND
-        ================================================= */}
+        {/* TOP BLEND */}
 
         <div
           className="
             pointer-events-none
+
             absolute
+
             inset-x-0
             top-0
+
             z-[130]
-            h-40
+
+            h-28
+            sm:h-40
+
             bg-gradient-to-b
+
             from-white
             via-white/70
             to-transparent
           "
         />
 
-        {/* =================================================
-            BOTTOM BLEND
-        ================================================= */}
+        {/* BOTTOM BLEND */}
 
         <div
           className="
             pointer-events-none
+
             absolute
+
             inset-x-0
             bottom-0
+
             z-[130]
-            h-32
+
+            h-24
+            sm:h-32
+
             bg-gradient-to-t
+
             from-[#F8FBFF]
             to-transparent
           "
         />
-
       </div>
     </section>
   );

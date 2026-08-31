@@ -16,6 +16,7 @@ import {
   useMotionValueEvent,
   useMotionTemplate,
   useReducedMotion,
+  MotionValue,
 } from "framer-motion";
 
 import {
@@ -177,8 +178,6 @@ const flagMap: Record<string, string> = {
 const pageBackground = "#F7FBFD";
 const sectionBackground = "#F5FAFF";
 
-const white = "#FFFFFF";
-
 const primaryText = "#020617";
 const secondaryText = "#64748B";
 const mutedText = "#94A3B8";
@@ -187,9 +186,6 @@ const border = "#E2E8F0";
 
 const sky = "#0EA5E9";
 const skyLight = "#BAE6FD";
-
-const indigo = "#6366F1";
-const violet = "#8B5CF6";
 
 const success = "#10B981";
 const development = "#F59E0B";
@@ -330,7 +326,7 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [initialProjects]);
 
   const featuredProjects = useMemo(
     () => projectsList.slice(0, 6),
@@ -1112,10 +1108,10 @@ function GalleryCard({
   project: Project;
   index: number;
   total: number;
-  progress: any;
+  progress: MotionValue<number>;
   isActive: boolean;
-  mouseX: any;
-  mouseY: any;
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
 }) {
   const intensity = useResponsiveIntensity();
 
@@ -1328,7 +1324,7 @@ function GalleryCard({
         z,
         opacity,
         transformStyle: "preserve-3d",
-        pointerEvents: pointerEvents as any,
+        pointerEvents: pointerEvents as unknown as React.CSSProperties["pointerEvents"],
       }}
     >
       <div className="relative w-full shrink-0 lg:w-[56%]">
@@ -1526,7 +1522,7 @@ function GalleryCard({
 ========================================================= */
 
 function useTextReveal(
-  progress: any,
+  progress: MotionValue<number>,
   hiddenAt: number,
   revealStart: number,
   revealEnd: number,
@@ -1760,7 +1756,7 @@ function CuriosityCTA({
             color: sky,
           }}
         >
-          And that's only the beginning
+          And that&apos;s only the beginning
         </p>
 
         <motion.h2
@@ -1957,7 +1953,7 @@ function ProjectArchive({
               }}
             >
               A map of problems, experiments and
-              businesses we've turned into
+              businesses we&apos;ve turned into
               something real.
             </p>
           </div>

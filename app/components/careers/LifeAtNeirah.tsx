@@ -179,8 +179,8 @@ export default function LifeAtNeirah() {
           </p>
 
           <p className="mt-4 text-base leading-7 text-slate-500">
-            Whether you're an experienced engineer or starting your career,
-            you'll have the opportunity to work on meaningful projects and
+            Whether you&apos;re an experienced engineer or starting your career,
+            you&apos;ll have the opportunity to work on meaningful projects and
             learn from people who love what they do.
           </p>
 

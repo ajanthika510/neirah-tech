@@ -231,6 +231,20 @@ export const products: Product[] = [
     gradient: ["#B91C1C", "#DC2626"],
     layer: "BUSINESS",
   },
+  {
+    phase: 11,
+    number: "11",
+    id: "neirah-cloud",
+    name: "Neirah Cloud",
+    category: "Global Enterprise Cloud",
+    description:
+      "Unified multi-region cloud platform, serverless compute grid & autonomous deployment network.",
+    capabilities: ["Serverless Grid", "Edge Telemetry", "Autonomous Ops"],
+    icon: Cpu,
+    accent: "#059669",
+    gradient: ["#047857", "#10B981"],
+    layer: "PHYSICAL WORLD",
+  },
 ];
 
 /* =========================================================
@@ -355,32 +369,28 @@ export default function FeaturedProjects() {
   );
 
   const smoothProgress = useSpring(rawProgress, {
-    stiffness: isMobile ? 75 : 60,
-    damping: isMobile ? 22 : 18,
-    mass: isMobile ? 0.5 : 0.65,
+    stiffness: isMobile ? 140 : 120,
+    damping: isMobile ? 26 : 24,
+    mass: 0.5,
     restDelta: 0.001,
   });
 
+  const lastProgressRef = useRef(0);
   useMotionValueEvent(
     smoothProgress,
     "change",
     (latest) => {
-      setCurrentProgressValue(latest);
-
       const rounded = Math.round(latest);
+      const clamped = Math.max(0, Math.min(maxIndex, rounded));
 
-      const clamped = Math.max(
-        0,
-        Math.min(maxIndex, rounded)
-      );
+      // Update active product index only when integer step changes
+      setActiveProductIndex((previous) => (previous === clamped ? previous : clamped));
 
-      setActiveProductIndex((previous) => {
-        if (previous === clamped) {
-          return previous;
-        }
-
-        return clamped;
-      });
+      // Throttle floating point state update so React re-renders only when progress shifts noticeably (> 0.04) or index changes
+      if (Math.abs(latest - lastProgressRef.current) > 0.04 || clamped !== activeProductIndex) {
+        lastProgressRef.current = latest;
+        setCurrentProgressValue(latest);
+      }
     }
   );
 
@@ -675,12 +685,6 @@ export default function FeaturedProjects() {
           progress={currentProgressValue}
           mousePos={mousePos}
           onSelectProduct={scrollToProduct}
-          isMobile={isMobile}
-          isTablet={isTablet}
-          isDesktop={isDesktop}
-          prefersReducedMotion={
-            prefersReducedMotion
-          }
         />
 
         {/* ===================================================

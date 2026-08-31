@@ -1,701 +1,1345 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  ArrowUpRight,
-  ChevronDown,
-  Quote,
-  Sparkles,
-  Star,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
 
-const testimonials = [
+import {
+  Zap,
+  ShieldCheck,
+  Globe2,
+  Activity,
+  ChevronLeft,
+  ChevronRight,
+  Terminal,
+  Cpu,
+  Orbit,
+  Atom,
+} from "lucide-react";
+
+/* =========================================================
+   TYPES
+========================================================= */
+
+export interface QuantumNodeSignal {
+  id: string;
+  code: string;
+  client: string;
+  role: string;
+  company: string;
+  avatarInitials: string;
+  quoteLead: string;
+  quoteHighlight: string;
+  quoteEnd: string;
+  category: string;
+  accent: string;
+  orbitAngle: number;
+  metrics: {
+    label: string;
+    value: number;
+  }[];
+}
+
+/* =========================================================
+   TESTIMONIAL DATA
+========================================================= */
+
+const QUANTUM_NODES: QuantumNodeSignal[] = [
   {
-    id: "01",
-    quote:
-      "Neirah Tech transformed our idea into a reliable digital product. Their team understood our requirements quickly and delivered beyond our expectations.",
-    name: "Sarah Johnson",
+    id: "node-01",
+    code: "NODE 01",
+    client: "Alex Morgan",
     role: "Founder & CEO",
-    company: "TechVision",
-    initials: "SJ",
-    accent: "#2563EB",
+    company: "Nova Systems",
+    avatarInitials: "AM",
+    quoteLead: "They didn't just build the product.",
+    quoteHighlight: "They understood the experience",
+    quoteEnd: "and helped us see what was possible next.",
+    category: "Product Architecture",
+    accent: "#0ea5e9",
+    orbitAngle: 0,
+    metrics: [
+      { label: "Thinking", value: 98 },
+      { label: "UX", value: 96 },
+      { label: "Velocity", value: 99 },
+    ],
   },
   {
-    id: "02",
-    quote:
-      "What impressed us most was their ability to combine great design with solid engineering. The final product feels modern, fast and incredibly easy to use.",
-    name: "Daniel Perera",
-    role: "Product Manager",
-    company: "Nova Solutions",
-    initials: "DP",
-    accent: "#06B6D4",
+    id: "node-02",
+    code: "NODE 02",
+    client: "Maya Chen",
+    role: "VP of Digital Product",
+    company: "Orbit Labs",
+    avatarInitials: "MC",
+    quoteLead: "Complex enterprise systems became",
+    quoteHighlight: "simple, intuitive & remarkably fluid.",
+    quoteEnd: "The impact on our users was immediate.",
+    category: "Experience Design",
+    accent: "#6366f1",
+    orbitAngle: 60,
+    metrics: [
+      { label: "Clarity", value: 99 },
+      { label: "Simplicity", value: 97 },
+      { label: "Adoption", value: 98 },
+    ],
   },
   {
-    id: "03",
-    quote:
-      "From the first discussion to the final delivery, the Neirah Tech team was professional, responsive and genuinely invested in our success.",
-    name: "Michael Fernando",
+    id: "node-03",
+    code: "NODE 03",
+    client: "Daniel Silva",
+    role: "Chief Technology Officer",
+    company: "Vertex AI",
+    avatarInitials: "DS",
+    quoteLead: "What impressed us most was the thinking behind execution.",
+    quoteHighlight: "Every interaction had a clear reason.",
+    quoteEnd: "They set a new engineering benchmark.",
+    category: "AI & Infrastructure",
+    accent: "#8b5cf6",
+    orbitAngle: 120,
+    metrics: [
+      { label: "Depth", value: 99 },
+      { label: "Performance", value: 98 },
+      { label: "Architecture", value: 97 },
+    ],
+  },
+  {
+    id: "node-04",
+    code: "NODE 04",
+    client: "Sofia Williams",
+    role: "Creative Director",
+    company: "Northstar Core",
+    avatarInitials: "SW",
+    quoteLead: "They transformed our strategic vision into something",
+    quoteHighlight: "far more ambitious and cinematic",
+    quoteEnd: "than we ever imagined.",
+    category: "Creative Strategy",
+    accent: "#06b6d4",
+    orbitAngle: 180,
+    metrics: [
+      { label: "Vision", value: 100 },
+      { label: "Craft", value: 98 },
+      { label: "Originality", value: 99 },
+    ],
+  },
+  {
+    id: "node-05",
+    code: "NODE 05",
+    client: "Ryan Patel",
     role: "Managing Director",
-    company: "DigitalWave",
-    initials: "MF",
-    accent: "#6366F1",
+    company: "Flux Commerce",
+    avatarInitials: "RP",
+    quoteLead: "The digital experience feels completely distinct.",
+    quoteHighlight: "Built with extreme craft & precision.",
+    quoteEnd: "Our users noticed the difference instantly.",
+    category: "Digital Venture",
+    accent: "#10b981",
+    orbitAngle: 240,
+    metrics: [
+      { label: "Difference", value: 99 },
+      { label: "Impact", value: 96 },
+      { label: "Execution", value: 98 },
+    ],
   },
   {
-    id: "04",
-    quote:
-      "We needed a technology partner who could understand our business, not just write code. Neirah Tech delivered exactly that.",
-    name: "Emily Wilson",
-    role: "Operations Director",
-    company: "SmartCore",
-    initials: "EW",
-    accent: "#0891B2",
+    id: "node-06",
+    code: "NODE 06",
+    client: "Emma Laurent",
+    role: "Head of Innovation",
+    company: "Aether Mesh",
+    avatarInitials: "EL",
+    quoteLead: "The team challenged every assumption,",
+    quoteHighlight: "uncovered better technology paths",
+    quoteEnd: "and delivered something truly iconic.",
+    category: "Innovation Lab",
+    accent: "#7c3aed",
+    orbitAngle: 300,
+    metrics: [
+      { label: "Innovation", value: 100 },
+      { label: "Problem Solving", value: 98 },
+      { label: "User Love", value: 99 },
+    ],
   },
 ];
 
-export default function Testimonials() {
-  const [active, setActive] = useState(0);
+const ORBIT_CYCLE_MS = 4500;
 
-  const testimonial = testimonials[active];
-
-  const next = () => {
-    setActive((current) => (current + 1) % testimonials.length);
+const QUANTUM_NODE_POSITIONS = QUANTUM_NODES.map((_, idx) => {
+  const angleRad = ((idx * 60 - 90) * Math.PI) / 180;
+  return {
+    cosVal: Math.cos(angleRad),
+    sinVal: Math.sin(angleRad),
   };
+});
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+export default function Testimonials() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const shouldReduceMotion = useReducedMotion();
+
+  const activeNode =
+    QUANTUM_NODES[activeIndex] ?? QUANTUM_NODES[0];
+
+  /* =======================================================
+     AUTO ROTATION
+  ======================================================= */
 
   useEffect(() => {
-    const timer = setInterval(next, 6500);
+    if (isPaused || shouldReduceMotion) return;
 
-    return () => clearInterval(timer);
+    const step = 50;
+    const increment = (step / ORBIT_CYCLE_MS) * 100;
+
+    const timer = window.setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          setActiveIndex(
+            (current) =>
+              (current + 1) % QUANTUM_NODES.length
+          );
+
+          return 0;
+        }
+
+        return prev + increment;
+      });
+    }, step);
+
+    return () => window.clearInterval(timer);
+  }, [isPaused, shouldReduceMotion]);
+
+  /* =======================================================
+     CONTROLS
+  ======================================================= */
+
+  const handleSelectNode = useCallback((index: number) => {
+    setActiveIndex(index);
+    setProgress(0);
   }, []);
+
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) =>
+      prev === 0
+        ? QUANTUM_NODES.length - 1
+        : prev - 1
+    );
+
+    setProgress(0);
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setActiveIndex(
+      (prev) => (prev + 1) % QUANTUM_NODES.length
+    );
+
+    setProgress(0);
+  }, []);
+
+  /* =======================================================
+     ANIMATION
+  ======================================================= */
+
+  const quantumVariants: Variants = useMemo(() => {
+    if (shouldReduceMotion) {
+      return {
+        initial: {
+          opacity: 0,
+        },
+        animate: {
+          opacity: 1,
+          transition: {
+            duration: 0.25,
+          },
+        },
+        exit: {
+          opacity: 0,
+          transition: {
+            duration: 0.15,
+          },
+        },
+      };
+    }
+
+    return {
+      initial: {
+        opacity: 0,
+        scale: 0.97,
+        filter: "blur(10px)",
+        y: 18,
+      },
+
+      animate: {
+        opacity: 1,
+        scale: 1,
+        filter: "blur(0px)",
+        y: 0,
+        transition: {
+          duration: 0.6,
+          ease: [0.16, 1, 0.3, 1],
+        },
+      },
+
+      exit: {
+        opacity: 0,
+        scale: 0.98,
+        filter: "blur(8px)",
+        y: -12,
+        transition: {
+          duration: 0.3,
+          ease: [0.7, 0, 0.84, 0],
+        },
+      },
+    };
+  }, [shouldReduceMotion]);
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <section
       id="testimonials"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
       className="
         relative
+        w-full
         overflow-hidden
         bg-[#F8FBFF]
-        px-6
-        py-28
-        sm:px-8
-        lg:px-12
-        lg:py-36
+        px-4
+        py-12
+        text-slate-900
+        sm:px-6
+        sm:py-14
+        lg:px-8
+        lg:py-16
       "
     >
-      {/* =====================================================
-          ATMOSPHERE
-      ===================================================== */}
+      {/* ===================================================
+          BACKGROUND
+      =================================================== */}
 
-      <div className="pointer-events-none absolute inset-0">
-        <motion.div
-          animate={{
-            x: [0, 80, 0],
-            y: [0, -40, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            -left-40
-            top-20
-            h-[500px]
-            w-[500px]
-            rounded-full
-            bg-sky-200/25
-            blur-[130px]
-          "
-        />
-
-        <motion.div
-          animate={{
-            x: [0, -70, 0],
-            y: [0, 50, 0],
-            scale: [1.1, 1, 1.1],
-          }}
-          transition={{
-            duration: 16,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            -right-40
-            bottom-0
-            h-[520px]
-            w-[520px]
-            rounded-full
-            bg-indigo-200/20
-            blur-[140px]
-          "
-        />
-
-        {/* fine grid */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Grid */}
 
         <div
           className="
             absolute
             inset-0
             opacity-[0.035]
-            [background-image:linear-gradient(rgba(37,99,235,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(37,99,235,0.5)_1px,transparent_1px)]
-            [background-size:70px_70px]
           "
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(14,165,233,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(14,165,233,0.5) 1px, transparent 1px)",
+            backgroundSize: "45px 45px",
+          }}
         />
 
-        {/* radial fade */}
+        {/* Center aura */}
+
+        <motion.div
+          animate={
+            shouldReduceMotion
+              ? undefined
+              : {
+                  scale: isPaused
+                    ? 1.12
+                    : 1,
+                  opacity: isPaused
+                    ? 0.14
+                    : 0.08,
+                }
+          }
+          transition={{
+            duration: 0.8,
+            ease: "easeOut",
+          }}
+          className="
+            absolute
+            left-1/2
+            top-1/2
+            h-[360px]
+            w-[360px]
+            -translate-x-1/2
+            -translate-y-1/2
+            rounded-full
+            blur-[110px]
+            sm:h-[500px]
+            sm:w-[500px]
+          "
+          style={{
+            backgroundColor: activeNode.accent,
+          }}
+        />
+
+        {/* Vignette */}
 
         <div
           className="
             absolute
             inset-0
-            bg-[radial-gradient(circle_at_center,transparent_15%,#F8FBFF_85%)]
           "
+          style={{
+            background:
+              "radial-gradient(circle at center, transparent 20%, #F8FBFF 88%)",
+          }}
         />
       </div>
 
-      {/* =====================================================
-          CONTENT
-      ===================================================== */}
+      {/* ===================================================
+          COMPACT CONTAINER
+      =================================================== */}
 
-      <div className="relative mx-auto max-w-7xl">
+      <div
+        className="
+          relative
+          z-10
+          mx-auto
+          flex
+          w-full
+          max-w-5xl
+          flex-col
+        "
+      >
+        {/* =================================================
+            SMALL HEADER
+        ================================================= */}
 
-        {/* ===================================================
-            HEADER
-        =================================================== */}
+        <div
+          className="
+            flex
+            flex-col
+            gap-3
+            border-b
+            border-slate-200/80
+            pb-3
+            sm:flex-row
+            sm:items-center
+            sm:justify-between
+          "
+        >
+          {/* Left */}
 
-        <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 30,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-            }}
-            viewport={{
-              once: true,
-              amount: 0.3,
-            }}
-            transition={{
-              duration: 0.7,
-            }}
-          >
-            <div className="flex items-center gap-3">
-              <span className="h-px w-10 bg-blue-500" />
+          <div className="flex items-center gap-2.5">
+            <div className="relative h-2.5 w-2.5">
+              <span
+                className="
+                  absolute
+                  inset-0
+                  animate-ping
+                  rounded-full
+                  opacity-50
+                "
+                style={{
+                  backgroundColor:
+                    activeNode.accent,
+                }}
+              />
 
               <span
                 className="
-                  font-mono
-                  text-[10px]
-                  font-semibold
-                  uppercase
-                  tracking-[0.35em]
-                  text-blue-600
+                  relative
+                  block
+                  h-2.5
+                  w-2.5
+                  rounded-full
                 "
-              >
-                06 / Client Stories
+                style={{
+                  backgroundColor:
+                    activeNode.accent,
+                }}
+              />
+            </div>
+
+            <Atom
+              size={13}
+              className="text-sky-500"
+            />
+
+            <span
+              className="
+                font-mono
+                text-[9px]
+                font-bold
+                uppercase
+                tracking-[0.18em]
+                text-slate-500
+                sm:text-[10px]
+              "
+            >
+              Client Signals
+            </span>
+
+            <span className="text-[9px] text-slate-300">
+              /
+            </span>
+
+            <span
+              className="
+                font-mono
+                text-[9px]
+                font-extrabold
+                tracking-wider
+                text-slate-900
+                sm:text-[10px]
+              "
+            >
+              {activeNode.code}
+            </span>
+          </div>
+
+          {/* Right */}
+
+          <div className="flex items-center gap-3">
+            <div
+              className="
+                flex
+                items-center
+                gap-1.5
+                font-mono
+                text-[8px]
+                font-semibold
+                uppercase
+                tracking-wider
+                text-slate-500
+              "
+            >
+              <Orbit
+                size={11}
+                className="text-indigo-500"
+              />
+
+              <span className="hidden sm:inline">
+                {isPaused
+                  ? "Reading"
+                  : "Live Signal"}
               </span>
             </div>
 
-            <h2
+            <div
               className="
-                mt-6
-                text-4xl
-                font-semibold
-                leading-[0.95]
-                tracking-[-0.055em]
-                text-[#14213D]
-                sm:text-5xl
-                lg:text-6xl
+                relative
+                h-1
+                w-20
+                overflow-hidden
+                rounded-full
+                bg-slate-200
+                sm:w-28
               "
             >
-              Built with
-              <span
-                className="
-                  block
-                  bg-gradient-to-r
-                  from-blue-600
-                  via-indigo-600
-                  to-cyan-500
-                  bg-clip-text
-                  text-transparent
-                "
-              >
-                trust.
-              </span>
-            </h2>
-          </motion.div>
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 30,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-            }}
-            viewport={{
-              once: true,
-            }}
-            transition={{
-              duration: 0.7,
-              delay: 0.1,
-            }}
-            className="lg:pb-2 lg:pl-16"
-          >
-            <p className="max-w-xl text-base leading-7 text-slate-500 sm:text-lg">
-              Great technology starts with understanding people.
-              Here is what happens when ambitious ideas meet the
-              Neirah ecosystem.
-            </p>
-          </motion.div>
+              <motion.div
+                className="h-full rounded-full"
+                style={{
+                  width: `${progress}%`,
+                  backgroundColor:
+                    activeNode.accent,
+                }}
+              />
+            </div>
+          </div>
         </div>
 
-        {/* ===================================================
-            EXPERIENCE
-        =================================================== */}
+        {/* =================================================
+            MAIN COMPACT EXPERIENCE
+        ================================================= */}
 
-        <div className="mt-16 grid gap-8 lg:grid-cols-[1fr_190px]">
+        <div
+          className="
+            grid
+            grid-cols-1
+            items-center
+            gap-7
+            py-7
+            sm:py-8
+            lg:grid-cols-[250px_minmax(0,1fr)]
+            lg:gap-10
+          "
+        >
+          {/* ===============================================
+              LEFT — SMALL ORBIT SYSTEM
+          =============================================== */}
 
-          {/* =================================================
-              MAIN TESTIMONIAL
-          ================================================= */}
+          <div
+            className="
+              relative
+              flex
+              min-h-[230px]
+              items-center
+              justify-center
+              rounded-2xl
+              border
+              border-slate-200/70
+              bg-white/60
+              p-4
+              shadow-[0_12px_50px_rgba(15,23,42,0.04)]
+              backdrop-blur-xl
+              sm:min-h-[260px]
+              lg:min-h-[280px]
+            "
+          >
+            {/* Orbital System */}
 
-          <div className="relative min-h-[520px] overflow-hidden rounded-[40px] border border-white bg-white/75 p-7 shadow-[0_35px_100px_rgba(30,64,175,0.10)] backdrop-blur-2xl sm:p-10 lg:p-14">
-
-            {/* top metadata */}
-
-            <div className="flex items-center justify-between">
-
-              <div className="flex items-center gap-3">
-
-                <span
-                  className="
-                    flex
-                    h-8
-                    w-8
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-blue-50
-                    text-[10px]
-                    font-bold
-                    text-blue-600
-                  "
-                >
-                  {testimonial.id}
-                </span>
-
-                <span className="h-px w-10 bg-slate-200" />
-
-                <span
-                  className="
-                    font-mono
-                    text-[9px]
-                    uppercase
-                    tracking-[0.3em]
-                    text-slate-400
-                  "
-                >
-                  Client Experience
-                </span>
-              </div>
-
-              <Sparkles className="h-4 w-4 text-blue-500" />
-
-            </div>
-
-            {/* decorative rings */}
-
-            <div className="pointer-events-none absolute right-[-100px] top-[-100px] h-[360px] w-[360px] rounded-full border border-blue-100/70" />
-
-            <div className="pointer-events-none absolute right-[-50px] top-[-50px] h-[260px] w-[260px] rounded-full border border-cyan-100/70" />
-
-            <motion.div
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 22,
-                repeat: Infinity,
-                ease: "linear",
-              }}
+            <div
               className="
-                pointer-events-none
-                absolute
-                right-[40px]
-                top-[40px]
+                relative
+                flex
                 h-[180px]
                 w-[180px]
-                rounded-full
-                border
-                border-dashed
-                border-blue-200
+                items-center
+                justify-center
+                sm:h-[205px]
+                sm:w-[205px]
+                [--orbit-radius:76px]
+                sm:[--orbit-radius:88px]
               "
             >
-              <span className="absolute left-1/2 top-0 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.5)]" />
-            </motion.div>
+              {/* Ring 1 */}
 
-            {/* quote */}
-
-            <AnimatePresence mode="wait">
               <motion.div
-                key={active}
-                initial={{
-                  opacity: 0,
-                  y: 25,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: -20,
-                }}
+                animate={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        rotate: 360,
+                      }
+                }
                 transition={{
-                  duration: 0.5,
+                  duration: 24,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                className="
+                  absolute
+                  inset-0
+                  rounded-full
+                  border
+                  border-dashed
+                  border-sky-300/50
+                "
+              />
+
+              {/* Ring 2 */}
+
+              <motion.div
+                animate={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        rotate: -360,
+                      }
+                }
+                transition={{
+                  duration: 18,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                className="
+                  absolute
+                  inset-5
+                  rounded-full
+                  border
+                  border-indigo-300/40
+                "
+              />
+
+              {/* Ring 3 */}
+
+              <motion.div
+                animate={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        rotate: 360,
+                      }
+                }
+                transition={{
+                  duration: 30,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                className="
+                  absolute
+                  inset-10
+                  rounded-full
+                  border
+                  border-slate-200
+                "
+              />
+
+              {/* Core */}
+
+              <motion.div
+                animate={
+                  shouldReduceMotion
+                    ? undefined
+                    : {
+                        scale: [0.95, 1.04, 0.95],
+                      }
+                }
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
                 }}
                 className="
                   relative
                   z-10
-                  mt-14
-                  max-w-4xl
+                  flex
+                  h-16
+                  w-16
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  border
+                  border-white
+                  shadow-[0_12px_35px_rgba(14,165,233,0.2)]
+                  sm:h-20
+                  sm:w-20
+                "
+                style={{
+                  background:
+                    `radial-gradient(circle at 35% 30%, #ffffff 0%, ${activeNode.accent}55 45%, ${activeNode.accent} 100%)`,
+                }}
+              >
+                <Cpu
+                  size={22}
+                  className="
+                    text-white
+                    drop-shadow-md
+                  "
+                />
+              </motion.div>
+
+              {/* Nodes */}
+
+              {QUANTUM_NODES.map(
+                (node, idx) => {
+                  const isSelected =
+                    idx === activeIndex;
+
+                  const pos =
+                    QUANTUM_NODE_POSITIONS[idx];
+
+                  return (
+                    <motion.button
+                      key={node.id}
+                      type="button"
+                      aria-label={`Select ${node.code}`}
+                      onClick={() =>
+                        handleSelectNode(idx)
+                      }
+                      animate={{
+                        scale: isSelected
+                          ? 1.18
+                          : 1,
+                      }}
+                      transition={{
+                        duration: 0.25,
+                      }}
+                      style={{
+                        x: `calc(var(--orbit-radius) * ${pos.cosVal})`,
+                        y: `calc(var(--orbit-radius) * ${pos.sinVal})`,
+                      }}
+                      className="
+                        absolute
+                        flex
+                        h-6
+                        w-6
+                        cursor-pointer
+                        items-center
+                        justify-center
+                        rounded-full
+                        font-mono
+                        text-[8px]
+                        font-bold
+                        sm:h-7
+                        sm:w-7
+                        sm:text-[9px]
+                      "
+                    >
+                      <span
+                        className={`
+                          absolute
+                          inset-0
+                          rounded-full
+                          ${
+                            isSelected
+                              ? "bg-slate-900 ring-2 ring-sky-400/40"
+                              : "border border-slate-200 bg-white"
+                          }
+                        `}
+                      />
+
+                      <span
+                        className={`
+                          relative
+                          z-10
+                          ${
+                            isSelected
+                              ? "text-white"
+                              : "text-slate-600"
+                          }
+                        `}
+                      >
+                        {idx + 1}
+                      </span>
+                    </motion.button>
+                  );
+                }
+              )}
+            </div>
+
+            {/* Node Label */}
+
+            <div
+              className="
+                absolute
+                bottom-3
+                left-1/2
+                flex
+                -translate-x-1/2
+                items-center
+                gap-1.5
+                whitespace-nowrap
+                rounded-full
+                border
+                border-slate-200/70
+                bg-white/90
+                px-2.5
+                py-1
+                font-mono
+                text-[8px]
+                shadow-sm
+              "
+            >
+              <Atom
+                size={9}
+                style={{
+                  color: activeNode.accent,
+                }}
+              />
+
+              <span className="font-bold text-slate-900">
+                {activeNode.code}
+              </span>
+
+              <span className="text-slate-300">
+                /
+              </span>
+
+              <span className="text-slate-500">
+                {activeNode.company}
+              </span>
+            </div>
+          </div>
+
+          {/* ===============================================
+              RIGHT — COMPACT TESTIMONIAL
+          =============================================== */}
+
+          <div className="min-w-0">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeNode.id}
+                variants={quantumVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="
+                  mx-auto
+                  max-w-2xl
                 "
               >
-                {/* quote icon */}
+                {/* Signal Meta */}
 
                 <div
                   className="
-                    mb-8
+                    mb-3
                     flex
-                    h-12
-                    w-12
+                    flex-wrap
                     items-center
-                    justify-center
-                    rounded-2xl
-                    bg-gradient-to-br
-                    from-blue-600
-                    to-cyan-400
-                    text-white
-                    shadow-[0_15px_35px_rgba(37,99,235,0.2)]
+                    gap-2
                   "
                 >
-                  <Quote size={21} />
+                  <div
+                    className="
+                      inline-flex
+                      items-center
+                      gap-1.5
+                      rounded-full
+                      border
+                      border-slate-200
+                      bg-white
+                      px-2.5
+                      py-1
+                      shadow-sm
+                    "
+                  >
+                    <Terminal
+                      size={10}
+                      style={{
+                        color:
+                          activeNode.accent,
+                      }}
+                    />
+
+                    <span
+                      className="
+                        font-mono
+                        text-[8px]
+                        font-bold
+                        uppercase
+                        tracking-wider
+                        text-slate-700
+                      "
+                    >
+                      {activeNode.category}
+                    </span>
+                  </div>
+
+                  <span
+                    className="
+                      flex
+                      items-center
+                      gap-1
+                      font-mono
+                      text-[8px]
+                      text-slate-400
+                    "
+                  >
+                    <Globe2 size={9} />
+
+                    VERIFIED SIGNAL
+                  </span>
                 </div>
 
-                {/* quote */}
+                {/* Small Testimonial */}
 
                 <blockquote
                   className="
-                    text-2xl
-                    font-medium
+                    font-display
+                    text-[17px]
+                    font-extrabold
                     leading-[1.35]
-                    tracking-[-0.035em]
-                    text-[#17233D]
-                    sm:text-3xl
-                    lg:text-[40px]
-                    lg:leading-[1.25]
+                    tracking-tight
+                    text-slate-900
+                    sm:text-[20px]
+                    md:text-[23px]
                   "
                 >
-                  “{testimonial.quote}”
+                  “{activeNode.quoteLead}{" "}
+
+                  <span
+                    className="
+                      bg-gradient-to-r
+                      from-sky-500
+                      via-indigo-500
+                      to-violet-500
+                      bg-clip-text
+                      text-transparent
+                    "
+                  >
+                    {activeNode.quoteHighlight}
+                  </span>{" "}
+
+                  {activeNode.quoteEnd}”
                 </blockquote>
 
-                {/* bottom */}
+                {/* Small Metrics */}
 
                 <div
                   className="
-                    mt-12
-                    flex
-                    flex-col
-                    gap-8
-                    sm:flex-row
-                    sm:items-end
-                    sm:justify-between
+                    mt-4
+                    grid
+                    grid-cols-3
+                    gap-2
+                    sm:max-w-md
                   "
                 >
+                  {activeNode.metrics.map(
+                    (metric) => (
+                      <div
+                        key={metric.label}
+                        className="
+                          rounded-lg
+                          border
+                          border-slate-200/80
+                          bg-white/70
+                          px-2
+                          py-2
+                          text-center
+                        "
+                      >
+                        <div
+                          className="
+                            font-display
+                            text-sm
+                            font-extrabold
+                            sm:text-base
+                          "
+                          style={{
+                            color:
+                              activeNode.accent,
+                          }}
+                        >
+                          {metric.value}%
+                        </div>
 
-                  {/* person */}
+                        <div
+                          className="
+                            mt-0.5
+                            truncate
+                            font-mono
+                            text-[7px]
+                            font-bold
+                            uppercase
+                            tracking-wider
+                            text-slate-400
+                            sm:text-[8px]
+                          "
+                        >
+                          {metric.label}
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
 
-                  <div className="flex items-center gap-4">
+                {/* Identity */}
 
+                <div
+                  className="
+                    mt-4
+                    flex
+                    items-center
+                    gap-2.5
+                  "
+                >
+                  <div
+                    className="
+                      flex
+                      h-8
+                      w-8
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-full
+                      text-[9px]
+                      font-bold
+                      text-white
+                      shadow-sm
+                    "
+                    style={{
+                      background:
+                        `linear-gradient(135deg, ${activeNode.accent}, #1E1B4B)`,
+                    }}
+                  >
+                    {activeNode.avatarInitials}
+                  </div>
+
+                  <div className="min-w-0">
                     <div
                       className="
                         flex
-                        h-14
-                        w-14
                         items-center
-                        justify-center
-                        rounded-2xl
-                        bg-gradient-to-br
-                        from-slate-900
-                        to-blue-700
-                        text-sm
-                        font-bold
-                        text-white
-                        shadow-lg
+                        gap-1
                       "
                     >
-                      {testimonial.initials}
-                    </div>
-
-                    <div>
-                      <h3 className="text-sm font-semibold text-[#17233D]">
-                        {testimonial.name}
+                      <h3
+                        className="
+                          truncate
+                          font-display
+                          text-xs
+                          font-bold
+                          text-slate-900
+                        "
+                      >
+                        {activeNode.client}
                       </h3>
 
-                      <p className="mt-1 text-xs text-slate-400">
-                        {testimonial.role}
-                      </p>
-
-                      <p className="mt-0.5 text-xs font-medium text-blue-600">
-                        {testimonial.company}
-                      </p>
+                      <ShieldCheck
+                        size={11}
+                        className="shrink-0 text-sky-500"
+                      />
                     </div>
 
-                  </div>
+                    <p
+                      className="
+                        truncate
+                        text-[8px]
+                        text-slate-400
+                        sm:text-[9px]
+                      "
+                    >
+                      {activeNode.role}
 
-                  {/* rating */}
+                      <span className="mx-1 text-slate-300">
+                        •
+                      </span>
 
-                  <div>
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          size={14}
-                          className="fill-blue-500 text-blue-500"
-                        />
-                      ))}
-                    </div>
-
-                    <p className="mt-2 font-mono text-[8px] uppercase tracking-[0.25em] text-slate-400">
-                      Verified Experience
+                      <span className="font-semibold text-slate-600">
+                        {activeNode.company}
+                      </span>
                     </p>
                   </div>
+                </div>
 
+                {/* Signal Line */}
+
+                <div
+                  className="
+                    mt-4
+                    flex
+                    items-center
+                    gap-2
+                  "
+                >
+                  <div
+                    className="
+                      h-px
+                      w-10
+                      bg-gradient-to-r
+                      from-sky-500
+                      to-transparent
+                    "
+                  />
+
+                  <Zap
+                    size={9}
+                    style={{
+                      color:
+                        activeNode.accent,
+                    }}
+                  />
+
+                  <span
+                    className="
+                      font-mono
+                      text-[7px]
+                      font-bold
+                      uppercase
+                      tracking-[0.2em]
+                      text-slate-400
+                    "
+                  >
+                    Digital Signal Verified
+                  </span>
                 </div>
               </motion.div>
             </AnimatePresence>
-
-            {/* bottom line */}
-
-            <div className="absolute bottom-0 left-0 h-1 w-full bg-slate-100">
-
-              <motion.div
-                key={active}
-                initial={{
-                  width: "0%",
-                }}
-                animate={{
-                  width: "100%",
-                }}
-                transition={{
-                  duration: 6.5,
-                  ease: "linear",
-                }}
-                className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400"
-              />
-
-            </div>
-          </div>
-
-          {/* =================================================
-              NAVIGATION
-          ================================================= */}
-
-          <div className="flex flex-row gap-3 lg:flex-col">
-
-            {testimonials.map((item, index) => (
-              <button
-                key={item.id}
-                onClick={() => setActive(index)}
-                className={`
-                  group
-                  relative
-                  flex
-                  flex-1
-                  items-center
-                  gap-4
-                  overflow-hidden
-                  rounded-2xl
-                  border
-                  p-4
-                  text-left
-                  transition-all
-                  duration-300
-                  lg:flex-none
-                  ${
-                    index === active
-                      ? "border-blue-200 bg-white shadow-[0_15px_40px_rgba(37,99,235,0.10)]"
-                      : "border-transparent bg-white/40 hover:border-slate-200 hover:bg-white"
-                  }
-                `}
-              >
-
-                {/* active indicator */}
-
-                <motion.div
-                  initial={false}
-                  animate={{
-                    scaleY: index === active ? 1 : 0,
-                  }}
-                  className="
-                    absolute
-                    left-0
-                    top-2
-                    bottom-2
-                    w-0.5
-                    origin-center
-                    rounded-full
-                    bg-blue-600
-                  "
-                />
-
-                <span
-                  className={`
-                    font-mono
-                    text-[9px]
-                    ${
-                      index === active
-                        ? "text-blue-600"
-                        : "text-slate-400"
-                    }
-                  `}
-                >
-                  {item.id}
-                </span>
-
-                <span
-                  className={`
-                    hidden
-                    text-xs
-                    font-semibold
-                    sm:block
-                    lg:block
-                    ${
-                      index === active
-                        ? "text-[#17233D]"
-                        : "text-slate-400"
-                    }
-                  `}
-                >
-                  {item.company}
-                </span>
-
-              </button>
-            ))}
-
-            {/* mobile / desktop hint */}
-
-            <div className="hidden items-center justify-center gap-2 pt-3 lg:flex">
-
-              <ChevronDown className="h-3 w-3 text-blue-500" />
-
-              <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-slate-400">
-                Explore Stories
-              </span>
-
-            </div>
           </div>
         </div>
 
-        {/* ===================================================
-            FOOTER TRUST
-        =================================================== */}
+        {/* =================================================
+            FOOTER / NODE SELECTOR
+        ================================================= */}
 
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-          }}
-          transition={{
-            duration: 0.6,
-            delay: 0.2,
-          }}
+        <div
           className="
-            mt-14
             flex
             flex-col
-            items-center
-            justify-between
-            gap-5
+            gap-3
             border-t
-            border-slate-200/70
-            pt-7
+            border-slate-200/80
+            pt-3
             sm:flex-row
+            sm:items-center
+            sm:justify-between
           "
         >
+          {/* Arrows */}
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handlePrev}
+              aria-label="Previous testimonial"
+              className="
+                flex
+                h-7
+                w-7
+                cursor-pointer
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-slate-200
+                bg-white
+                text-slate-600
+                shadow-sm
+                transition
+                hover:bg-slate-50
+              "
+            >
+              <ChevronLeft size={13} />
+            </button>
 
-            <div className="flex -space-x-2">
-
-              {testimonials.map((item) => (
-                <div
-                  key={item.id}
-                  className="
-                    flex
-                    h-7
-                    w-7
-                    items-center
-                    justify-center
-                    rounded-full
-                    border-2
-                    border-[#F8FBFF]
-                    bg-gradient-to-br
-                    from-blue-600
-                    to-cyan-400
-                    text-[7px]
-                    font-bold
-                    text-white
-                  "
-                >
-                  {item.initials}
-                </div>
-              ))}
-
-            </div>
-
-            <span className="text-xs text-slate-400">
-              Trusted by teams building what comes next.
-            </span>
-
+            <button
+              type="button"
+              onClick={handleNext}
+              aria-label="Next testimonial"
+              className="
+                flex
+                h-7
+                w-7
+                cursor-pointer
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-slate-200
+                bg-white
+                text-slate-600
+                shadow-sm
+                transition
+                hover:bg-slate-50
+              "
+            >
+              <ChevronRight size={13} />
+            </button>
           </div>
 
-          <Link
-            href="/contact"
-            className="group flex items-center gap-2 text-xs font-semibold text-[#17233D] transition-colors hover:text-blue-600"
+          {/* Node Selector */}
+
+          <div
+            className="
+              flex
+              max-w-full
+              items-center
+              gap-1.5
+              overflow-x-auto
+              py-0.5
+              no-scrollbar
+            "
           >
-            <span>Let's build something meaningful</span>
+            {QUANTUM_NODES.map(
+              (node, idx) => {
+                const isActive =
+                  idx === activeIndex;
 
-            <ArrowUpRight
-              size={15}
-              className="
-                text-blue-600
-                transition-transform
-                group-hover:translate-x-1
-                group-hover:-translate-y-1
-              "
+                return (
+                  <button
+                    key={node.id}
+                    type="button"
+                    onClick={() =>
+                      handleSelectNode(idx)
+                    }
+                    className={`
+                      flex
+                      shrink-0
+                      cursor-pointer
+                      items-center
+                      gap-1
+                      rounded-full
+                      px-2
+                      py-1
+                      font-mono
+                      text-[7px]
+                      font-bold
+                      transition-all
+                      duration-300
+                      sm:text-[8px]
+                      ${
+                        isActive
+                          ? "bg-slate-900 text-white shadow-sm"
+                          : "border border-slate-200 bg-white text-slate-500 hover:text-slate-900"
+                      }
+                    `}
+                  >
+                    {isActive && (
+                      <span
+                        className="
+                          h-1.5
+                          w-1.5
+                          rounded-full
+                        "
+                        style={{
+                          backgroundColor:
+                            node.accent,
+                        }}
+                      />
+                    )}
+
+                    <span>
+                      {String(idx + 1).padStart(
+                        2,
+                        "0"
+                      )}
+                    </span>
+                  </button>
+                );
+              }
+            )}
+          </div>
+
+          {/* Status */}
+
+          <div
+            className="
+              hidden
+              items-center
+              gap-1.5
+              font-mono
+              text-[8px]
+              font-semibold
+              uppercase
+              tracking-wider
+              text-slate-400
+              lg:flex
+            "
+          >
+            <Activity
+              size={10}
+              className="text-emerald-500"
             />
-          </Link>
 
-        </motion.div>
-
+            <span>Signal Locked</span>
+          </div>
+        </div>
       </div>
+
+      {/* ===================================================
+          SMALL BOTTOM DECORATION
+      =================================================== */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-0
+          left-1/2
+          h-px
+          w-1/2
+          -translate-x-1/2
+          bg-gradient-to-r
+          from-transparent
+          via-sky-200
+          to-transparent
+        "
+      />
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-0
+          left-1/2
+          h-20
+          w-1/2
+          -translate-x-1/2
+          bg-sky-400/5
+          blur-3xl
+        "
+      />
     </section>
   );
 }

@@ -128,7 +128,7 @@ export async function createBooking(
       success: true,
       booking: insertRes.rows[0],
     };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Error creating booking:", err);
     const fallbackBooking: Booking = {
       id: Date.now(),

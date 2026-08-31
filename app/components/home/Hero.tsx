@@ -17,7 +17,6 @@ import {
   ChevronDown,
   Cpu,
   Palette,
-  Sparkles,
   Truck,
 } from "lucide-react";
 
@@ -25,6 +24,7 @@ import Image from "next/image";
 import Link from "next/link";
 import HeroBackground from "./HeroBackground";
 import SchedulerModal from "./SchedulerModal";
+import RevealText from "../ui/RevealText";
 
 function HeroCountUp({ target }: { target: string }) {
   const hasPlus = target.includes("+");
@@ -336,61 +336,45 @@ export default function Hero() {
                     text-slate-900
                   "
                 >
-                  <div className="overflow-hidden block">
-                    {["Technology", "That"].map((word, i) => (
-                      <motion.span
-                        key={word}
-                        initial={{ y: "110%", opacity: 0 }}
-                        animate={{ y: "0%", opacity: 1 }}
-                        transition={{
-                          duration: 1,
-                          delay: 0.25 + i * 0.12,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="inline-block mr-[0.24em]"
-                      >
-                        {word}
-                      </motion.span>
-                    ))}
+                  <div className="block">
+                    <RevealText
+                      text="Technology That"
+                      delay={0.2}
+                      stagger={0.1}
+                      duration={0.65}
+                      blurAmount={8}
+                      yOffset="115%"
+                    />
                   </div>
 
-                  <div className="overflow-hidden block">
-                    {["Connects", "Business."].map((word, i) => (
-                      <motion.span
-                        key={word}
-                        initial={{ y: "110%", opacity: 0 }}
-                        animate={{ y: "0%", opacity: 1 }}
-                        transition={{
-                          duration: 1,
-                          delay: 0.5 + i * 0.12,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="
-                          inline-block mr-[0.24em]
-                          bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500
-                          bg-clip-text text-transparent
-                        "
-                      >
-                        {word}
-                      </motion.span>
-                    ))}
+                  <div className="block">
+                    <RevealText
+                      text="Connects Business."
+                      delay={0.45}
+                      stagger={0.1}
+                      duration={0.65}
+                      blurAmount={8}
+                      yOffset="115%"
+                      className="bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent"
+                    />
                   </div>
                 </h1>
               </div>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              <RevealText
+                as="p"
+                delay={0.7}
+                stagger={0.04}
+                duration={0.5}
+                blurAmount={5}
+                yOffset="80%"
                 className="
                   text-slate-500 text-base sm:text-lg md:text-xl
                   font-light leading-relaxed max-w-xl mx-auto lg:mx-0
                 "
               >
-                We design digital experiences, build intelligent software,
-                automate businesses and connect technology with the physical
-                world.
-              </motion.p>
+                We design digital experiences, build intelligent software, automate businesses and connect technology with the physical world.
+              </RevealText>
             </div>
 
             {/* ACTION BUTTONS */}

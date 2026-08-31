@@ -11,6 +11,7 @@ import {
 } from "framer-motion";
 
 import Link from "next/link";
+import RevealText from "../ui/RevealText";
 
 import {
   ArrowUpRight,
@@ -21,7 +22,6 @@ import {
   Zap,
   Wrench,
   MousePointer2,
-  Layers3,
   Sparkles,
   Eye,
   Code2,
@@ -373,9 +373,9 @@ export default function UIUXLab() {
           className="
             grid
             items-center
-            gap-16
-            lg:grid-cols-[0.9fr_1.1fr]
-            lg:gap-20
+            gap-12
+            lg:grid-cols-2
+            lg:gap-16
           "
         >
           {/* LEFT — COPY */}
@@ -383,7 +383,7 @@ export default function UIUXLab() {
           <motion.div
             initial={{
               opacity: 0,
-              x: -70,
+              x: -40,
             }}
             whileInView={{
               opacity: 1,
@@ -397,6 +397,13 @@ export default function UIUXLab() {
               duration: 0.9,
               ease: [0.16, 1, 0.3, 1],
             }}
+            className="
+              flex
+              flex-col
+              items-start
+              text-left
+              w-full
+            "
           >
             <div
               className="
@@ -446,19 +453,22 @@ export default function UIUXLab() {
             <h2
               className="
                 mt-8
+                text-center
+                mx-auto
                 text-4xl
                 font-black
                 leading-[1.02]
                 tracking-[-0.04em]
                 sm:text-5xl
                 md:text-6xl
-                lg:text-7xl
+                lg:text-6xl
+                xl:text-7xl
               "
             >
-              We don't just
+              <RevealText text="We don't just" mode="viewport" stagger={0.07} duration={0.6} blurAmount={7} />
 
               <span className="block">
-                design screens.
+                <RevealText text="design screens." mode="viewport" delay={0.2} stagger={0.07} duration={0.6} blurAmount={7} />
               </span>
 
               <span
@@ -473,13 +483,21 @@ export default function UIUXLab() {
                   text-transparent
                 "
               >
-                We design experiences.
+                <RevealText text="We design experiences." mode="viewport" delay={0.4} stagger={0.07} duration={0.6} blurAmount={7} />
               </span>
             </h2>
 
-            <p
+            <RevealText
+              as="p"
+              mode="viewport"
+              delay={0.65}
+              stagger={0.035}
+              duration={0.5}
+              blurAmount={4}
+              yOffset="80%"
               className="
                 mt-7
+                text-left
                 max-w-xl
                 text-base
                 leading-8
@@ -487,13 +505,10 @@ export default function UIUXLab() {
                 sm:text-lg
               "
             >
-              From the first click to the final conversion,
-              we design digital experiences that are beautiful,
-              intuitive, and built around how real people
-              interact with your business.
-            </p>
+              From the first click to the final conversion, we design digital experiences that are beautiful, intuitive, and built around how real people interact with your business.
+            </RevealText>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row relative z-20">
+            <div className="mt-9 flex flex-col sm:flex-row items-center justify-start gap-3 relative z-20 w-full sm:w-auto">
               <Link
                 href="/projects"
                 className="
@@ -574,6 +589,8 @@ export default function UIUXLab() {
                 border-slate-200
                 pt-7
                 sm:grid-cols-4
+                w-full
+                text-left
               "
             >
               <Stat value="30+" label="Websites" />
@@ -596,7 +613,7 @@ export default function UIUXLab() {
             initial={{
               opacity: 0,
               scale: 0.88,
-              y: 70,
+              x: 40,
             }}
             whileInView={{
               opacity: 1,
@@ -2054,7 +2071,14 @@ function JourneyCard({
           relative
           z-20
           mt-10
-          ${isLeft ? "lg:order-2 lg:pl-24" : "lg:order-1 lg:pr-24"}
+          flex
+          flex-col
+          items-center
+          text-center
+          mx-auto
+          max-w-lg
+          lg:max-w-none
+          ${isLeft ? "lg:order-2 lg:pl-16" : "lg:order-1 lg:pr-16"}
         `}
       >
         <div
@@ -2131,13 +2155,14 @@ function JourneyCard({
             h-1
             w-16
             rounded-full
+            mx-auto
           "
           style={{
             background: `linear-gradient(90deg, ${item.accent}, transparent)`,
           }}
         />
 
-        <div className="mt-8 flex items-center gap-3 text-sm font-bold text-slate-400">
+        <div className="mt-8 flex items-center justify-center gap-3 text-sm font-bold text-slate-400 mx-auto">
           <span
             className="
               h-2
@@ -2949,6 +2974,10 @@ function SelectedWork() {
                     sm:bottom-10
                     lg:inset-x-14
                     lg:bottom-12
+                    flex
+                    flex-col
+                    items-center
+                    text-center
                   "
                 >
                   <motion.div
@@ -2999,6 +3028,7 @@ function SelectedWork() {
                         flex
                         flex-wrap
                         items-center
+                        justify-center
                         gap-x-4
                         gap-y-2
                         text-[9px]
@@ -3006,6 +3036,7 @@ function SelectedWork() {
                         uppercase
                         tracking-[0.25em]
                         text-sky-100/55
+                        text-center
                       "
                     >
                       <span>
@@ -3653,12 +3684,13 @@ function Stat({
   label: string;
 }) {
   return (
-    <div>
+    <div className="flex flex-col items-center text-center">
       <p
         className="
           text-2xl
           font-black
           text-sky-500
+          text-center
         "
       >
         {value}
@@ -3669,7 +3701,8 @@ function Stat({
           mt-1
           text-xs
           font-medium
-          text-slate-400
+          text-slate-500
+          text-center
         "
       >
         {label}

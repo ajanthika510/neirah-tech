@@ -1,7 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Compass, Sparkles } from "lucide-react";
 import { Product } from "../FeaturedProjects";
 
@@ -69,6 +67,11 @@ export const PRODUCT_COMPOSITIONS: CompositionType[] = [
     headingSide: "left",
     entryDirection: "from-left",
   },
+  {
+    objectSide: "left",
+    headingSide: "right",
+    entryDirection: "from-right",
+  },
 ];
 
 function clamp(value: number, min: number, max: number) {
@@ -96,15 +99,10 @@ export default function ProductEditorialOverlay({
   onConsult,
 }: ProductEditorialOverlayProps) {
   const activeProduct = products[activeIndex] || products[0];
-
-  if (!activeProduct) {
-    return null;
-  }
+  const Icon = activeProduct.icon;
 
   const comp =
     PRODUCT_COMPOSITIONS[activeIndex % PRODUCT_COMPOSITIONS.length];
-
-  const Icon = activeProduct.icon;
 
   /*
    * Continuous scroll offset.
@@ -116,229 +114,113 @@ export default function ProductEditorialOverlay({
   const offset = progress - activeIndex;
 
   /* ============================================================
-     DISCOVERY PHASES
-     ============================================================ */
-
-  /**
-   * Phase 1
-   * Visual teaser
-   *
-   * Phase 2
-   * Object settles
-   *
-   * Phase 3
-   * Product title reveals
-   *
-   * Phase 4
-   * Category + description
-   *
-   * Phase 5
-   * Capability badges
-   *
-   * Phase 6
-   * CTA
-   *
-   * Phase 7
-   * Exit / next product
-   */
-
-  /* ============================================================
      TITLE
      ============================================================ */
 
-  const titleOpacity = useMemo(() => {
+  const titleOpacity = (() => {
     if (offset < -0.1) return 0;
-
-    if (offset < 0.12) {
-      return mapRange(offset, -0.1, 0.12, 0, 1);
-    }
-
+    if (offset < 0.12) return mapRange(offset, -0.1, 0.12, 0, 1);
     if (offset < 0.68) return 1;
-
-    if (offset < 0.88) {
-      return mapRange(offset, 0.68, 0.88, 1, 0);
-    }
-
+    if (offset < 0.88) return mapRange(offset, 0.68, 0.88, 1, 0);
     return 0;
-  }, [offset]);
+  })();
 
-  const titleClipPercent = useMemo(() => {
+  const titleClipPercent = (() => {
     if (offset < -0.08) return 100;
-
-    if (offset < 0.14) {
-      return mapRange(offset, -0.08, 0.14, 100, 0);
-    }
-
+    if (offset < 0.14) return mapRange(offset, -0.08, 0.14, 100, 0);
     return 0;
-  }, [offset]);
+  })();
 
-  const titleTranslateX = useMemo(() => {
-    const startX =
-      comp.entryDirection === "from-right"
-        ? 24
-        : -24;
+  const titleTranslateX = (() => {
+    const startX = comp.entryDirection === "from-right" ? 24 : -24;
+    const exitX = comp.entryDirection === "from-right" ? -24 : 24;
 
-    const exitX =
-      comp.entryDirection === "from-right"
-        ? -24
-        : 24;
-
-    if (offset < -0.08) {
-      return startX;
-    }
-
-    if (offset < 0.14) {
-      return mapRange(offset, -0.08, 0.14, startX, 0);
-    }
-
-    if (offset > 0.68) {
-      return mapRange(offset, 0.68, 0.88, 0, exitX);
-    }
-
+    if (offset < -0.08) return startX;
+    if (offset < 0.14) return mapRange(offset, -0.08, 0.14, startX, 0);
+    if (offset > 0.68) return mapRange(offset, 0.68, 0.88, 0, exitX);
     return 0;
-  }, [offset, comp.entryDirection]);
+  })();
 
   /* ============================================================
      MONOGRAM / LAYER
      ============================================================ */
 
-  const monogramOpacity = useMemo(() => {
+  const monogramOpacity = (() => {
     if (offset < -0.02) return 0;
-
-    if (offset < 0.16) {
-      return mapRange(offset, -0.02, 0.16, 0, 1);
-    }
-
+    if (offset < 0.16) return mapRange(offset, -0.02, 0.16, 0, 1);
     if (offset < 0.65) return 1;
-
-    if (offset < 0.85) {
-      return mapRange(offset, 0.65, 0.85, 1, 0);
-    }
-
+    if (offset < 0.85) return mapRange(offset, 0.65, 0.85, 1, 0);
     return 0;
-  }, [offset]);
+  })();
 
-  const monogramY = useMemo(() => {
+  const monogramY = (() => {
     if (offset < -0.02) return 10;
-
-    if (offset < 0.16) {
-      return mapRange(offset, -0.02, 0.16, 10, 0);
-    }
-
-    if (offset > 0.65) {
-      return mapRange(offset, 0.65, 0.85, 0, -10);
-    }
-
+    if (offset < 0.16) return mapRange(offset, -0.02, 0.16, 10, 0);
+    if (offset > 0.65) return mapRange(offset, 0.65, 0.85, 0, -10);
     return 0;
-  }, [offset]);
+  })();
 
   /* ============================================================
      DESCRIPTION
      ============================================================ */
 
-  const descOpacity = useMemo(() => {
+  const descOpacity = (() => {
     if (offset < 0.08) return 0;
-
-    if (offset < 0.24) {
-      return mapRange(offset, 0.08, 0.24, 0, 1);
-    }
-
+    if (offset < 0.24) return mapRange(offset, 0.08, 0.24, 0, 1);
     if (offset < 0.62) return 1;
-
-    if (offset < 0.8) {
-      return mapRange(offset, 0.62, 0.8, 1, 0);
-    }
-
+    if (offset < 0.8) return mapRange(offset, 0.62, 0.8, 1, 0);
     return 0;
-  }, [offset]);
+  })();
 
-  const descY = useMemo(() => {
+  const descY = (() => {
     if (offset < 0.08) return 14;
-
-    if (offset < 0.24) {
-      return mapRange(offset, 0.08, 0.24, 14, 0);
-    }
-
-    if (offset > 0.62) {
-      return mapRange(offset, 0.62, 0.8, 0, -12);
-    }
-
+    if (offset < 0.24) return mapRange(offset, 0.08, 0.24, 14, 0);
+    if (offset > 0.62) return mapRange(offset, 0.62, 0.8, 0, -12);
     return 0;
-  }, [offset]);
+  })();
 
   /* ============================================================
      CAPABILITY BADGES
      ============================================================ */
 
-  const badgesOpacity = useMemo(() => {
+  const badgesOpacity = (() => {
     if (offset < 0.18) return 0;
-
-    if (offset < 0.32) {
-      return mapRange(offset, 0.18, 0.32, 0, 1);
-    }
-
+    if (offset < 0.32) return mapRange(offset, 0.18, 0.32, 0, 1);
     if (offset < 0.58) return 1;
-
-    if (offset < 0.76) {
-      return mapRange(offset, 0.58, 0.76, 1, 0);
-    }
-
+    if (offset < 0.76) return mapRange(offset, 0.58, 0.76, 1, 0);
     return 0;
-  }, [offset]);
+  })();
 
-  const badgesScale = useMemo(() => {
+  const badgesScale = (() => {
     if (offset < 0.18) return 0.92;
-
-    if (offset < 0.32) {
-      return mapRange(offset, 0.18, 0.32, 0.92, 1);
-    }
-
+    if (offset < 0.32) return mapRange(offset, 0.18, 0.32, 0.92, 1);
     return 1;
-  }, [offset]);
+  })();
 
   /* ============================================================
      CTA
      ============================================================ */
 
-  const ctaOpacity = useMemo(() => {
+  const ctaOpacity = (() => {
     if (offset < 0.28) return 0;
-
-    if (offset < 0.42) {
-      return mapRange(offset, 0.28, 0.42, 0, 1);
-    }
-
+    if (offset < 0.42) return mapRange(offset, 0.28, 0.42, 0, 1);
     if (offset < 0.55) return 1;
-
-    if (offset < 0.7) {
-      return mapRange(offset, 0.55, 0.7, 1, 0);
-    }
-
+    if (offset < 0.7) return mapRange(offset, 0.55, 0.7, 1, 0);
     return 0;
-  }, [offset]);
+  })();
 
-  const ctaY = useMemo(() => {
+  const ctaY = (() => {
     if (offset < 0.28) return 18;
-
-    if (offset < 0.42) {
-      return mapRange(offset, 0.28, 0.42, 18, 0);
-    }
-
-    if (offset > 0.55) {
-      return mapRange(offset, 0.55, 0.7, 0, -10);
-    }
-
+    if (offset < 0.42) return mapRange(offset, 0.28, 0.42, 18, 0);
+    if (offset > 0.55) return mapRange(offset, 0.55, 0.7, 0, -10);
     return 0;
-  }, [offset]);
+  })();
 
-  const ctaScale = useMemo(() => {
+  const ctaScale = (() => {
     if (offset < 0.28) return 0.88;
-
-    if (offset < 0.42) {
-      return mapRange(offset, 0.28, 0.42, 0.88, 1);
-    }
-
+    if (offset < 0.42) return mapRange(offset, 0.28, 0.42, 0.88, 1);
     return 1;
-  }, [offset]);
+  })();
 
   const isCtaInteractive = ctaOpacity > 0.4;
 
@@ -346,29 +228,14 @@ export default function ProductEditorialOverlay({
      HUD PHASE
      ============================================================ */
 
-  const currentDiscoveryPhase = useMemo(() => {
-    if (offset < -0.1) {
-      return "01 · Visual Teaser";
-    }
-
-    if (offset < 0.05) {
-      return "02 · Geometry Settling";
-    }
-
-    if (offset < 0.2) {
-      return "03 · Identity Revealed";
-    }
-
-    if (offset < 0.35) {
-      return "04 · Capability Analysis";
-    }
-
-    if (offset < 0.6) {
-      return "05 · Full Discovery";
-    }
-
+  const currentDiscoveryPhase = (() => {
+    if (offset < -0.1) return "01 · Visual Teaser";
+    if (offset < 0.05) return "02 · Geometry Settling";
+    if (offset < 0.2) return "03 · Identity Revealed";
+    if (offset < 0.35) return "04 · Capability Analysis";
+    if (offset < 0.6) return "05 · Full Discovery";
     return "06 · Transitioning";
-  }, [offset]);
+  })();
 
   /* ============================================================
      SHARED CONTENT

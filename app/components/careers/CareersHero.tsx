@@ -100,11 +100,11 @@ export default function CareersHero() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-600" />
             </span>
 
-            We're hiring talented people
+            We&apos;re hiring talented people
           </motion.div>
 
           <h1 className="max-w-3xl text-5xl font-bold leading-[1.05] tracking-[-0.04em] text-[#14213D] sm:text-6xl lg:text-7xl">
-            Build what's
+            Build what&apos;s
             <br />
 
             <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 bg-clip-text text-transparent">

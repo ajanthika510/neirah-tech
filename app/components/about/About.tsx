@@ -22,6 +22,7 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import RevealText from "../ui/RevealText";
 
 /* =========================================================
    TYPES
@@ -490,11 +491,11 @@ export default function About() {
                 </div>
 
                 <h3 className="mt-5 text-lg font-bold text-[#172033]">
-                  Let's solve real problems.
+                  Let&apos;s solve real problems.
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-[#64748B]">
-                  And that's where the journey began.
+                  And that&apos;s where the journey began.
                 </p>
 
                 <div className="mt-5 flex items-center gap-2 text-xs text-[#64748B]">
@@ -685,7 +686,13 @@ export default function About() {
               </span>
 
               <h2 className="mt-6 text-4xl font-black leading-tight text-[#172033] md:text-6xl">
-                Sometimes the biggest ideas begin with a simple question.
+                <RevealText
+                  text="Sometimes the biggest ideas begin with a simple question."
+                  mode="viewport"
+                  stagger={0.06}
+                  duration={0.6}
+                  blurAmount={7}
+                />
               </h2>
 
             </motion.div>
@@ -720,7 +727,7 @@ export default function About() {
 
                 <p className="mt-8 text-xl leading-9 text-[#64748B]">
                   “What if we could build something that actually solves
-                  people's problems?”
+                  people&apos;s problems?”
                 </p>
 
                 <div className="mt-8 flex items-center gap-3">
@@ -1108,7 +1115,7 @@ export default function About() {
 
                   <Rocket size={15} />
 
-                  Where we're growing
+                  Where we&apos;re growing
 
                 </div>
 
@@ -1122,7 +1129,7 @@ export default function About() {
 
               <p className="mx-auto max-w-3xl text-xl leading-9 text-[#64748B] md:text-2xl">
 
-                We didn't leave hardware behind.
+                We didn&apos;t leave hardware behind.
 
                 <span className="bg-gradient-to-r from-[#0EA5E9] to-[#4F46E5] bg-clip-text font-bold text-transparent">
                   {" "}

@@ -17,14 +17,13 @@ import {
 
 import Link from "next/link";
 import SchedulerModal from "./SchedulerModal";
+import RevealText from "../ui/RevealText";
 
 const benefits = [
   "Custom Software",
   "AI Solutions",
   "Enterprise Systems",
 ];
-
-const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function ProjectCTA() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -660,7 +659,7 @@ export default function ProjectCTA() {
               >
                 <Sparkles size={15} />
 
-                Let's Build Something Amazing
+                Let&apos;s Build Something Amazing
               </div>
 
               {/* Heading */}
@@ -678,7 +677,7 @@ export default function ProjectCTA() {
                   text-slate-900
                 "
               >
-                Ready to Start Your
+                <RevealText text="Ready to Start Your" mode="viewport" stagger={0.08} duration={0.6} blurAmount={8} />
 
                 <span
                   className="
@@ -692,13 +691,18 @@ export default function ProjectCTA() {
                     text-transparent
                   "
                 >
-                  Next Project?
+                  <RevealText text="Next Project?" mode="viewport" delay={0.25} stagger={0.08} duration={0.6} blurAmount={8} />
                 </span>
               </h2>
 
-              {/* Description */}
-
-              <p
+              <RevealText
+                as="p"
+                mode="viewport"
+                delay={0.5}
+                stagger={0.04}
+                duration={0.5}
+                blurAmount={4}
+                yOffset="70%"
                 className="
                   mt-7
                   max-w-2xl
@@ -709,10 +713,8 @@ export default function ProjectCTA() {
                   text-slate-600
                 "
               >
-                Have an idea? Let's transform it into a
-                powerful digital solution with modern
-                software, AI, cloud and automation.
-              </p>
+                Have an idea? Let&apos;s transform it into a powerful digital solution with modern software, AI, cloud and automation.
+              </RevealText>
 
               {/* Buttons */}
 

@@ -52,7 +52,7 @@ export default function CareersCTA() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-slate-300 sm:text-base">
-            We're always looking for curious, creative and ambitious people
+            We&apos;re always looking for curious, creative and ambitious people
             who want to create meaningful technology.
           </p>
 

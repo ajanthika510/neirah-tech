@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition, useCallback } from "react";
 import {
   Plus,
   Trash2,
@@ -19,10 +19,7 @@ import {
   Mail,
   Phone,
   Video,
-  CheckCircle,
-  XCircle,
   Search,
-  Building,
 } from "lucide-react";
 import Link from "next/link";
 import { getProjects, createProject, updateProject, deleteProject, Project } from "../actions/projectActions";
@@ -72,21 +69,12 @@ export default function AdminPage() {
   const [newService, setNewService] = useState("");
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  useEffect(() => {
-    const savedPassword = localStorage.getItem("neirah_admin_password");
-    if (savedPassword) {
-      setPassword(savedPassword);
-      setIsAuthenticated(true);
-    }
-  }, []);
+  const showMsg = (type: "success" | "error", text: string) => {
+    setMessage({ type, text });
+    setTimeout(() => setMessage(null), 5000);
+  };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchData();
-    }
-  }, [isAuthenticated]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [projs, cases, bks] = await Promise.all([
@@ -103,12 +91,23 @@ export default function AdminPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [password]);
 
-  const showMsg = (type: "success" | "error", text: string) => {
-    setMessage({ type, text });
-    setTimeout(() => setMessage(null), 5000);
-  };
+  useEffect(() => {
+    const savedPassword = localStorage.getItem("neirah_admin_password");
+    if (savedPassword) {
+      queueMicrotask(() => {
+        setPassword(savedPassword);
+        setIsAuthenticated(true);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      queueMicrotask(() => fetchData());
+    }
+  }, [isAuthenticated, fetchData]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,8 +135,8 @@ export default function AdminPage() {
       await updateBookingStatus(id, newStatus, password);
       showMsg("success", `Booking marked as ${newStatus}`);
       await fetchData();
-    } catch (err: any) {
-      showMsg("error", err.message || "Failed to update booking status");
+    } catch (err) {
+      showMsg("error", (err as Error).message || "Failed to update booking status");
     }
   };
 
@@ -147,8 +146,8 @@ export default function AdminPage() {
       await deleteBooking(id, password);
       showMsg("success", "Booking deleted successfully");
       await fetchData();
-    } catch (err: any) {
-      showMsg("error", err.message || "Failed to delete booking");
+    } catch (err) {
+      showMsg("error", (err as Error).message || "Failed to delete booking");
     }
   };
 
@@ -175,9 +174,9 @@ export default function AdminPage() {
         });
         setEditingId(null);
         await fetchData();
-      } catch (err: any) {
+      } catch (err) {
         console.error(err);
-        showMsg("error", err.message || "Failed to save project");
+        showMsg("error", (err as Error).message || "Failed to save project");
       }
     });
   };
@@ -194,8 +193,8 @@ export default function AdminPage() {
       await deleteProject(id, password);
       showMsg("success", "Project deleted successfully");
       await fetchData();
-    } catch (err: any) {
-      showMsg("error", err.message || "Failed to delete project");
+    } catch (err) {
+      showMsg("error", (err as Error).message || "Failed to delete project");
     }
   };
 
@@ -224,9 +223,9 @@ export default function AdminPage() {
         });
         setEditingId(null);
         await fetchData();
-      } catch (err: any) {
+      } catch (err) {
         console.error(err);
-        showMsg("error", err.message || "Failed to save case study");
+        showMsg("error", (err as Error).message || "Failed to save case study");
       }
     });
   };
@@ -243,8 +242,8 @@ export default function AdminPage() {
       await deleteCaseStudy(id, password);
       showMsg("success", "Case study deleted successfully");
       await fetchData();
-    } catch (err: any) {
-      showMsg("error", err.message || "Failed to delete case study");
+    } catch (err) {
+      showMsg("error", (err as Error).message || "Failed to delete case study");
     }
   };
 

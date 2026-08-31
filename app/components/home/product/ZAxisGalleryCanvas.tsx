@@ -31,6 +31,7 @@ const MESH_OFFSETS: [number, number, number][] = [
   [1.7, 0.25, 0],
   [-1.7, 0.05, 0],
   [1.7, -0.05, 0],
+  [-1.7, 0.15, 0],
 ];
 
 /* =========================================================
@@ -43,32 +44,27 @@ function GalleryScene({
   mousePos,
   onSelectProduct,
 }: ZAxisGalleryCanvasProps) {
-  const { camera, scene } = useThree();
   const groupRef = useRef<THREE.Group>(null);
-
-  useMemo(() => {
-    scene.fog = new THREE.FogExp2("#F8FBFF", 0.022);
-  }, [scene]);
 
   useFrame((state, delta) => {
     const targetCamX = mousePos.x * 0.45;
     const targetCamY = mousePos.y * 0.3;
 
-    camera.position.x = THREE.MathUtils.damp(
-      camera.position.x,
+    state.camera.position.x = THREE.MathUtils.damp(
+      state.camera.position.x,
       targetCamX,
       2.5,
       delta
     );
 
-    camera.position.y = THREE.MathUtils.damp(
-      camera.position.y,
+    state.camera.position.y = THREE.MathUtils.damp(
+      state.camera.position.y,
       targetCamY,
       2.5,
       delta
     );
 
-    camera.lookAt(0, 0, 0);
+    state.camera.lookAt(0, 0, 0);
 
     if (groupRef.current) {
       groupRef.current.position.y =
@@ -78,6 +74,7 @@ function GalleryScene({
 
   return (
     <>
+      <fogExp2 attach="fog" args={["#F8FBFF", 0.022]} />
       {/* =====================================================
           LIGHTING
       ===================================================== */}
@@ -304,58 +301,42 @@ function GlowingFlowLines({
    FLOATING BLOBS
 ========================================================= */
 
+function createFloatingBlobsData() {
+  return Array.from({ length: 26 }, (_, i) => {
+    const angle = (i / 26) * Math.PI * 2 + Math.sin(i * 1.5);
+    const radius = 2.4 + (i % 5) * 0.8;
+
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * (radius * 0.7) + (Math.random() - 0.5) * 1.2;
+    const z = 6 - i * 3.2;
+
+    const scale = 0.08 + (i % 4) * 0.04;
+    const color =
+      i % 3 === 0
+        ? "#38BDF8"
+        : i % 3 === 1
+        ? "#818CF8"
+        : "#22D3EE";
+
+    return {
+      x,
+      y,
+      z,
+      scale,
+      color,
+      speed: 0.6 + (i % 4) * 0.3,
+      offset: i * 0.7,
+    };
+  });
+}
+
 function FloatingBlobs3D({
   progress,
 }: {
   progress: number;
 }) {
   const groupRef = useRef<THREE.Group>(null);
-
-  const blobs = useMemo(() => {
-    return Array.from(
-      { length: 26 },
-      (_, i) => {
-        const angle =
-          (i / 26) * Math.PI * 2 +
-          Math.sin(i * 1.5);
-
-        const radius =
-          2.4 + (i % 5) * 0.8;
-
-        const x =
-          Math.cos(angle) * radius;
-
-        const y =
-          Math.sin(angle) *
-            (radius * 0.7) +
-          (Math.random() - 0.5) * 1.2;
-
-        const z =
-          6 - i * 3.2;
-
-        const scale =
-          0.08 + (i % 4) * 0.04;
-
-        const color =
-          i % 3 === 0
-            ? "#38BDF8"
-            : i % 3 === 1
-            ? "#818CF8"
-            : "#22D3EE";
-
-        return {
-          x,
-          y,
-          z,
-          scale,
-          color,
-          speed:
-            0.6 + (i % 4) * 0.3,
-          offset: i * 0.7,
-        };
-      }
-    );
-  }, []);
+  const blobs = useMemo(() => createFloatingBlobsData(), []);
 
   useFrame(() => {
     if (!groupRef.current) return;
@@ -447,85 +428,43 @@ function SmallBlobMesh({
    ETHEREAL DUST
 ========================================================= */
 
+function createEtherealDust(count: number) {
+  const pos = new Float32Array(count * 3);
+  const col = new Float32Array(count * 3);
+
+  const palette = [
+    new THREE.Color("#94A3B8"),
+    new THREE.Color("#38BDF8"),
+    new THREE.Color("#CBD5E1"),
+    new THREE.Color("#818CF8"),
+  ];
+
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 2.0 + Math.random() * 9.0;
+
+    pos[i3] = Math.cos(angle) * radius;
+    pos[i3 + 1] = Math.sin(angle) * (radius * 0.75) + (Math.random() - 0.5) * 2;
+    pos[i3 + 2] = 14 - Math.random() * 95;
+
+    const c = palette[i % palette.length];
+    col[i3] = c.r;
+    col[i3 + 1] = c.g;
+    col[i3 + 2] = c.b;
+  }
+
+  return [pos, col] as const;
+}
+
 function EtherealDustField({
   progress,
 }: {
   progress: number;
 }) {
   const count = 1100;
-
-  const pointsRef =
-    useRef<THREE.Points>(null);
-
-  const [positions, colors] =
-    useMemo(() => {
-      const pos =
-        new Float32Array(
-          count * 3
-        );
-
-      const col =
-        new Float32Array(
-          count * 3
-        );
-
-      const palette = [
-        new THREE.Color(
-          "#94A3B8"
-        ),
-        new THREE.Color(
-          "#38BDF8"
-        ),
-        new THREE.Color(
-          "#CBD5E1"
-        ),
-        new THREE.Color(
-          "#818CF8"
-        ),
-      ];
-
-      for (
-        let i = 0;
-        i < count;
-        i++
-      ) {
-        const i3 = i * 3;
-
-        const angle =
-          Math.random() *
-          Math.PI *
-          2;
-
-        const radius =
-          2.0 +
-          Math.random() * 9.0;
-
-        pos[i3] =
-          Math.cos(angle) *
-          radius;
-
-        pos[i3 + 1] =
-          Math.sin(angle) *
-            (radius * 0.75) +
-          (Math.random() - 0.5) *
-            2;
-
-        pos[i3 + 2] =
-          14 -
-          Math.random() * 95;
-
-        const c =
-          palette[
-            i % palette.length
-          ];
-
-        col[i3] = c.r;
-        col[i3 + 1] = c.g;
-        col[i3 + 2] = c.b;
-      }
-
-      return [pos, col];
-    }, []);
+  const pointsRef = useRef<THREE.Points>(null);
+  const [positions, colors] = useMemo(() => createEtherealDust(count), [count]);
 
   useFrame((state) => {
     if (!pointsRef.current) return;
@@ -968,10 +907,9 @@ function ProductDiscovery3D({
 
 function RefinedProductGeometry({
   index,
-  accent,
 }: {
   index: number;
-  accent: string;
+  accent?: string;
 }) {
   const coreRef =
     useRef<THREE.Mesh>(null);
@@ -1690,7 +1628,6 @@ function RefinedProductGeometry({
     ===================================================== */
 
     case 9:
-    default:
       return (
         <group>
           <mesh>
@@ -1728,6 +1665,37 @@ function RefinedProductGeometry({
             <meshBasicMaterial
               color="#FFE4E6"
             />
+          </mesh>
+        </group>
+      );
+
+    /* =====================================================
+       11. NEIRAH CLOUD
+    ===================================================== */
+
+    case 10:
+    default:
+      return (
+        <group>
+          <mesh>
+            <icosahedronGeometry args={[1.25, 0]} />
+            <meshStandardMaterial
+              color="#059669"
+              emissive="#047857"
+              emissiveIntensity={0.4}
+              roughness={0.1}
+              metalness={0.9}
+            />
+          </mesh>
+
+          <mesh rotation-z={Math.PI / 4}>
+            <torusGeometry args={[1.5, 0.035, 16, 64]} />
+            <meshBasicMaterial color="#34D399" transparent opacity={0.6} />
+          </mesh>
+
+          <mesh ref={coreRef}>
+            <sphereGeometry args={[0.5, 16, 16]} />
+            <meshStandardMaterial color="#FFFFFF" emissive="#10B981" emissiveIntensity={0.85} />
           </mesh>
         </group>
       );

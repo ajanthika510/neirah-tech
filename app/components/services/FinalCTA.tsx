@@ -68,7 +68,7 @@ export default function FinalCTA({ onEnter }: { onEnter: () => void }) {
         >
           <div className="h-px w-8 bg-gradient-to-r from-transparent to-violet-400" />
           <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-violet-500">
-            Chapter V — Let's Talk
+            Chapter V — Let&apos;s Talk
           </span>
           <div className="h-px w-8 bg-gradient-to-r from-violet-400 to-transparent" />
         </motion.div>
@@ -112,7 +112,7 @@ export default function FinalCTA({ onEnter }: { onEnter: () => void }) {
           transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="text-base sm:text-lg md:text-xl text-slate-500 max-w-lg mx-auto leading-relaxed mb-10 sm:mb-12 font-light px-2"
         >
-          Tell us what you want to build. We'll find the right way to build it.
+          Tell us what you want to build. We&apos;ll find the right way to build it.
         </motion.p>
 
         {/* CTA */}

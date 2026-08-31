@@ -23,16 +23,7 @@ import {
 } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { sendContactMessage } from "../../actions/contactActions";
-
-const colors = {
-  navy: "#0B1736",
-  blue: "#0EA5E9",
-  cyan: "#06B6D4",
-  royal: "#2563EB",
-  indigo: "#4F46E5",
-  muted: "#52627A",
-  bg: "#F7FCFF",
-};
+import RevealText from "../ui/RevealText";
 
 const services = [
   "Business Website",
@@ -269,16 +260,13 @@ export default function Contact() {
 
               {/* Heading */}
 
-              <motion.h1
-                variants={fadeUp}
-                className="mt-7 max-w-3xl text-[2.65rem] font-black leading-[1.08] tracking-[-0.04em] text-[#0B1736] sm:text-5xl md:text-6xl lg:text-7xl"
-              >
-                Let&apos;s build
+              <h1 className="mt-7 max-w-3xl text-[2.65rem] font-black leading-[1.08] tracking-[-0.04em] text-[#0B1736] sm:text-5xl md:text-6xl lg:text-7xl">
+                <RevealText text="Let's build" mode="viewport" stagger={0.08} duration={0.6} blurAmount={8} />
                 <span className="block bg-gradient-to-r from-[#0EA5E9] via-[#2563EB] to-[#4F46E5] bg-clip-text pb-1 text-transparent">
-                  something smart
+                  <RevealText text="something smart" mode="viewport" delay={0.2} stagger={0.08} duration={0.6} blurAmount={8} />
                 </span>
-                together.
-              </motion.h1>
+                <RevealText text="together." mode="viewport" delay={0.4} stagger={0.08} duration={0.6} blurAmount={8} />
+              </h1>
 
               {/* Description */}
 
@@ -568,7 +556,7 @@ export default function Contact() {
             {/* Contact cards */}
 
             <div className="mt-8 space-y-4">
-              {contactInfo.map((item, index) => {
+              {contactInfo.map((item) => {
                 const Icon = item.icon;
 
                 return (

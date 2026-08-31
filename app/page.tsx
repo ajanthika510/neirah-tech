@@ -17,9 +17,8 @@ export default function Home() {
 
   useEffect(() => {
     // Only show splash screen once per browser session
-    const hasSeen = sessionStorage.getItem("splash_seen");
-    if (!hasSeen) {
-      setShowSplash(true);
+    if (!sessionStorage.getItem("splash_seen")) {
+      queueMicrotask(() => setShowSplash(true));
     }
   }, []);
 

@@ -76,7 +76,7 @@ export default function CareersBenefits() {
 
           <p className="mt-5 text-base leading-7 text-slate-500">
             We create an environment where people can experiment, learn,
-            collaborate and do work they're proud of.
+            collaborate and do work they&apos;re proud of.
           </p>
         </motion.div>
 
