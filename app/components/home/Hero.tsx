@@ -319,9 +319,15 @@ export default function Hero() {
               className="flex items-center justify-center lg:justify-start gap-3"
             >
               <div className="h-px w-8 bg-gradient-to-r from-transparent to-sky-400" />
-              <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-sky-500">
-                Technology for Every Layer of Business
-              </span>
+              <RevealText
+                as="span"
+                text="Technology for Every Layer of Business"
+                delay={0.2}
+                stagger={0.05}
+                duration={0.5}
+                blurAmount={4}
+                className="text-[11px] font-bold tracking-[0.3em] uppercase text-sky-500"
+              />
               <div className="h-px w-8 bg-gradient-to-r from-sky-400 to-transparent" />
             </motion.div>
 
@@ -457,9 +463,15 @@ export default function Hero() {
                     <p className="font-display font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">
                       <HeroCountUp target={stat.value} />
                     </p>
-                    <p className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-[0.2em]">
-                      {stat.label}
-                    </p>
+                    <RevealText
+                      as="p"
+                      text={stat.label}
+                      delay={0.5 + i * 0.1}
+                      stagger={0.05}
+                      duration={0.4}
+                      blurAmount={3}
+                      className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-[0.2em]"
+                    />
                   </div>
                 </div>
               ))}

@@ -21,6 +21,8 @@ import {
   Atom,
 } from "lucide-react";
 
+import RevealText from "../ui/RevealText";
+
 /* =========================================================
    TYPES
 ========================================================= */
@@ -936,7 +938,7 @@ export default function Testimonials() {
                     md:text-[23px]
                   "
                 >
-                  “{activeNode.quoteLead}{" "}
+                  “<RevealText text={activeNode.quoteLead} stagger={0.05} duration={0.4} blurAmount={4} />{" "}
 
                   <span
                     className="
@@ -948,10 +950,10 @@ export default function Testimonials() {
                       text-transparent
                     "
                   >
-                    {activeNode.quoteHighlight}
+                    <RevealText text={activeNode.quoteHighlight} delay={0.1} stagger={0.05} duration={0.4} blurAmount={4} />
                   </span>{" "}
 
-                  {activeNode.quoteEnd}”
+                  <RevealText text={activeNode.quoteEnd} delay={0.2} stagger={0.05} duration={0.4} blurAmount={4} />”
                 </blockquote>
 
                 {/* Small Metrics */}
@@ -994,7 +996,12 @@ export default function Testimonials() {
                           {metric.value}%
                         </div>
 
-                        <div
+                        <RevealText
+                          as="div"
+                          text={metric.label}
+                          stagger={0.04}
+                          duration={0.3}
+                          blurAmount={2}
                           className="
                             mt-0.5
                             truncate
@@ -1006,9 +1013,7 @@ export default function Testimonials() {
                             text-slate-400
                             sm:text-[8px]
                           "
-                        >
-                          {metric.label}
-                        </div>
+                        />
                       </div>
                     )
                   )}
@@ -1063,7 +1068,7 @@ export default function Testimonials() {
                           text-slate-900
                         "
                       >
-                        {activeNode.client}
+                        <RevealText text={activeNode.client} stagger={0.05} duration={0.4} blurAmount={3} />
                       </h3>
 
                       <ShieldCheck
@@ -1072,24 +1077,11 @@ export default function Testimonials() {
                       />
                     </div>
 
-                    <p
-                      className="
-                        truncate
-                        text-[8px]
-                        text-slate-400
-                        sm:text-[9px]
-                      "
-                    >
-                      {activeNode.role}
-
-                      <span className="mx-1 text-slate-300">
-                        •
-                      </span>
-
-                      <span className="font-semibold text-slate-600">
-                        {activeNode.company}
-                      </span>
-                    </p>
+                    <div className="flex items-center gap-1 text-[8px] text-slate-400 sm:text-[9px]">
+                      <RevealText text={activeNode.role} stagger={0.04} duration={0.4} blurAmount={3} />
+                      <span className="mx-1 text-slate-300">•</span>
+                      <span className="font-semibold text-slate-600">{activeNode.company}</span>
+                    </div>
                   </div>
                 </div>
 

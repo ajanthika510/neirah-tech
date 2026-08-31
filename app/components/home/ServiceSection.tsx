@@ -31,6 +31,8 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 
+import RevealText from "../ui/RevealText";
+
 /* =========================================================
    SERVICES
 ========================================================= */
@@ -1040,61 +1042,59 @@ function ServiceExperience({
             xl:text-7xl
           "
         >
-          {service.title}
+          <RevealText text={service.title} stagger={0.06} duration={0.5} blurAmount={4} />
         </h3>
 
         {/* -----------------------------------------
             SUBTITLE
         ----------------------------------------- */}
 
-        <p
+        <RevealText
+          as="p"
+          text={service.subtitle}
+          delay={0.1}
+          stagger={0.05}
+          duration={0.4}
+          blurAmount={3}
           className="
             mt-2
-
             text-[10px]
             sm:text-xs
             md:text-sm
-
             font-bold
             uppercase
-
             tracking-[0.18em]
-
             text-[#2563EB]
           "
-        >
-          {service.subtitle}
-        </p>
+        />
 
         {/* -----------------------------------------
             DESCRIPTION
         ----------------------------------------- */}
 
-        <p
+        <RevealText
+          as="p"
+          text={service.description}
+          delay={0.2}
+          stagger={0.03}
+          duration={0.5}
+          blurAmount={4}
           className="
             mx-auto
-
             mt-3
             sm:mt-4
-
             max-w-[300px]
             sm:max-w-[480px]
             md:max-w-[560px]
-
             text-[11px]
             leading-5
-
             sm:text-sm
             sm:leading-6
-
             md:text-base
             md:leading-7
-
             text-[#475569]
           "
-        >
-          {service.description}
-        </p>
+        />
 
         {/* -----------------------------------------
             CAPABILITIES
@@ -1549,22 +1549,14 @@ export default function ServicesTunnel() {
               "
             />
 
-            <span
-              className="
-                text-[8px]
-                sm:text-[10px]
-
-                font-bold
-                uppercase
-
-                tracking-[0.22em]
-                sm:tracking-[0.3em]
-
-                text-[#2563EB]
-              "
-            >
-              What We Build
-            </span>
+            <RevealText
+              as="span"
+              text="What We Build"
+              stagger={0.06}
+              duration={0.4}
+              blurAmount={4}
+              className="text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.22em] sm:tracking-[0.3em] text-[#2563EB]"
+            />
 
             <span
               className="
@@ -1598,7 +1590,12 @@ export default function ServicesTunnel() {
               lg:text-6xl
             "
           >
-            Technology without
+            <RevealText
+              text="Technology without"
+              stagger={0.08}
+              duration={0.6}
+              blurAmount={6}
+            />
 
             <span
               className="
@@ -1614,37 +1611,38 @@ export default function ServicesTunnel() {
                 text-transparent
               "
             >
-              boundaries.
+              <RevealText
+                text="boundaries."
+                delay={0.2}
+                stagger={0.08}
+                duration={0.6}
+                blurAmount={6}
+              />
             </span>
           </h2>
 
           {/* DESCRIPTION */}
 
-          <p
+          <RevealText
+            as="p"
+            text="Explore the systems, experiences and technologies that power modern digital products."
+            delay={0.3}
+            stagger={0.04}
+            duration={0.5}
+            blurAmount={4}
             className="
               mx-auto
-
               mt-2
               sm:mt-3
-
               max-w-md
-
               text-[10px]
               leading-4
-
               sm:text-xs
               sm:leading-5
-
               text-[#64748B]
-
               font-light
             "
-          >
-            Explore the systems,
-            experiences and technologies
-            that power modern digital
-            products.
-          </p>
+          />
         </motion.div>
 
         {/* =================================================

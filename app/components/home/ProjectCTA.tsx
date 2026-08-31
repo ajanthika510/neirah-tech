@@ -659,7 +659,7 @@ export default function ProjectCTA() {
               >
                 <Sparkles size={15} />
 
-                Let&apos;s Build Something Amazing
+                <RevealText text="Let's Build Something Amazing" mode="viewport" stagger={0.06} duration={0.4} blurAmount={3} />
               </div>
 
               {/* Heading */}

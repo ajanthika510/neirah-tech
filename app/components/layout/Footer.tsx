@@ -12,6 +12,8 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import RevealText from "../ui/RevealText";
+
 function FacebookIcon({ size = 17 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -136,26 +138,36 @@ export default function Footer() {
                   className="text-sky-400"
                 />
 
-                <span className="text-xs font-bold tracking-[0.2em] text-sky-300">
-                  LET&apos;S BUILD SOMETHING
-                </span>
+                <RevealText
+                  as="span"
+                  text="LET'S BUILD SOMETHING"
+                  stagger={0.05}
+                  duration={0.4}
+                  blurAmount={3}
+                  className="text-xs font-bold tracking-[0.2em] text-sky-300"
+                />
 
               </div>
 
               <h2 className="text-3xl font-black leading-tight md:text-5xl">
 
-                Have a problem?
+                <RevealText text="Have a problem?" stagger={0.06} duration={0.5} blurAmount={5} />
 
                 <span className="block bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
-                  Let&apos;s start a conversation.
+                  <RevealText text="Let's start a conversation." delay={0.2} stagger={0.06} duration={0.5} blurAmount={5} />
                 </span>
 
               </h2>
 
-              <p className="mt-5 max-w-xl leading-7 text-slate-400">
-                Tell us what you&apos;re trying to solve. We&apos;ll help you explore
-                the right technology and turn the idea into something useful.
-              </p>
+              <RevealText
+                as="p"
+                text="Tell us what you're trying to solve. We'll help you explore the right technology and turn the idea into something useful."
+                delay={0.3}
+                stagger={0.03}
+                duration={0.5}
+                blurAmount={4}
+                className="mt-5 max-w-xl leading-7 text-slate-400"
+              />
 
             </div>
 

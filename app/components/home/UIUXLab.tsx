@@ -189,6 +189,16 @@ const projects = Array.from({ length: 120 }, (_, index) => {
 
 export default function UIUXLab() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -400,8 +410,10 @@ export default function UIUXLab() {
             className="
               flex
               flex-col
-              items-start
-              text-left
+              items-center
+              lg:items-start
+              text-center
+              lg:text-left
               w-full
             "
           >
@@ -447,17 +459,20 @@ export default function UIUXLab() {
                 />
               </span>
 
-              UI / UX LAB
+              <RevealText text="UI / UX LAB" mode="viewport" stagger={0.06} duration={0.4} blurAmount={3} />
             </div>
 
             <h2
               className="
-                mt-8
+                mt-6
                 text-center
+                lg:text-left
                 mx-auto
-                text-4xl
+                lg:mx-0
+                text-3xl
+                min-[380px]:text-4xl
                 font-black
-                leading-[1.02]
+                leading-[1.04]
                 tracking-[-0.04em]
                 sm:text-5xl
                 md:text-6xl
@@ -496,19 +511,23 @@ export default function UIUXLab() {
               blurAmount={4}
               yOffset="80%"
               className="
-                mt-7
-                text-left
+                mt-6
+                text-center
+                lg:text-left
+                mx-auto
+                lg:mx-0
                 max-w-xl
-                text-base
-                leading-8
+                text-sm
+                sm:text-base
+                leading-relaxed
                 text-slate-500
-                sm:text-lg
+                sm:leading-8
               "
             >
               From the first click to the final conversion, we design digital experiences that are beautiful, intuitive, and built around how real people interact with your business.
             </RevealText>
 
-            <div className="mt-9 flex flex-col sm:flex-row items-center justify-start gap-3 relative z-20 w-full sm:w-auto">
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 relative z-20 w-full sm:w-auto">
               <Link
                 href="/projects"
                 className="
@@ -590,7 +609,8 @@ export default function UIUXLab() {
                 pt-7
                 sm:grid-cols-4
                 w-full
-                text-left
+                text-center
+                lg:text-left
               "
             >
               <Stat value="30+" label="Websites" />
@@ -606,18 +626,19 @@ export default function UIUXLab() {
 
           <motion.div
             style={{
-              rotateX,
-              rotateY,
+              rotateX: isMobile ? 0 : rotateX,
+              rotateY: isMobile ? 0 : rotateY,
               transformPerspective: 1200,
             }}
             initial={{
               opacity: 0,
               scale: 0.88,
-              x: 40,
+              y: 30,
             }}
             whileInView={{
               opacity: 1,
               scale: 1,
+              x: 0,
               y: 0,
             }}
             viewport={{
@@ -631,10 +652,11 @@ export default function UIUXLab() {
             className="
               relative
               mx-auto
-              h-[470px]
+              h-[420px]
+              min-[380px]:h-[460px]
+              sm:h-[550px]
               w-full
               max-w-[620px]
-              sm:h-[550px]
             "
           >
             <div
@@ -723,13 +745,13 @@ export default function UIUXLab() {
                   border-b
                   border-slate-200/80
                   bg-white/50
-                  px-5
-                  py-4
+                  px-4
+                  py-3.5
                   sm:px-7
                   sm:py-5
                 "
               >
-                <div className="flex gap-2">
+                <div className="flex w-12 items-center gap-1.5 shrink-0">
                   <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
                   <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
                   <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
@@ -741,17 +763,20 @@ export default function UIUXLab() {
                     border
                     border-slate-200
                     bg-white
-                    px-5
+                    px-4 sm:px-5
                     py-1.5
                     text-[10px]
                     font-bold
                     text-slate-400
+                    truncate
+                    max-w-[160px] sm:max-w-none
+                    text-center
                   "
                 >
                   neirahtech.design
                 </div>
 
-                <div className="w-10" />
+                <div className="w-12 shrink-0" />
               </div>
 
               <div
@@ -902,10 +927,12 @@ function CodeDrawingVisual() {
         }}
         className="
           absolute
-          left-3
-          top-8
+          left-1
+          min-[380px]:left-3
+          top-4
           z-30
-          w-[210px]
+          w-[195px]
+          min-[380px]:w-[215px]
           overflow-hidden
           rounded-2xl
           border
@@ -1124,13 +1151,17 @@ function CodeDrawingVisual() {
         }}
         className="
           absolute
-          bottom-8
-          right-3
+          bottom-4
+          right-1
+          min-[380px]:right-3
           z-30
-          h-[250px]
-          w-[255px]
+          h-[220px]
+          min-[380px]:h-[250px]
+          w-[215px]
+          min-[380px]:w-[255px]
           overflow-hidden
-          rounded-[24px]
+          rounded-[20px]
+          min-[380px]:rounded-[24px]
           border
           border-white
           bg-white/95
@@ -2111,17 +2142,15 @@ function JourneyCard({
           <span className="h-px flex-1 bg-sky-100" />
         </div>
 
-        <span
-          className="
-            text-xs
-            font-black
-            uppercase
-            tracking-[0.25em]
-            text-sky-500
-          "
-        >
-          {item.number} / DESIGN PRINCIPLE
-        </span>
+        <RevealText
+          as="span"
+          text={`${item.number} / DESIGN PRINCIPLE`}
+          mode="viewport"
+          stagger={0.05}
+          duration={0.4}
+          blurAmount={3}
+          className="text-xs font-black uppercase tracking-[0.25em] text-sky-500"
+        />
 
         <h4
           className="
@@ -2133,10 +2162,17 @@ function JourneyCard({
             sm:text-5xl
           "
         >
-          {item.title}
+          <RevealText text={item.title} mode="viewport" stagger={0.06} duration={0.5} blurAmount={4} />
         </h4>
 
-        <p
+        <RevealText
+          as="p"
+          text={item.description}
+          mode="viewport"
+          delay={0.15}
+          stagger={0.03}
+          duration={0.5}
+          blurAmount={4}
           className="
             mt-5
             max-w-md
@@ -2145,9 +2181,7 @@ function JourneyCard({
             text-slate-500
             sm:text-lg
           "
-        >
-          {item.description}
-        </p>
+        />
 
         <div
           className="
@@ -3010,7 +3044,9 @@ function SelectedWork() {
                     <h4
                       className="
                         mt-3
-                        text-5xl
+                        text-3xl
+                        min-[380px]:text-4xl
+                        min-[480px]:text-5xl
                         font-black
                         leading-none
                         tracking-[-0.055em]
