@@ -2,22 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
-
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   ArrowUpRight,
   MoveUpRight,
   Sparkles,
 } from "lucide-react";
-
 import { useEffect, useRef, useState } from "react";
 import { getCaseStudies } from "../../actions/caseStudyActions";
 import RevealText from "../ui/RevealText";
+import { easeCustom as ease, revealUp, staggerContainer } from "@/lib/motion";
 
 /* =========================================================
    TYPES
@@ -35,36 +30,6 @@ type CaseStudyItem = {
   year: string;
   services: string[];
   slug?: string;
-};
-
-/* =========================================================
-   ANIMATION
-========================================================= */
-
-const ease = [0.22, 1, 0.36, 1] as const;
-
-const revealUp = {
-  hidden: {
-    opacity: 0,
-    y: 50,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease,
-    },
-  },
-};
-
-const staggerContainer = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
 };
 
 /* =========================================================
@@ -223,45 +188,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
     };
   }, [initialCaseStudies]);
 
-  /* =======================================================
-     CURSOR GLOW
-  ======================================================= */
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springX = useSpring(mouseX, {
-    stiffness: 100,
-    damping: 25,
-    mass: 0.5,
-  });
-
-  const springY = useSpring(mouseY, {
-    stiffness: 100,
-    damping: 25,
-    mass: 0.5,
-  });
-
-  useEffect(() => {
-    const handleMouseMove = (
-      event: MouseEvent
-    ) => {
-      mouseX.set(event.clientX);
-      mouseY.set(event.clientY);
-    };
-
-    window.addEventListener(
-      "mousemove",
-      handleMouseMove
-    );
-
-    return () => {
-      window.removeEventListener(
-        "mousemove",
-        handleMouseMove
-      );
-    };
-  }, [mouseX, mouseY]);
 
   /* =======================================================
      LOADING
@@ -582,53 +509,9 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
           overflow-hidden
         "
       >
-        {/* Cursor */}
-
-        <motion.div
-          style={{
-            left: springX,
-            top: springY,
-          }}
-          className="
-            absolute
-            h-[220px]
-            w-[220px]
-            -translate-x-1/2
-            -translate-y-1/2
-            rounded-full
-            bg-cyan-400/10
-            blur-[90px]
-            sm:h-[300px]
-            sm:w-[300px]
-            lg:h-[360px]
-            lg:w-[360px]
-          "
-        />
-
-        {/* Grid */}
-
-        <div
-          className="
-            absolute
-            inset-0
-            opacity-[0.22]
-            [background-image:linear-gradient(rgba(15,23,42,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,.045)_1px,transparent_1px)]
-            [background-size:70px_70px]
-          "
-        />
-
         {/* Sky atmosphere */}
 
-        <motion.div
-          animate={{
-            y: [0, -30, 0],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        <div
           className="
             absolute
             left-1/2
@@ -649,16 +532,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
 
         {/* Indigo */}
 
-        <motion.div
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -25, 0],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        <div
           className="
             absolute
             right-[-220px]
@@ -739,17 +613,6 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
                     justify-center
                   "
                 >
-                  <span
-                    className="
-                      absolute
-                      h-3
-                      w-3
-                      animate-ping
-                      rounded-full
-                      bg-cyan-400/50
-                    "
-                  />
-
                   <span
                     className="
                       relative
@@ -858,15 +721,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
                   gap-4
                 "
               >
-                <motion.div
-                  animate={{
-                    y: [0, 7, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+                <div
                   className="
                     flex
                     h-11
@@ -881,7 +736,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
                   "
                 >
                   ↓
-                </motion.div>
+                </div>
 
                 <span
                   className="
@@ -1301,15 +1156,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
 
             {/* ORBIT */}
 
-            <motion.div
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "linear",
-              }}
+            <div
               className="
                 absolute
                 right-[10%]
@@ -1335,7 +1182,7 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
                   shadow-[0_0_20px_#67E8F9]
                 "
               />
-            </motion.div>
+            </div>
           </motion.article>
         </div>
       </section>

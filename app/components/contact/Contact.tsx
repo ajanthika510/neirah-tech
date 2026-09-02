@@ -24,6 +24,7 @@ import {
 import { FormEvent, useState } from "react";
 import { sendContactMessage } from "../../actions/contactActions";
 import RevealText from "../ui/RevealText";
+import { fadeUp, staggerContainer as stagger } from "@/lib/motion";
 
 const services = [
   "Business Website",
@@ -35,30 +36,6 @@ const services = [
   "Smart Devices & IoT",
   "Innovation Lab",
 ];
-
-const fadeUp: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 35,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: "easeOut",
-    },
-  },
-};
-
-const stagger: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
 
 interface ContactInfo {
   icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;

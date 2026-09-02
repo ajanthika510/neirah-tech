@@ -103,7 +103,7 @@ export default function HeroBackground() {
 
     // Helper to spawn glow ball
     const spawnGlowBall = (x: number, y: number, speedMult = 1, sizeMult = 1) => {
-      if (glowBalls.length > 35) return;
+      if (glowBalls.length > 20) return;
       const color = GLOW_COLORS[Math.floor(Math.random() * (GLOW_COLORS.length - 1))];
       const angle = Math.random() * Math.PI * 2;
       const speed = (0.3 + Math.random() * 1.2) * speedMult;
@@ -124,7 +124,7 @@ export default function HeroBackground() {
     // Helper to spawn blinking sparkle
     const spawnSparkle = (x: number, y: number, count = 1) => {
       for (let i = 0; i < count; i++) {
-        if (sparkles.length > 50) return;
+        if (sparkles.length > 25) return;
         const color = GLOW_COLORS[Math.floor(Math.random() * GLOW_COLORS.length)];
         const angle = Math.random() * Math.PI * 2;
         const speed = 0.5 + Math.random() * 2;
@@ -225,6 +225,16 @@ export default function HeroBackground() {
       pointer.active = false;
     };
 
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animId);
+      } else {
+        lastTime = performance.now();
+        animId = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     window.addEventListener("pointerdown", onPointerDown, { passive: true });
     window.addEventListener("pointerleave", onPointerLeave);
@@ -299,32 +309,20 @@ export default function HeroBackground() {
 
         s.x += s.vx;
         s.y += s.vy;
-        s.vx *= 0.95;
-        s.vy *= 0.95;
+        s.vx *= 0.97;
+        s.vy *= 0.97;
+
+        s.twinklePhase += s.twinkleSpeed * dt;
+        const twinkle = (Math.sin(s.twinklePhase) + 1) * 0.5;
 
         const lifeFraction = s.life / s.maxLife;
         const fade = Math.sin(lifeFraction * Math.PI);
-        const blink = Math.sin(time * s.twinkleSpeed + s.twinklePhase) * 0.5 + 0.5;
-        const sparkAlpha = Math.max(0, fade * (0.35 + blink * 0.65));
+        const alpha = fade * (0.2 + twinkle * 0.8);
 
-        // Core starlet dot
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size * (0.8 + blink * 0.4), 0, Math.PI * 2);
-        ctx.fillStyle = `${s.color}${sparkAlpha.toFixed(3)})`;
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fillStyle = `${s.color}${alpha.toFixed(3)})`;
         ctx.fill();
-
-        // Cross-flare gleam for high brightness blinks
-        if (sparkAlpha > 0.4) {
-          const gleam = s.size * 2.2;
-          ctx.strokeStyle = `${s.color}${(sparkAlpha * 0.65).toFixed(3)})`;
-          ctx.lineWidth = 0.8;
-          ctx.beginPath();
-          ctx.moveTo(s.x - gleam, s.y);
-          ctx.lineTo(s.x + gleam, s.y);
-          ctx.moveTo(s.x, s.y - gleam);
-          ctx.lineTo(s.x, s.y + gleam);
-          ctx.stroke();
-        }
       }
 
       animId = requestAnimationFrame(render);
@@ -334,6 +332,7 @@ export default function HeroBackground() {
 
     return () => {
       cancelAnimationFrame(animId);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerdown", onPointerDown);
