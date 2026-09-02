@@ -379,7 +379,7 @@ export default function ProductEditorialOverlay({
         >
           {activeProduct.capabilities
             .slice(0, 3)
-            .map((capability) => (
+            .map((capability: string) => (
               <span
                 key={capability}
                 className="
@@ -565,11 +565,7 @@ export default function ProductEditorialOverlay({
               size={12}
               className="
                 text-sky-500
-                animate-spin
               "
-              style={{
-                animationDuration: "14s",
-              }}
             />
 
             <span>
@@ -919,7 +915,7 @@ export default function ProductEditorialOverlay({
                   >
                     {activeProduct.capabilities
                       .slice(0, 3)
-                      .map((capability) => (
+                      .map((capability: string) => (
                         <span
                           key={capability}
                           className="

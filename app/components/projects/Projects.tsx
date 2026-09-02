@@ -611,24 +611,21 @@ function ProjectsHero({
 
         {/* =====================================================
             MAIN TITLE
-
-            IMPORTANT:
-            Each line owns its own clipping container.
-            This prevents the text from being permanently hidden.
         ===================================================== */}
 
         <h1
           className="
             font-extrabold
-            tracking-[-0.065em]
-            leading-[0.88]
-
+            tracking-[-0.04em]
+            leading-[1.08]
+            sm:leading-[1.04]
+            pb-2
           "
           style={{
             fontFamily: fontDisplay,
             color: primaryText,
             fontSize:
-              "clamp(3.4rem, 9.2vw, 8.5rem)",
+              "clamp(2.5rem, 7.5vw, 6.8rem)",
           }}
         >
           {/* -------------------------------------------------
@@ -641,7 +638,7 @@ function ProjectsHero({
               overflow-hidden
             "
             style={{
-              paddingBottom: "0.03em",
+              paddingBottom: "0.15em",
             }}
           >
             <motion.span
@@ -675,10 +672,11 @@ function ProjectsHero({
             className="
               block
               overflow-hidden
+              pb-3
+              sm:pb-4
+              -mb-3
+              sm:-mb-4
             "
-            style={{
-              paddingBottom: "0.12em",
-            }}
           >
             <motion.span
               initial={{
@@ -697,6 +695,8 @@ function ProjectsHero({
               className="
                 block
                 will-change-transform
+                pb-2
+                sm:pb-3
               "
               style={{
                 backgroundImage: gradientText,

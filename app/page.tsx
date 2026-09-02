@@ -12,6 +12,8 @@ import UIUXLab from "./components/home/UIUXLab";
 import Testimonials from "./components/home/Testimonials";
 import SplashScreen from "./components/splash/SplashScreen";
 
+import CaseStudiesShowcase from "./components/home/CaseStudiesShowcase";
+
 export default function Home() {
   const [showSplash, setShowSplash] = useState(false);
 
@@ -49,6 +51,8 @@ export default function Home() {
           <UIUXLab />
 
           <FeaturedProjects />
+
+          <CaseStudiesShowcase />
 
           <ProjectCTA />
 

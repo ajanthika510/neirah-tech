@@ -24,7 +24,6 @@ import Image from "next/image";
 import Link from "next/link";
 import HeroBackground from "./HeroBackground";
 import SchedulerModal from "./SchedulerModal";
-import RevealText from "../ui/RevealText";
 
 function HeroCountUp({ target }: { target: string }) {
   const hasPlus = target.includes("+");
@@ -67,9 +66,6 @@ export default function Hero() {
 
   /* ==========================================
      RESPONSIVE ORBIT TIERS
-     Calculates exact radius based on viewport width
-     to prevent horizontal overflow on small mobile (360px-375px)
-     while filling space elegantly on tablet & desktop.
   ========================================== */
   const [radius, setRadius] = useState(200);
 
@@ -77,13 +73,13 @@ export default function Hero() {
     const updateRadius = () => {
       const w = window.innerWidth;
       if (w < 380) {
-        setRadius(108); // Fits 320px-375px screens with 0 overflow
+        setRadius(108);
       } else if (w < 640) {
-        setRadius(126); // Fits standard 380px-639px phones
+        setRadius(126);
       } else if (w < 1024) {
-        setRadius(175); // Fits tablets
+        setRadius(175);
       } else {
-        setRadius(200); // Desktop & wide screens
+        setRadius(200);
       }
     };
 
@@ -163,15 +159,6 @@ export default function Hero() {
     []
   );
 
-  /* ==========================================
-     ORBIT / CARD VARIANTS
-     Typed as Variants explicitly. The reduced-motion
-     branch still returns a valid TargetAndTransition
-     (rotate: 0, no transition) instead of `{}`, which
-     is what TypeScript was flagging — `{}` doesn't
-     satisfy Variants even though it "looks" like a
-     reasonable no-op.
-  ========================================== */
   const orbitVariants: Variants = {
     animate: prefersReducedMotion
       ? { rotate: 0 }
@@ -236,12 +223,7 @@ export default function Hero() {
       >
         <HeroBackground />
 
-        {/* ==========================================
-            AURORA FIELD
-            Three staggered blobs instead of two static
-            ones, each drifting independently — reads as
-            atmosphere rather than a fixed gradient.
-        ========================================== */}
+        {/* AURORA FIELD */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
             animate={
@@ -291,9 +273,7 @@ export default function Hero() {
           }}
         />
 
-        {/* ==========================================
-            MAIN CONTENT (SCROLL-LINKED GENTLE RETREAT)
-        ========================================== */}
+        {/* MAIN CONTENT */}
         <motion.div
           style={{
             opacity: heroOpacity,
@@ -307,87 +287,45 @@ export default function Hero() {
             relative z-10 w-full
           "
         >
-          {/* ==========================================
-              LEFT CONTENT
-          ========================================== */}
+          {/* LEFT CONTENT */}
           <div className="lg:col-span-6 space-y-7 sm:space-y-8 text-center lg:text-left">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center justify-center lg:justify-start gap-3"
-            >
+            {/* Badge (Static Text) */}
+            <div className="flex items-center justify-center lg:justify-start gap-3">
               <div className="h-px w-8 bg-gradient-to-r from-transparent to-sky-400" />
-              <RevealText
-                as="span"
-                text="Technology for Every Layer of Business"
-                delay={0.2}
-                stagger={0.05}
-                duration={0.5}
-                blurAmount={4}
-                className="text-[11px] font-bold tracking-[0.3em] uppercase text-sky-500"
-              />
+              <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-sky-500">
+                Technology for Every Layer of Business
+              </span>
               <div className="h-px w-8 bg-gradient-to-r from-sky-400 to-transparent" />
-            </motion.div>
+            </div>
 
-            {/* HEADING (Word-by-word roll up) */}
+            {/* HEADING (Static Text - No Animation) */}
             <div className="space-y-4">
-              <div className="overflow-hidden">
-                <h1
-                  className="
-                    font-display font-extrabold
-                    text-[2.6rem] xs:text-5xl sm:text-6xl md:text-7xl lg:text-[4.25rem]
-                    tracking-tight leading-[1.08] sm:leading-[1.04]
-                    text-slate-900
-                  "
-                >
-                  <div className="block">
-                    <RevealText
-                      text="Technology That"
-                      delay={0.2}
-                      stagger={0.1}
-                      duration={0.65}
-                      blurAmount={8}
-                      yOffset="115%"
-                    />
-                  </div>
+              <h1
+                className="
+                  font-display font-extrabold
+                  text-[2.6rem] xs:text-5xl sm:text-6xl md:text-7xl lg:text-[4.25rem]
+                  tracking-tight leading-[1.08] sm:leading-[1.04]
+                  text-slate-900
+                "
+              >
+                Technology That{" "}
+                <span className="bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent block sm:inline">
+                  Connects Business.
+                </span>
+              </h1>
 
-                  <div className="block">
-                    <RevealText
-                      text="Connects Business."
-                      delay={0.45}
-                      stagger={0.1}
-                      duration={0.65}
-                      blurAmount={8}
-                      yOffset="115%"
-                      className="bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent"
-                    />
-                  </div>
-                </h1>
-              </div>
-
-              <RevealText
-                as="p"
-                delay={0.7}
-                stagger={0.04}
-                duration={0.5}
-                blurAmount={5}
-                yOffset="80%"
+              <p
                 className="
                   text-slate-500 text-base sm:text-lg md:text-xl
                   font-light leading-relaxed max-w-xl mx-auto lg:mx-0
                 "
               >
                 We design digital experiences, build intelligent software, automate businesses and connect technology with the physical world.
-              </RevealText>
+              </p>
             </div>
 
             {/* ACTION BUTTONS */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+            <div
               className="
                 relative z-20
                 flex flex-col sm:flex-row items-center
@@ -443,13 +381,10 @@ export default function Hero() {
                 <span>Explore Solutions</span>
                 <ArrowUpRight className="w-4 h-4 text-slate-500 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 pointer-events-none" />
               </Link>
-            </motion.div>
+            </div>
 
-            {/* TRUST STATS WITH RUNNING NUMBERS */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+            {/* TRUST STATS WITH RUNNING NUMBERS (Static Labels) */}
+            <div
               className="
                 pt-5 sm:pt-6 border-t border-slate-200
                 flex flex-wrap items-center justify-center lg:justify-start
@@ -463,24 +398,16 @@ export default function Hero() {
                     <p className="font-display font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">
                       <HeroCountUp target={stat.value} />
                     </p>
-                    <RevealText
-                      as="p"
-                      text={stat.label}
-                      delay={0.5 + i * 0.1}
-                      stagger={0.05}
-                      duration={0.4}
-                      blurAmount={3}
-                      className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-[0.2em]"
-                    />
+                    <p className="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-[0.2em]">
+                      {stat.label}
+                    </p>
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
-          {/* ==========================================
-              RIGHT SERVICE ECOSYSTEM
-          ========================================== */}
+          {/* RIGHT SERVICE ECOSYSTEM */}
           <div
             className="
               lg:col-span-6 relative flex items-center justify-center
@@ -499,7 +426,7 @@ export default function Hero() {
                 flex items-center justify-center will-change-transform
               "
             >
-              {/* ORBIT LINE — draws itself in on load via stroke-dashoffset */}
+              {/* ORBIT LINE */}
               <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none opacity-40">
                 <motion.circle
                   cx="50%"
@@ -518,7 +445,7 @@ export default function Hero() {
               {/* Secondary orbit */}
               <div className="absolute inset-[12%] rounded-full border border-dashed border-indigo-200/50 pointer-events-none" />
 
-              {/* SERVICE CARDS — staggered entrance, per-service accent */}
+              {/* SERVICE CARDS */}
               {services.map((item, index) => {
                 const radian = (item.angle * Math.PI) / 180;
                 const x = Math.round(Math.cos(radian) * radius);
@@ -633,11 +560,10 @@ export default function Hero() {
                 className="absolute -inset-5 min-[380px]:-inset-6 sm:-inset-8 rounded-full border border-indigo-300/40"
               />
               <div
-                className={`
+                className="
                   absolute -inset-[24px] min-[380px]:-inset-[32px] sm:-inset-[45px] rounded-full
                   border border-dashed border-sky-300/40
-                  ${prefersReducedMotion ? "" : "animate-spin [animation-duration:15s]"}
-                `}
+                "
               />
             </div>
           </div>
