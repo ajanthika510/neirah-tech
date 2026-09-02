@@ -38,7 +38,10 @@ export async function query(text: string, params?: unknown[]) {
   const start = Date.now();
   const res = await pool.query(text, params);
   const duration = Date.now() - start;
-  console.log("Executed query", { text, duration, rows: res.rowCount });
+  
+  if (process.env.NODE_ENV !== "production") {
+    console.log("Executed query", { text: text.trim().slice(0, 60), duration, rows: res.rowCount });
+  }
   return res;
 }
 
@@ -51,7 +54,7 @@ export async function ensureDb(): Promise<void> {
   return dbInitPromise;
 }
 
-// Function to initialize tables and insert seed data
+// Function to initialize tables and insert seed data efficiently
 export async function initDb() {
   try {
     // 1. Create projects table
@@ -86,169 +89,36 @@ export async function initDb() {
       )
     `);
 
-    // 3. Seed projects if empty
+    // 3. Seed projects if empty (Batch insert)
     const projCount = await query("SELECT COUNT(*) FROM projects");
     if (parseInt(projCount.rows[0].count, 10) === 0) {
-      console.log("Seeding projects data...");
-      const seedProjects = [
-        {
-          title: "D Plus Landscaping",
-          category: "Landscaping Services",
-          country: "USA",
-          country_code: "US",
-          status: "Live",
-          website: "https://dpluslandscaping.com/",
-          description: "Professional landscaping company website with portfolio showcase and service booking system.",
-        },
-        {
-          title: "KK99 Proline",
-          category: "Apparel Manufacturing",
-          country: "Sri Lanka",
-          country_code: "LK",
-          status: "Live",
-          website: "https://kk99proline.com/",
-          description: "Custom apparel manufacturer platform with order management and design customization tools.",
-        },
-        {
-          title: "Chelmsford Master Cabs",
-          category: "Transportation",
-          country: "UK",
-          country_code: "GB",
-          status: "Live",
-          website: "https://chelmsfordmastercabs.com/",
-          description: "Taxi booking platform with real-time tracking, fare calculation, and driver management.",
-        },
-        {
-          title: "Kesi Chauffeurs",
-          category: "Luxury Transport",
-          country: "UK",
-          country_code: "GB",
-          status: "Live",
-          website: "https://kesichauffeurs.co.uk/",
-          description: "Premium chauffeur service platform with luxury vehicle booking and route optimization.",
-        },
-        {
-          title: "David Taxi",
-          category: "Transportation",
-          country: "Switzerland",
-          country_code: "CH",
-          status: "Live",
-          website: "https://davidtaxi.com/",
-          description: "Swiss taxi service with multilingual support and airport region coverage.",
-        },
-        {
-          title: "Aqua Experts",
-          category: "Aquarium Services",
-          country: "Norway",
-          country_code: "NO",
-          status: "Live",
-          website: "https://aqua-experts.org/wexperts/",
-          description: "Professional aquarium services with maintenance scheduling and fish care consultation.",
-        },
-        {
-          title: "Mamma Products",
-          category: "Health Products",
-          country: "Sri Lanka",
-          country_code: "LK",
-          status: "Live",
-          website: "https://mamma-products.com/",
-          description: "Food products e-commerce with subscription management and health tracking.",
-        },
-        {
-          title: "Minlon Solar",
-          category: "Renewable Energy",
-          country: "Sri Lanka",
-          country_code: "LK",
-          status: "Live",
-          website: "https://miwonsolar.com/",
-          description: "Solar energy solutions with system design calculator and installation management.",
-        },
-        {
-          title: "LS O'Hare Taxi",
-          category: "Airport Transportation",
-          country: "USA",
-          country_code: "US",
-          status: "Live",
-          website: "https://ls-oharetaxi.com/lander?oref=https%3A%2F%2Fwww.neirahtech.com%2F",
-          description: "Chicago O'Hare airport taxi service with flight tracking and pre-booking system.",
-        },
-        {
-          title: "Nirosh Clean Rent",
-          category: "Professional Cleaning Services",
-          country: "USA",
-          country_code: "US",
-          status: "Live",
-          website: "https://niroshcleanrent.com/lander?oref=https%3A%2F%2Fwww.neirahtech.com%2F",
-          description: "Professional cleaning service platform with booking system and quality assurance tracking.",
-        },
-      ];
-
-      for (const proj of seedProjects) {
-        await query(
-          "INSERT INTO projects (title, category, country, country_code, status, website, description) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-          [proj.title, proj.category, proj.country, proj.country_code, proj.status, proj.website, proj.description]
-        );
-      }
+      await query(`
+        INSERT INTO projects (title, category, country, country_code, status, website, description) VALUES
+        ('D Plus Landscaping', 'Landscaping Services', 'USA', 'US', 'Live', 'https://dpluslandscaping.com/', 'Professional landscaping company website with portfolio showcase and service booking system.'),
+        ('KK99 Proline', 'Apparel Manufacturing', 'Sri Lanka', 'LK', 'Live', 'https://kk99proline.com/', 'Custom apparel manufacturer platform with order management and design customization tools.'),
+        ('Chelmsford Master Cabs', 'Transportation', 'UK', 'GB', 'Live', 'https://chelmsfordmastercabs.com/', 'Taxi booking platform with real-time tracking, fare calculation, and driver management.'),
+        ('Kesi Chauffeurs', 'Luxury Transport', 'UK', 'GB', 'Live', 'https://kesichauffeurs.co.uk/', 'Premium chauffeur service platform with luxury vehicle booking and route optimization.'),
+        ('David Taxi', 'Transportation', 'Switzerland', 'CH', 'Live', 'https://davidtaxi.com/', 'Swiss taxi service with multilingual support and airport region coverage.'),
+        ('Aqua Experts', 'Aquarium Services', 'Norway', 'NO', 'Live', 'https://aqua-experts.org/wexperts/', 'Professional aquarium services with maintenance scheduling and fish care consultation.'),
+        ('Mamma Products', 'Health Products', 'Sri Lanka', 'LK', 'Live', 'https://mamma-products.com/', 'Food products e-commerce with subscription management and health tracking.'),
+        ('Minlon Solar', 'Renewable Energy', 'Sri Lanka', 'LK', 'Live', 'https://miwonsolar.com/', 'Solar energy solutions with system design calculator and installation management.'),
+        ('LS O''Hare Taxi', 'Airport Transportation', 'USA', 'US', 'Live', 'https://ls-oharetaxi.com/lander?oref=https%3A%2F%2Fwww.neirahtech.com%2F', 'Chicago O''Hare airport taxi service with flight tracking and pre-booking system.'),
+        ('Nirosh Clean Rent', 'Professional Cleaning Services', 'USA', 'US', 'Live', 'https://niroshcleanrent.com/lander?oref=https%3A%2F%2Fwww.neirahtech.com%2F', 'Professional cleaning service platform with booking system and quality assurance tracking.')
+      `);
     }
 
-    // 4. Seed case studies if empty
+    // 4. Seed case studies if empty (Batch insert)
     const csCount = await query("SELECT COUNT(*) FROM case_studies");
     if (parseInt(csCount.rows[0].count, 10) === 0) {
-      console.log("Seeding case studies data...");
-      const seedCaseStudies = [
-        {
-          number: "01",
-          category: "Transportation",
-          type: "Web Platform",
-          title: "David Taxi",
-          subtitle: "Smart Booking Platform",
-          description: "A complete digital booking ecosystem designed to simplify taxi reservations, live tracking and customer management.",
-          image: "/images/case-studies/david-taxi.jpg",
-          year: "2026",
-          services: ["UX/UI", "Web Development", "Booking System"],
-        },
-        {
-          number: "02",
-          category: "Food & Beverage",
-          type: "Restaurant Website",
-          title: "Sri Lanka Wok",
-          subtitle: "Digital Dining Experience",
-          description: "A modern restaurant experience combining menu discovery, reservations and online ordering for an authentic Sri Lankan dining brand.",
-          image: "/images/case-studies/sri-lanka-wok.jpg",
-          year: "2026",
-          services: ["Web Design", "Development", "Ordering"],
-        },
-        {
-          number: "03",
-          category: "Fashion & Retail",
-          type: "E-Commerce",
-          title: "VRN Pretty Saree",
-          subtitle: "E-commerce Excellence",
-          description: "A visually rich shopping experience created to showcase traditional Indian fashion through a modern and engaging interface.",
-          image: "/images/case-studies/vrn-pretty-saree.jpg",
-          year: "2026",
-          services: ["E-Commerce", "UX/UI", "Payment"],
-        },
-        {
-          number: "04",
-          category: "Business",
-          type: "Business Website",
-          title: "D Plus Landscaping",
-          subtitle: "Professional Services Portal",
-          description: "A professional digital platform built to communicate expertise, services and completed landscaping projects.",
-          image: "/images/case-studies/d-plus.jpg",
-          year: "2026",
-          services: ["Brand Website", "Development", "SEO"],
-        },
-      ];
-
-      for (const cs of seedCaseStudies) {
-        await query(
-          "INSERT INTO case_studies (number, category, type, title, subtitle, description, image, year, services) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-          [cs.number, cs.category, cs.type, cs.title, cs.subtitle, cs.description, cs.image, cs.year, cs.services]
-        );
-      }
+      await query(`
+        INSERT INTO case_studies (number, category, type, title, subtitle, description, image, year, services) VALUES
+        ('01', 'Transportation', 'Web Platform', 'David Taxi', 'Smart Booking Platform', 'A complete digital booking ecosystem designed to simplify taxi reservations, live tracking and customer management.', '/images/case-studies/david-taxi.jpg', '2026', ARRAY['UX/UI', 'Web Development', 'Booking System']),
+        ('02', 'Food & Beverage', 'Restaurant Website', 'Sri Lanka Wok', 'Digital Dining Experience', 'A modern restaurant experience combining menu discovery, reservations and online ordering for an authentic Sri Lankan dining brand.', '/images/case-studies/sri-lanka-wok.jpg', '2026', ARRAY['Web Design', 'Development', 'Ordering']),
+        ('03', 'Fashion & Retail', 'E-Commerce', 'VRN Pretty Saree', 'E-commerce Excellence', 'A visually rich shopping experience created to showcase traditional Indian fashion through a modern and engaging interface.', '/images/case-studies/vrn-pretty-saree.jpg', '2026', ARRAY['E-Commerce', 'UX/UI', 'Payment']),
+        ('04', 'Business', 'Business Website', 'D Plus Landscaping', 'Professional Services Portal', 'A professional digital platform built to communicate expertise, services and completed landscaping projects.', '/images/case-studies/d-plus.jpg', '2026', ARRAY['Brand Website', 'Development', 'SEO'])
+      `);
     }
+
     // 5. Create messages table
     await query(`
       CREATE TABLE IF NOT EXISTS messages (

@@ -197,7 +197,7 @@ export default function Navbar() {
             >
               <Image
                 src="/images/logo.png"
-                alt="Neiran Tech"
+                alt="Neirah Tech"
                 fill
                 priority
                 className="
