@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -322,28 +322,13 @@ export const EDITORIAL_PROJECTS: EcosystemProduct[] = NEIRAH_ECOSYSTEM_PRODUCTS;
 export const PRODUCTS: MiniatureProduct[] = NEIRAH_ECOSYSTEM_PRODUCTS;
 export const products: Product[] = PRODUCTS;
 
-const LAYERS: { id: ProductLayer; label: string; count: number }[] = [
-  { id: "ALL", label: "All Ecosystems", count: 9 },
-  { id: "DESIGN", label: "Design", count: 1 },
-  { id: "INTELLIGENCE", label: "Intelligence", count: 2 },
-  { id: "BUSINESS", label: "Business", count: 2 },
-  { id: "DELIVERY & MOBILITY", label: "Delivery & Mobility", count: 3 },
-  { id: "PHYSICAL WORLD", label: "Physical World", count: 1 },
-];
-
 /* =========================================================
    MAIN FEATURED PROJECTS COMPONENT — VERTICAL ANIMATED RUNWAY
 ========================================================= */
 
 export default function FeaturedProjects() {
-  const [selectedLayer, setSelectedLayer] = useState<ProductLayer>("ALL");
   const [selectedProduct, setSelectedProduct] = useState<EcosystemProduct | null>(null);
   const [schedulerOpen, setSchedulerOpen] = useState(false);
-
-  const filteredProducts = useMemo(() => {
-    if (selectedLayer === "ALL") return NEIRAH_ECOSYSTEM_PRODUCTS;
-    return NEIRAH_ECOSYSTEM_PRODUCTS.filter((p) => p.layer === selectedLayer);
-  }, [selectedLayer]);
 
   return (
     <section
@@ -377,36 +362,12 @@ export default function FeaturedProjects() {
         <p className="text-stone-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-normal pt-2">
           Neirah builds products that connect people, businesses, intelligence and the physical world.
         </p>
-
-        {/* INTERACTIVE ANIMATED LAYER FILTER PILLS */}
-        <div className="flex flex-wrap justify-center items-center gap-2 pt-4">
-          {LAYERS.map((layer) => {
-            const isSelected = selectedLayer === layer.id;
-            return (
-              <motion.button
-                key={layer.id}
-                type="button"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={() => setSelectedLayer(layer.id)}
-                className={`px-5 py-2 rounded-full font-mono text-xs font-bold transition-all cursor-pointer ${
-                  isSelected
-                    ? "bg-stone-950 text-white shadow-lg shadow-stone-950/20"
-                    : "bg-white text-stone-600 border border-stone-200 hover:bg-stone-100 hover:text-stone-900"
-                }`}
-              >
-                <span>{layer.label}</span>
-                <span className="ml-1.5 opacity-60">({layer.count})</span>
-              </motion.button>
-            );
-          })}
-        </div>
       </div>
 
       {/* 9 PRODUCTS VERTICAL EDITORIAL RUNWAY WITH ANIMATEPRESENCE LAYOUT */}
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-20 space-y-24">
         <AnimatePresence mode="popLayout">
-          {filteredProducts.map((product, index) => (
+          {NEIRAH_ECOSYSTEM_PRODUCTS.map((product, index) => (
             <VerticalEditorialProjectCard
               key={product.id}
               product={product}

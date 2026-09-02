@@ -320,24 +320,9 @@ export default function UIUXLab() {
           </motion.div>
 
           <h2 className="text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl font-black leading-[1.08] tracking-tight text-slate-900 pb-1">
-            <RevealText
-              text="We don't just design screens."
-              mode="viewport"
-              viewportAmount={0.05}
-              stagger={0.04}
-              duration={0.35}
-              blurAmount={0}
-            />
+            <span>We don&apos;t just design screens.</span>
             <span className="block mt-1 bg-gradient-to-r from-sky-500 via-indigo-500 via-rose-500 to-cyan-500 bg-clip-text text-transparent pb-1">
-              <RevealText
-                text="We design experiences built for growth."
-                mode="viewport"
-                viewportAmount={0.05}
-                delay={0.1}
-                stagger={0.04}
-                duration={0.35}
-                blurAmount={0}
-              />
+              We design experiences built for growth.
             </span>
           </h2>
 

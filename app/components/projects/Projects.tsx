@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   useEffect,
   useMemo,
@@ -1343,10 +1344,12 @@ function GalleryCard({
             }}
           >
             {!imageError && preview ? (
-              <img
+              <Image
                 src={preview}
                 alt={`${project.title} website`}
-                className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.025]"
+                fill
+                unoptimized
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.025]"
                 onError={() =>
                   setImageError(true)
                 }
@@ -1627,10 +1630,12 @@ function StaticProjectCard({
           }}
         >
           {preview ? (
-            <img
+            <Image
               src={preview}
               alt={project.title}
-              className="h-full w-full object-cover object-top"
+              fill
+              unoptimized
+              className="object-cover object-top"
             />
           ) : (
             <div
@@ -2177,10 +2182,12 @@ function ArchiveProjectCard({
         >
           <div className="relative aspect-[1.35/1] overflow-hidden">
             {!imageError && preview ? (
-              <img
+              <Image
                 src={preview}
                 alt={`${project.title} website`}
-                className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.035]"
+                fill
+                unoptimized
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.035]"
                 onError={() =>
                   setImageError(true)
                 }

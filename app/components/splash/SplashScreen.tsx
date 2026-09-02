@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 import AIUniverse from "./AIUniverse";
 
@@ -9,46 +10,43 @@ interface SplashScreenProps {
   onComplete?: () => void;
 }
 
-export default function SplashScreen({
-  onComplete,
-}: SplashScreenProps) {
+export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const [exiting, setExiting] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    /*
-     * =========================================================
-     * SYSTEM BOOT TIMELINE
-     * =========================================================
-     *
-     * 0.0s  - Digital environment starts
-     * 0.5s  - System UI appears
-     * 1.2s  - Particle system becomes active
-     * 1.8s  - Core begins synchronizing
-     * 2.8s  - System reaches stable state
-     * 3.5s  - Final loading phase
-     * 4.2s  - Cinematic exit
-     * 5.2s  - Splash complete
-     *
-     * =========================================================
-     */
+    // Smooth, linear progress bar counter
+    const startTime = Date.now();
+    const duration = 3200; // 3.2 seconds total duration
+
+    const progressInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const currentProgress = Math.min(100, Math.floor((elapsed / duration) * 100));
+      setProgress(currentProgress);
+
+      if (elapsed >= duration) {
+        clearInterval(progressInterval);
+      }
+    }, 30);
 
     const exitTimer = window.setTimeout(() => {
       setExiting(true);
-    }, 4200);
+    }, 3400);
 
     const completeTimer = window.setTimeout(() => {
       onComplete?.();
-    }, 5200);
+    }, 4000);
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setExiting(true);
-        setTimeout(() => onComplete?.(), 300);
+        setTimeout(() => onComplete?.(), 400);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      clearInterval(progressInterval);
       window.clearTimeout(exitTimer);
       window.clearTimeout(completeTimer);
       window.removeEventListener("keydown", handleKeyDown);
@@ -57,870 +55,157 @@ export default function SplashScreen({
 
   const handleSkip = () => {
     setExiting(true);
-    setTimeout(() => onComplete?.(), 300);
+    setTimeout(() => onComplete?.(), 400);
   };
 
   return (
     <motion.section
-      className={`
-        fixed
-        inset-0
-        z-[9999]
-        overflow-hidden
-        bg-[#030712]
-        ${exiting ? "pointer-events-none" : "pointer-events-auto"}
-      `}
-      initial={{
-        opacity: 1,
-        scale: 1,
-      }}
+      className={`fixed inset-0 z-[9999] overflow-hidden bg-[#030712] text-white ${
+        exiting ? "pointer-events-none" : "pointer-events-auto"
+      }`}
+      initial={{ opacity: 1, scale: 1 }}
       animate={{
         opacity: exiting ? 0 : 1,
-        scale: exiting ? 1.06 : 1,
+        scale: exiting ? 1.05 : 1,
       }}
-      exit={{
-        opacity: 0,
-        scale: 1.06,
-      }}
-      transition={{
-        duration: 0.6,
-        ease: [0.76, 0, 0.24, 1],
-      }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
     >
-      {/* Skip Button */}
+      {/* SKIP INTRO BUTTON */}
       <button
         type="button"
         onClick={handleSkip}
         aria-label="Skip introduction"
-        className="absolute top-6 right-6 z-50 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[11px] font-medium tracking-wider uppercase text-white/80 backdrop-blur-md transition-colors hover:bg-white/20 hover:text-white cursor-pointer"
+        className="absolute top-6 right-6 z-50 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 font-mono text-xs font-semibold tracking-wider uppercase text-white/70 backdrop-blur-md transition-all hover:bg-white/15 hover:text-white cursor-pointer"
       >
         Skip Intro
       </button>
 
-      {/* =====================================================
-          3D DIGITAL ENVIRONMENT
-      ===================================================== */}
+      {/* 3D FLOATING PARTICLES */}
+      <AIUniverse exiting={exiting} />
 
-      <div className="absolute inset-0">
-        <AIUniverse exiting={exiting} />
-      </div>
-
-      {/* =====================================================
-          BACKGROUND VIGNETTE
-      ===================================================== */}
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          z-10
-        "
-        style={{
-          background:
-            "radial-gradient(circle at center, transparent 0%, rgba(3,7,18,0.05) 30%, rgba(3,7,18,0.78) 100%)",
-        }}
-      />
-
-      {/* =====================================================
-          CENTRAL ATMOSPHERE
-      ===================================================== */}
-
-      <motion.div
-        className="
-          pointer-events-none
-          absolute
-          left-1/2
-          top-1/2
-          z-10
-          h-[360px]
-          w-[360px]
-          -translate-x-1/2
-          -translate-y-1/2
-          rounded-full
-          bg-cyan-500/[0.06]
-          blur-[110px]
-          sm:h-[500px]
-          sm:w-[500px]
-        "
-        animate={{
-          scale: [0.75, 1.15, 0.85],
-          opacity: [0.25, 0.55, 0.25],
-        }}
-        transition={{
-          duration: 3.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* =====================================================
-          TOP LEFT SYSTEM LABEL
-      ===================================================== */}
-
-      <motion.div
-        className="
-          absolute
-          left-6
-          top-6
-          z-30
-          flex
-          items-center
-          gap-3
-          sm:left-10
-          sm:top-10
-        "
-        initial={{
-          opacity: 0,
-          y: -12,
-        }}
-        animate={{
-          opacity: exiting ? 0 : 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 0.7,
-          delay: 0.3,
-        }}
-      >
+      {/* AMBIENT BACKGROUND GLOW ORBS */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <motion.div
-          className="
-            h-1.5
-            w-1.5
-            rounded-full
-            bg-cyan-300
-            shadow-[0_0_14px_rgba(103,232,249,0.9)]
-          "
+          className="h-[450px] w-[450px] rounded-full bg-sky-500/15 blur-[120px] sm:h-[600px] sm:w-[600px]"
           animate={{
-            scale: [1, 1.5, 1],
-            opacity: [0.4, 1, 0.4],
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
           }}
           transition={{
-            duration: 1.3,
+            duration: 2.8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
         />
-
-        <span
-          className="
-            text-[8px]
-            font-medium
-            uppercase
-            tracking-[0.35em]
-            text-slate-600
-            sm:text-[9px]
-          "
-        >
-          DIGITAL ENVIRONMENT
-        </span>
-      </motion.div>
-
-      {/* =====================================================
-          TOP RIGHT SYSTEM STATUS
-      ===================================================== */}
-
-      <motion.div
-        className="
-          absolute
-          right-6
-          top-6
-          z-30
-          sm:right-10
-          sm:top-10
-        "
-        initial={{
-          opacity: 0,
-          x: 12,
-        }}
-        animate={{
-          opacity: exiting ? 0 : 1,
-          x: 0,
-        }}
-        transition={{
-          duration: 0.6,
-          delay: 0.6,
-        }}
-      >
-        <div className="flex items-center gap-2">
-          <span
-            className="
-              text-[7px]
-              uppercase
-              tracking-[0.28em]
-              text-slate-700
-              sm:text-[8px]
-            "
-          >
-            SYSTEM BOOT
-          </span>
-
-          <motion.span
-            className="
-              h-1.5
-              w-1.5
-              rounded-full
-              bg-cyan-300
-              shadow-[0_0_10px_rgba(103,232,249,0.8)]
-            "
-            animate={{
-              opacity: [0.2, 1, 0.2],
-            }}
-            transition={{
-              duration: 1.1,
-              repeat: Infinity,
-            }}
-          />
-        </div>
-      </motion.div>
-
-      {/* =====================================================
-          CENTER SYSTEM CORE
-      ===================================================== */}
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          z-20
-          flex
-          items-center
-          justify-center
-        "
-      >
         <motion.div
-          className="
-            flex
-            flex-col
-            items-center
-          "
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
+          className="absolute h-[350px] w-[350px] rounded-full bg-indigo-500/15 blur-[100px] sm:h-[450px] sm:w-[450px]"
           animate={{
-            opacity: exiting ? 0 : 1,
-            y: exiting ? -20 : 0,
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.5, 0.2],
           }}
           transition={{
-            duration: 0.8,
-            ease: [0.16, 1, 0.3, 1],
+            duration: 3.2,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
-        >
-          {/* =================================================
-              CORE VISUAL
-          ================================================= */}
+        />
+      </div>
 
+      {/* MAIN CENTERSTAGE: NEIRO HEARTBEAT CORE */}
+      <div className="relative z-20 flex min-h-screen flex-col items-center justify-center px-6">
+        <div className="relative flex flex-col items-center justify-center text-center space-y-8">
+          
+          {/* NEIRO PNG WITH ORGANIC DUAL-PULSE HEARTBEAT */}
           <div className="relative flex items-center justify-center">
-
-            {/* Large atmospheric glow */}
-
-            <motion.div
-              className="
-                absolute
-                h-[180px]
-                w-[180px]
-                rounded-full
-                bg-blue-500/[0.08]
-                blur-[55px]
-                sm:h-[230px]
-                sm:w-[230px]
-              "
-              animate={{
-                scale: [0.8, 1.1, 0.8],
-                opacity: [0.25, 0.65, 0.25],
-              }}
-              transition={{
-                duration: 2.8,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* Outer ring */}
-
-            <motion.div
-              className="
-                absolute
-                h-[155px]
-                w-[155px]
-                rounded-full
-                border
-                border-cyan-400/[0.12]
-                sm:h-[195px]
-                sm:w-[195px]
-              "
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 9,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            />
-
-            {/* Outer segmented ring */}
-
-            <motion.div
-              className="
-                absolute
-                h-[140px]
-                w-[140px]
-                rounded-full
-                border
-                border-dashed
-                border-blue-400/[0.18]
-                sm:h-[175px]
-                sm:w-[175px]
-              "
-              animate={{
-                rotate: -360,
-              }}
-              transition={{
-                duration: 13,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            />
-
-            {/* Inner ring */}
-
-            <motion.div
-              className="
-                absolute
-                h-[105px]
-                w-[105px]
-                rounded-full
-                border
-                border-cyan-300/[0.10]
-                sm:h-[135px]
-                sm:w-[135px]
-              "
-              animate={{
-                rotate: 360,
-                scale: [0.95, 1.04, 0.95],
-              }}
-              transition={{
-                rotate: {
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "linear",
-                },
-                scale: {
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                },
-              }}
-            />
-
-            {/* Scanning arc */}
-
-            <motion.div
-              className="
-                absolute
-                h-[155px]
-                w-[155px]
-                rounded-full
-                border-t
-                border-cyan-300/60
-                sm:h-[195px]
-                sm:w-[195px]
-              "
-              animate={{
-                rotate: [0, 360],
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            />
-
-            {/* Center core */}
-
-            <motion.div
-              className="
-                relative
-                z-10
-                flex
-                h-[54px]
-                w-[54px]
-                items-center
-                justify-center
-                rounded-full
-                border
-                border-cyan-300/20
-                bg-[#030712]/90
-                shadow-[0_0_40px_rgba(34,211,238,0.18)]
-                sm:h-[64px]
-                sm:w-[64px]
-              "
-              animate={{
-                scale: [1, 1.08, 1],
-              }}
-              transition={{
-                duration: 1.6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              {/* Core glow */}
-
+            
+            {/* CONCENTRIC HEARTBEAT RIPPLE RINGS */}
+            {[0, 1, 2].map((ringIndex) => (
               <motion.div
-                className="
-                  absolute
-                  h-5
-                  w-5
-                  rounded-full
-                  bg-cyan-400/20
-                  blur-md
-                "
-                animate={{
-                  scale: [0.7, 1.5, 0.7],
-                  opacity: [0.4, 0.9, 0.4],
-                }}
-                transition={{
-                  duration: 1.2,
-                  repeat: Infinity,
-                }}
-              />
-
-              {/* Core point */}
-
-              <motion.div
-                className="
-                  relative
-                  h-2
-                  w-2
-                  rounded-full
-                  bg-cyan-200
-                  shadow-[0_0_20px_rgba(103,232,249,1)]
-                "
-                animate={{
-                  scale: [0.7, 1.5, 0.7],
-                }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                }}
-              />
-            </motion.div>
-
-            {/* Small orbital nodes */}
-
-            {[0, 90, 180, 270].map((rotation) => (
-              <motion.div
-                key={rotation}
-                className="
-                  absolute
-                  h-1
-                  w-1
-                  rounded-full
-                  bg-blue-300
-                  shadow-[0_0_8px_rgba(96,165,250,0.9)]
-                "
+                key={ringIndex}
+                className="absolute rounded-full border border-sky-400/30 bg-sky-400/5 shadow-[0_0_30px_rgba(56,189,248,0.2)]"
                 style={{
-                  transform: `rotate(${rotation}deg) translateY(-82px)`,
+                  width: "160px",
+                  height: "160px",
                 }}
                 animate={{
-                  opacity: [0.2, 1, 0.2],
+                  scale: [0.8, 2.5],
+                  opacity: [0.7, 0],
                 }}
                 transition={{
-                  duration: 1.6,
-                  delay: rotation / 360,
+                  duration: 1.8,
                   repeat: Infinity,
+                  ease: [0.215, 0.61, 0.355, 1],
+                  delay: ringIndex * 0.5,
                 }}
               />
             ))}
-          </div>
 
-          {/* =================================================
-              STATUS TEXT
-          ================================================= */}
-
-          <motion.div
-            className="
-              mt-10
-              flex
-              flex-col
-              items-center
-            "
-            initial={{
-              opacity: 0,
-              y: 10,
-            }}
-            animate={{
-              opacity: exiting ? 0 : 1,
-              y: exiting ? -10 : 0,
-            }}
-            transition={{
-              duration: 0.6,
-              delay: 0.7,
-            }}
-          >
-            <motion.p
-              className="
-                text-[10px]
-                font-medium
-                uppercase
-                tracking-[0.45em]
-                text-slate-300
-                sm:text-xs
-              "
+            {/* NEIRO MASCOT IMAGE CONTAINER WITH HEARTBEAT PULSE */}
+            <motion.div
+              className="relative h-36 w-36 sm:h-44 sm:w-44 md:h-48 md:w-48 group cursor-pointer"
               animate={{
-                opacity: [0.45, 1, 0.45],
+                scale: [1, 1.12, 1.04, 1.18, 1],
               }}
               transition={{
-                duration: 1.8,
+                duration: 1.4,
                 repeat: Infinity,
                 ease: "easeInOut",
+                times: [0, 0.15, 0.3, 0.45, 1],
               }}
             >
-              Initializing
-            </motion.p>
+              {/* Soft radial aura under Neiro */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-sky-500/20 via-cyan-400/30 to-indigo-500/20 blur-xl animate-pulse" />
 
-            <motion.p
-              className="
-                mt-3
-                text-[7px]
-                uppercase
-                tracking-[0.3em]
-                text-slate-600
-                sm:text-[8px]
-              "
-              animate={{
-                opacity: [0.4, 0.8, 0.4],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-              }}
-            >
-              Processing digital environment
-            </motion.p>
+              <Image
+                src="/images/Neiro.png"
+                alt="Neiro Ecosystem Mascot"
+                fill
+                priority
+                sizes="(max-width: 640px) 144px, (max-width: 768px) 176px, 192px"
+                className="h-full w-full object-contain drop-shadow-[0_10px_35px_rgba(56,189,248,0.45)] transition-transform"
+              />
+            </motion.div>
+          </div>
+
+          {/* BRAND TITLE & TAGLINE */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="space-y-2"
+          >
+            <h1 className="font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight text-white">
+              NEIRAH
+            </h1>
+            <p className="font-mono text-xs sm:text-sm text-sky-400/90 tracking-widest uppercase">
+              Technology for Every Layer of Business
+            </p>
           </motion.div>
 
-          {/* =================================================
-              LOADING BAR
-          ================================================= */}
-
-          <div
-            className="
-              mt-6
-              h-px
-              w-[180px]
-              overflow-hidden
-              bg-slate-800
-              sm:w-[240px]
-            "
-          >
-            <motion.div
-              className="
-                h-full
-                w-1/2
-                bg-gradient-to-r
-                from-transparent
-                via-cyan-300
-                to-transparent
-              "
-              animate={{
-                x: [
-                  "-150%",
-                  "300%",
-                ],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          </div>
-
-          {/* =================================================
-              SYSTEM METRICS
-          ================================================= */}
-
-          <div
-            className="
-              mt-5
-              flex
-              items-center
-              gap-3
-              text-[6px]
-              uppercase
-              tracking-[0.22em]
-              text-slate-700
-              sm:gap-4
-              sm:text-[7px]
-            "
-          >
-            <span>CORE</span>
-
-            <span className="text-cyan-500/50">
-              ACTIVE
-            </span>
-
-            <span className="h-3 w-px bg-slate-800" />
-
-            <span>DATA</span>
-
-            <span className="text-cyan-500/50">
-              SYNC
-            </span>
-
-            <span className="h-3 w-px bg-slate-800" />
-
-            <span>ENV</span>
-
-            <span className="text-cyan-500/50">
-              READY
-            </span>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* =====================================================
-          BOTTOM SYSTEM MESSAGE
-      ===================================================== */}
-
-      <motion.div
-        className="
-          absolute
-          bottom-6
-          left-0
-          right-0
-          z-30
-          flex
-          justify-center
-          sm:bottom-8
-        "
-        initial={{
-          opacity: 0,
-          y: 8,
-        }}
-        animate={{
-          opacity: exiting ? 0 : 1,
-          y: 0,
-        }}
-        transition={{
-          delay: 1.2,
-          duration: 0.6,
-        }}
-      >
-        <div className="flex items-center gap-3">
-
+          {/* SMOOTH CONTINUOUS PROGRESS BAR */}
           <motion.div
-            className="
-              h-1
-              w-1
-              rounded-full
-              bg-blue-400
-              shadow-[0_0_8px_rgba(96,165,250,0.8)]
-            "
-            animate={{
-              scale: [1, 1.8, 1],
-              opacity: [0.3, 1, 0.3],
-            }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-            }}
-          />
-
-          <motion.span
-            className="
-              text-[7px]
-              uppercase
-              tracking-[0.3em]
-              text-slate-600
-              sm:text-[8px]
-              sm:tracking-[0.35em]
-            "
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="w-48 sm:w-64 space-y-2 pt-2"
           >
-            Establishing secure runtime environment
-          </motion.span>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800/80 p-0.5 border border-white/10 backdrop-blur-md">
+              <motion.div
+                className="h-full rounded-full bg-gradient-to-r from-sky-500 via-cyan-400 to-indigo-500 shadow-[0_0_12px_rgba(56,189,248,0.8)]"
+                style={{ width: `${progress}%` }}
+                transition={{ ease: "easeOut" }}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between font-mono text-[10px] text-slate-400 tracking-wider">
+              <span>INITIALIZING</span>
+              <span>{progress}%</span>
+            </div>
+          </motion.div>
+
         </div>
-      </motion.div>
-
-      {/* =====================================================
-          CORNER UI — TOP LEFT
-      ===================================================== */}
-
-      <motion.div
-        className="
-          pointer-events-none
-          absolute
-          left-5
-          top-5
-          z-30
-          h-10
-          w-10
-          border-l
-          border-t
-          border-blue-400/10
-        "
-        animate={{
-          opacity: exiting ? 0 : [0.4, 0.8, 0.4],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-        }}
-      />
-
-      {/* =====================================================
-          CORNER UI — TOP RIGHT
-      ===================================================== */}
-
-      <motion.div
-        className="
-          pointer-events-none
-          absolute
-          right-5
-          top-5
-          z-30
-          h-10
-          w-10
-          border-r
-          border-t
-          border-blue-400/10
-        "
-        animate={{
-          opacity: exiting ? 0 : [0.4, 0.8, 0.4],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          delay: 0.5,
-        }}
-      />
-
-      {/* =====================================================
-          CORNER UI — BOTTOM LEFT
-      ===================================================== */}
-
-      <motion.div
-        className="
-          pointer-events-none
-          absolute
-          bottom-5
-          left-5
-          z-30
-          h-10
-          w-10
-          border-b
-          border-l
-          border-blue-400/10
-        "
-        animate={{
-          opacity: exiting ? 0 : [0.4, 0.8, 0.4],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          delay: 1,
-        }}
-      />
-
-      {/* =====================================================
-          CORNER UI — BOTTOM RIGHT
-      ===================================================== */}
-
-      <motion.div
-        className="
-          pointer-events-none
-          absolute
-          bottom-5
-          right-5
-          z-30
-          h-10
-          w-10
-          border-b
-          border-r
-          border-blue-400/10
-        "
-        animate={{
-          opacity: exiting ? 0 : [0.4, 0.8, 0.4],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          delay: 1.5,
-        }}
-      />
-
-      {/* =====================================================
-          CINEMATIC EXIT FLASH
-      ===================================================== */}
-
-      <motion.div
-        className="
-          pointer-events-none
-          absolute
-          left-1/2
-          top-1/2
-          z-50
-          h-[20px]
-          w-[20px]
-          -translate-x-1/2
-          -translate-y-1/2
-          rounded-full
-          bg-cyan-100
-        "
-        initial={{
-          opacity: 0,
-          scale: 0,
-        }}
-        animate={{
-          opacity: exiting
-            ? [0, 0.25, 0]
-            : 0,
-          scale: exiting
-            ? [0, 8, 30]
-            : 0,
-        }}
-        transition={{
-          duration: 1,
-          ease: [0.16, 1, 0.3, 1],
-        }}
-      />
-
-      {/* =====================================================
-          EXIT SCAN LINE
-      ===================================================== */}
-
-      <motion.div
-        className="
-          pointer-events-none
-          absolute
-          left-0
-          right-0
-          top-1/2
-          z-40
-          h-px
-          bg-cyan-300/0
-        "
-        animate={{
-          backgroundColor: exiting
-            ? [
-                "rgba(103,232,249,0)",
-                "rgba(103,232,249,0.5)",
-                "rgba(103,232,249,0)",
-              ]
-            : "rgba(103,232,249,0)",
-          scaleX: exiting
-            ? [0, 1, 1.4]
-            : 0,
-        }}
-        transition={{
-          duration: 0.9,
-          ease: [0.16, 1, 0.3, 1],
-        }}
-      />
+      </div>
     </motion.section>
   );
 }
