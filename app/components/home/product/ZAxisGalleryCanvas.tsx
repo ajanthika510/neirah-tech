@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree, ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { Product } from "../FeaturedProjects";
 
@@ -826,7 +826,7 @@ function ProductDiscovery3D({
         0,
         targetZ,
       ]}
-      onClick={(event) => {
+      onClick={(event: ThreeEvent<MouseEvent>) => {
         event.stopPropagation();
         onClick();
       }}
