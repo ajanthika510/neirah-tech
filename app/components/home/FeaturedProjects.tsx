@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import {
   motion,
+  MotionValue,
   useMotionValueEvent,
   useScroll,
   useSpring,
@@ -269,7 +270,7 @@ function ProductScene({
 }: {
   product: Product;
   index: number;
-  progress: any;
+  progress: MotionValue<number>;
 }) {
   const introOffset = 0.08;
 
@@ -418,7 +419,7 @@ function ProductScene({
         className="
           absolute
           inset-x-3
-          top-1/2
+          top-[44%]
           z-20
           flex
           max-h-[85vh]
@@ -427,29 +428,49 @@ function ProductScene({
           items-center
           justify-center
           overflow-y-auto
-          py-2
+          pb-2
+          pt-2
           text-center
           md:hidden
         "
       >
-        {/* EYEBROW */}
+        {/* TITLE */}
+
+        <h3
+          className="
+            whitespace-nowrap
+            text-xl
+            font-black
+            leading-tight
+            tracking-tight
+            text-slate-950
+            xs:text-2xl
+            sm:text-3xl
+          "
+        >
+          {product.name}
+        </h3>
+
+        {/* EYEBROW (BELOW TITLE) */}
 
         <div
           className="
-            mb-1.5
+            mb-2
+            mt-1.5
             inline-flex
             items-center
             gap-1.5
             rounded-full
             px-3
-            py-1
+            py-0.5
             font-mono
-            text-[10px]
+            text-[11px]
             font-bold
             uppercase
             tracking-wider
             shadow-xs
             backdrop-blur-md
+            sm:text-xs
           "
           style={{
             backgroundColor: `${product.accent}12`,
@@ -473,34 +494,19 @@ function ProductScene({
           <span>{product.eyebrow}</span>
         </div>
 
-        {/* TITLE */}
-
-        <h3
-          className="
-            text-2xl
-            font-black
-            leading-tight
-            tracking-tight
-            text-slate-950
-            xs:text-3xl
-          "
-        >
-          {product.name}
-        </h3>
-
         {/* MOBILE FLOATING IMAGE */}
 
         <motion.div
           className="
             relative
-            my-1.5
+            my-2
             flex
-            h-[110px]
+            h-[120px]
             w-full
-            max-w-[200px]
+            max-w-[220px]
             items-center
             justify-center
-            xs:h-[130px]
+            xs:h-[140px]
           "
           style={{
             y: imageY,
@@ -529,12 +535,12 @@ function ProductScene({
             className="
               relative
               z-10
-              max-h-[105px]
+              max-h-[115px]
               w-auto
               select-none
               object-contain
               drop-shadow-md
-              xs:max-h-[125px]
+              xs:max-h-[135px]
             "
           />
         </motion.div>
@@ -543,21 +549,22 @@ function ProductScene({
 
         <div
           className="
-            my-1.5
-            max-w-xs
+            my-2
+            max-w-sm
             border-y
             border-slate-900/10
-            px-2
-            py-1
+            px-3
+            py-1.5
           "
         >
           <p
             className="
               font-serif
-              text-xs
+              text-sm
               italic
-              leading-snug
+              leading-relaxed
               text-slate-800
+              xs:text-base
             "
           >
             {product.quote}
@@ -568,10 +575,10 @@ function ProductScene({
 
         <div
           className="
-            mb-1
-            mt-1
+            mb-1.5
+            mt-1.5
             font-mono
-            text-[9px]
+            text-xs
             font-bold
             uppercase
             tracking-widest
@@ -586,10 +593,10 @@ function ProductScene({
         <div
           className="
             flex
-            max-w-xs
+            max-w-sm
             flex-wrap
             justify-center
-            gap-1
+            gap-1.5
           "
         >
           {product.capabilities.map((capability) => (
@@ -600,13 +607,14 @@ function ProductScene({
                 border
                 border-slate-900/10
                 bg-white/95
-                px-2.5
-                py-0.5
-                text-[10px]
+                px-3
+                py-1
+                text-xs
                 font-semibold
                 text-slate-800
                 shadow-2xs
                 backdrop-blur-md
+                sm:text-sm
               "
             >
               {capability}
@@ -618,26 +626,27 @@ function ProductScene({
 
         <div
           className="
-            mt-1.5
+            mt-2
             flex
             items-center
             justify-center
-            gap-1
+            gap-1.5
             font-mono
-            text-[10px]
+            text-xs
             text-slate-500
+            sm:text-sm
           "
         >
           <span className="font-bold text-slate-800">Built for:</span>
 
-          <span className="max-w-[220px] truncate font-medium text-slate-600">
+          <span className="max-w-[280px] truncate font-medium text-slate-600 sm:max-w-none">
             {product.builtFor}
           </span>
         </div>
 
         {/* CTA */}
 
-        <div className="mt-2.5">
+        <div className="mt-3">
           <a
             href="/projects"
             className="
@@ -645,12 +654,12 @@ function ProductScene({
               group
               inline-flex
               items-center
-              gap-2
+              gap-2.5
               rounded-full
               bg-slate-950
-              px-4
-              py-2
-              text-[10px]
+              px-5
+              py-2.5
+              text-xs
               font-bold
               uppercase
               tracking-widest
@@ -658,11 +667,12 @@ function ProductScene({
               shadow-md
               transition-all
               hover:bg-slate-800
+              sm:text-sm
             "
           >
             <span>Explore System</span>
 
-            <ArrowUpRight size={12} strokeWidth={2.5} />
+            <ArrowUpRight size={14} strokeWidth={2.5} />
           </a>
         </div>
       </div>
@@ -675,7 +685,7 @@ function ProductScene({
         className="
           absolute
           left-6
-          top-1/2
+          top-[56%]
           z-20
           hidden
           -translate-y-1/2
@@ -716,7 +726,7 @@ function ProductScene({
       <div
         className={`
           absolute
-          top-1/2
+          top-[56%]
           z-20
           hidden
           w-[min(460px,38vw)]
@@ -793,7 +803,8 @@ function ProductScene({
 
         <h3
           className="
-            text-[clamp(3.2rem,6.2vw,6.5rem)]
+            whitespace-nowrap
+            text-[clamp(2.5rem,5.2vw,6rem)]
             font-black
             leading-[0.85]
             tracking-[-0.065em]
@@ -1025,7 +1036,7 @@ function ProductScene({
       <motion.div
         className={`
           absolute
-          top-1/2
+          top-[56%]
           z-10
           hidden
           h-[360px]
@@ -1112,7 +1123,7 @@ function ProductScene({
       <motion.div
         className={`
           absolute
-          top-1/2
+          top-[56%]
           z-0
           hidden
           h-px
@@ -1150,7 +1161,7 @@ function ProductScene({
         className="
           absolute
           left-1/2
-          top-1/2
+          top-[56%]
           z-30
           hidden
           h-4
@@ -1546,30 +1557,10 @@ export default function ProductSignals() {
                 />
               </span>
 
-              <p
-                className="
-                  text-[10px]
-                  font-bold
-                  uppercase
-                  tracking-[0.3em]
-                  text-slate-500
-                  sm:text-xs
-                "
-              >
-                Neirah / Ecosystem
-              </p>
+              
             </div>
 
-            <p
-              className="
-                mt-1.5
-                text-xs
-                font-medium
-                text-slate-500
-              "
-            >
-              10 Systems. One Connected Vision.
-            </p>
+            
           </div>
 
           {/* DESKTOP SCROLL INDICATOR */}

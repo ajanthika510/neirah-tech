@@ -75,6 +75,11 @@ export async function createBooking(
     return { success: false, error: "Please provide your name, email, and phone number." };
   }
 
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(input.email.trim())) {
+    return { success: false, error: "Please enter a valid email address with a domain extension (e.g. alex@company.com)." };
+  }
+
   if (!input.bookingDate || !input.bookingTime) {
     return { success: false, error: "Please choose a valid date and time slot." };
   }

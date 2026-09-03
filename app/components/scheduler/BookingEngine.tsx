@@ -158,10 +158,17 @@ export default function BookingEngine({
       errs.name = "Name must be at least 2 characters";
     }
 
-    if (!formData.email.trim()) {
+    const emailValue = formData.email.trim();
+    if (!emailValue) {
       errs.email = "Work email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      errs.email = "Please enter a valid email address";
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailValue)) {
+      if (!emailValue.includes("@")) {
+        errs.email = "Email must include '@' symbol";
+      } else if (!emailValue.split("@")[1]?.includes(".")) {
+        errs.email = "Email domain must include '.' (e.g. .com, .org, .io)";
+      } else {
+        errs.email = "Please enter a valid email (e.g. alex@company.com)";
+      }
     }
 
     const cleanPhone = formData.phone.replace(/[^\d+]/g, "");

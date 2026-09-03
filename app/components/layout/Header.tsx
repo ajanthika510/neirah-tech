@@ -124,33 +124,33 @@ export default function Navbar() {
           className={`
             mx-auto
             flex
-            h-[64px]
+            h-[52px]
+            w-full
             max-w-[1450px]
             items-center
-            rounded-full
-            border
-            border-white/80
-            bg-white/95
-            px-4
-            shadow-[0_10px_35px_rgba(37,99,235,0.07)]
-            backdrop-blur-xl
+            justify-between
+            px-1
             transition-all
             duration-300
 
-            sm:h-[68px]
-            sm:px-5
-
-            md:px-6
+            sm:h-[58px]
+            sm:px-2
 
             lg:h-[82px]
+            lg:rounded-full
+            lg:border
+            lg:border-white/80
+            lg:bg-white/95
             lg:px-5
+            lg:shadow-[0_10px_35px_rgba(37,99,235,0.07)]
+            lg:backdrop-blur-xl
 
             xl:h-[86px]
             xl:px-6
 
             ${
               scrolled
-                ? "shadow-[0_12px_40px_rgba(37,99,235,0.11)]"
+                ? "lg:shadow-[0_12px_40px_rgba(37,99,235,0.11)]"
                 : ""
             }
           `}
@@ -356,10 +356,16 @@ export default function Navbar() {
                 items-center
                 justify-center
                 rounded-full
-                bg-[#EEF6FF]
+                border
+                border-white/80
+                bg-white/90
                 text-[#26364D]
-                transition-colors
-                hover:bg-[#E4F0FF]
+                shadow-md
+                backdrop-blur-md
+                transition-all
+                hover:bg-white
+                hover:scale-105
+                active:scale-95
 
                 sm:h-11
                 sm:w-11

@@ -9,10 +9,7 @@ import {
   MapPin,
   Phone,
   Sparkles,
-  Globe,
 } from "lucide-react";
-
-import RevealText from "../ui/RevealText";
 
 function FacebookIcon({ size = 15 }: { size?: number }) {
   return (
@@ -286,9 +283,7 @@ export default function Footer() {
               Terms of Service
             </Link>
             <span className="text-slate-700">•</span>
-            <span className="flex items-center gap-1 text-slate-500">
-              <Globe size={13} className="text-sky-500" /> English (US)
-            </span>
+            
           </div>
         </div>
       </div>

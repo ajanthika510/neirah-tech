@@ -31,7 +31,6 @@ import {
   Move,
   RotateCcw,
   ExternalLink,
-  Maximize2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -433,7 +432,7 @@ function NeirahTechLabVisualStudio({
               />
             </div>
             <span style={{ color: currentAccent }} className="font-mono font-black transition-colors duration-300">
-              neirahtech.lab
+              NEIRAH LAB
             </span>
             <span className="h-2 w-2 rounded-full animate-pulse transition-colors duration-300" style={{ background: currentAccent }} />
           </div>

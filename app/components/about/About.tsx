@@ -448,7 +448,7 @@ function Intro() {
         >
           <span className="h-px w-8 bg-sky-400" />
 
-          Let's Start
+          Let&apos;s Start
 
           <span className="h-px w-8 bg-sky-400" />
         </div>
@@ -1404,10 +1404,10 @@ function Values() {
     >
       <AmbientBackground variant="soft" />
 
-      <div className="relative z-10 mx-auto max-w-6xl">
+      <div className="relative z-10 mx-auto max-w-6xl text-center">
         {/* HEADER */}
 
-        <div className="mb-3 sm:mb-5">
+        <div className="mb-6 flex flex-col items-center justify-center text-center sm:mb-8">
           <span
             className="
               text-[10px]
@@ -1423,8 +1423,10 @@ function Values() {
 
           <h2
             className="
+              mx-auto
               mt-2
               max-w-4xl
+              text-center
               text-3xl
               font-black
               leading-[0.96]
@@ -1455,7 +1457,7 @@ function Values() {
 
         {/* VALUES */}
 
-        <div>
+        <div className="mx-auto max-w-3xl border-b border-sky-100">
           {values.map((value, index) => (
             <motion.div
               key={value}
@@ -1479,43 +1481,45 @@ function Values() {
                 group
                 flex
                 items-center
-                justify-between
+                justify-center
+                gap-3
                 border-t
                 border-sky-100
-                py-2.5
-                sm:py-4
+                py-3.5
+                text-center
+                sm:gap-5
+                sm:py-5
               "
             >
-              <div className="flex min-w-0 items-center gap-3 sm:gap-5">
-                <span
-                  className="
-                    shrink-0
-                    text-xs
-                    font-bold
-                    text-sky-500
-                  "
-                >
-                  0{index + 1}
-                </span>
+              <span
+                className="
+                  shrink-0
+                  font-mono
+                  text-xs
+                  font-bold
+                  text-sky-500
+                  sm:text-sm
+                "
+              >
+                0{index + 1}
+              </span>
 
-                <h3
-                  className="
-                    text-base
-                    font-black
-                    tracking-[-0.035em]
-                    text-slate-950
-                    sm:text-2xl
-                    md:text-3xl
-                  "
-                >
-                  {value}
-                </h3>
-              </div>
+              <h3
+                className="
+                  text-base
+                  font-black
+                  tracking-[-0.035em]
+                  text-slate-950
+                  sm:text-2xl
+                  md:text-3xl
+                "
+              >
+                {value}
+              </h3>
 
               <ArrowRight
                 size={18}
                 className="
-                  ml-3
                   shrink-0
                   text-sky-300
                   transition-transform
