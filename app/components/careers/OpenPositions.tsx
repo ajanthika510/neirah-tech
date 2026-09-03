@@ -75,7 +75,7 @@ export default function OpenPositions() {
 
     <section
       id="open-positions"
-      className="relative scroll-mt-24 bg-[#F7FAFF] px-6 py-24 sm:px-8 lg:px-10"
+      className="relative scroll-mt-24 bg-[#F7FAFF] px-6 py-12 sm:py-16 sm:px-8 lg:px-10"
     >
       <div className="mx-auto max-w-6xl">
 

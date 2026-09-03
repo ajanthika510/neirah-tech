@@ -260,9 +260,9 @@ export default function CaseStudiesShowcase() {
         overflow-hidden
         bg-[#F8FBFF]
         text-[#0F172A]
-        py-20
-        sm:py-24
-        lg:py-28
+        py-12
+        sm:py-16
+        lg:py-20
       "
     >
       {/* =================================================
@@ -549,7 +549,7 @@ export default function CaseStudiesShowcase() {
                 </motion.div>
 
                 {/* =================================================
-                    IMAGE COLOR TREATMENT
+                    IMAGE COLOR TREATMENT (DARK OVERLAY)
                 ================================================= */}
 
                 <div
@@ -560,14 +560,14 @@ export default function CaseStudiesShowcase() {
                     duration-700
                     ${
                       isActive
-                        ? "bg-slate-950/25"
-                        : "bg-slate-950/65"
+                        ? "bg-slate-950/50"
+                        : "bg-slate-950/70"
                     }
                   `}
                 />
 
                 {/* =================================================
-                    ACTIVE BOTTOM GRADIENT
+                    ACTIVE BOTTOM GRADIENT FOR HIGH CONTRAST TEXT
                 ================================================= */}
 
                 <div
@@ -576,15 +576,15 @@ export default function CaseStudiesShowcase() {
                     absolute
                     inset-0
                     bg-gradient-to-t
-                    from-slate-950/85
-                    via-slate-950/20
-                    to-transparent
+                    from-slate-950/95
+                    via-slate-950/70
+                    to-slate-950/30
                     transition-opacity
                     duration-500
                     ${
                       isActive
                         ? "opacity-100"
-                        : "opacity-70"
+                        : "opacity-85"
                     }
                   `}
                 />
@@ -852,8 +852,9 @@ export default function CaseStudiesShowcase() {
                           mt-3
                           max-w-2xl
                           text-xs
+                          font-medium
                           leading-relaxed
-                          text-white/80
+                          text-white/95
                           sm:text-sm
                         "
                       >
@@ -883,7 +884,7 @@ export default function CaseStudiesShowcase() {
                           max-w-2xl
                           text-xs
                           leading-relaxed
-                          text-white/65
+                          text-white/85
                           sm:block
                           sm:text-sm
                         "

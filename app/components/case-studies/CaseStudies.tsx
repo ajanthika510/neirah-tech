@@ -642,36 +642,59 @@ export default function CaseStudiesPage({ initialCaseStudies }: { initialCaseStu
               {/* H1 */}
 
               <h1
-                className="
-                  max-w-5xl
-                  text-[clamp(3rem,7vw,6.8rem)]
-                  font-semibold
-                  leading-[0.87]
-                  tracking-[-0.065em]
-                  text-[#0F172A]
-                "
-              >
-                <RevealText text="Digital" mode="viewport" stagger={0.09} duration={0.65} blurAmount={8} />
+  className="
+    max-w-5xl
+    mx-auto
+    text-[clamp(3rem,7vw,6.8rem)]
+    font-semibold
+    leading-[0.85]
+    tracking-[-0.065em]
+    text-[#0F172A]
+  "
+>
+  <span className="block">
+    <RevealText
+      text="Digital"
+      mode="viewport"
+      stagger={0.09}
+      duration={0.65}
+      blurAmount={8}
+    />
+  </span>
 
-                <br />
+  <span
+    className="
+      block
+      -mt-[0.08em]
+      bg-gradient-to-r
+      from-[#22D3EE]
+      via-[#0EA5E9]
+      to-[#4F46E5]
+      bg-clip-text
+      text-transparent
+    "
+  >
+    <RevealText
+      text="experiences"
+      mode="viewport"
+      delay={0.2}
+      stagger={0.09}
+      duration={0.65}
+      blurAmount={8}
+    />
+  </span>
 
-                <span
-                  className="
-                    bg-gradient-to-r
-                    from-[#22D3EE]
-                    via-[#0EA5E9]
-                    to-[#4F46E5]
-                    bg-clip-text
-                    text-transparent
-                  "
-                >
-                  <RevealText text="experiences" mode="viewport" delay={0.2} stagger={0.09} duration={0.65} blurAmount={8} />
-                </span>
-
-                <br />
-
-                <RevealText text="that move." mode="viewport" delay={0.4} stagger={0.09} duration={0.65} blurAmount={8} />
-              </h1>
+  <span className="block -mt-[0.08em]">
+    <RevealText
+      text="that move."
+      mode="viewport"
+      delay={0.4}
+      stagger={0.09}
+      duration={0.65}
+      blurAmount={8}
+    />
+  </span>
+</h1>
             </div>
 
             {/* RIGHT */}

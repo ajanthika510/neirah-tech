@@ -1,84 +1,28 @@
 "use client";
 
-import { useState, useRef } from "react";
-import Image from "next/image";
+import { useRef, useState } from "react";
 import {
   motion,
-  AnimatePresence,
-  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
   useSpring,
   useTransform,
 } from "framer-motion";
-import {
-  ArrowRight,
-  Compass,
-  CheckCircle2,
-  X,
-  ShieldCheck,
-  type LucideIcon,
-  Palette,
-  BrainCircuit,
-  Plane,
-  Building2,
-  Users,
-  Truck,
-  Utensils,
-  Car,
-  Megaphone,
-  Sparkles,
-} from "lucide-react";
-
-import SchedulerModal from "./SchedulerModal";
+import { ArrowDown, ArrowUpRight, Sparkles } from "lucide-react";
 
 /* =========================================================
-   TYPES & DATA MODEL
+   PRODUCT DATA
 ========================================================= */
 
-export type ProductLayer =
-  | "ALL"
-  | "DESIGN"
-  | "INTELLIGENCE"
-  | "BUSINESS"
-  | "DELIVERY & MOBILITY"
-  | "PHYSICAL WORLD";
-
-export interface EcosystemProduct {
-  phase: number;
-  number: string;
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  capabilities: string[];
-  builtFor?: string;
-  icon: LucideIcon;
-  accentColor: string;
-  accent: string;
-  gradient: [string, string];
-  layer: ProductLayer;
-  image: string;
-  stats?: { label: string; value: string };
-  rating?: string;
-  status?: string;
-}
-
-export type MiniatureProduct = EcosystemProduct;
-export type Product = EcosystemProduct;
-export type EditorialCaseStudy = EcosystemProduct;
-
-/* =========================================================
-   FULL 9 NEIRAH PRODUCT ECOSYSTEM DATASET (MERGED IOT & DRONE)
-========================================================= */
-
-export const NEIRAH_ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
+const products = [
   {
-    phase: 1,
-    number: "01",
     id: "lantriva",
+    number: "01",
+    eyebrow: "01. LANTRIVA",
     name: "Lantriva",
     category: "UI/UX & Digital Experience",
-    description:
-      "Designing memorable digital products, interfaces and experiences that elevate user engagement and brand authority.",
+    quote:
+      "“Designing memorable digital products, interfaces and experiences that elevate user engagement and brand authority.”",
     capabilities: [
       "UI/UX",
       "Product Design",
@@ -87,775 +31,2143 @@ export const NEIRAH_ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
       "Design Systems",
     ],
     builtFor: "Global Enterprises & Modern Digital Products",
-    icon: Palette,
-    accentColor: "#F59E0B",
-    accent: "#F59E0B",
-    gradient: ["#D97706", "#F59E0B"],
-    layer: "DESIGN",
     image: "/images/lantravia.png",
-    stats: { label: "Design Resonance", value: "99.8%" },
-    rating: "4.9 ★",
-    status: "Live Production",
+
+    // INDIGO
+    accent: "#4F46E5",
+
+    position: "left" as const,
   },
+
   {
-    phase: 2,
-    number: "02",
     id: "neirah-lab",
+    number: "02",
+    eyebrow: "02. NEIRAH LAB",
     name: "Neirah Lab",
     category: "AI, R&D & Automation",
-    description:
-      "Researching and building intelligent systems that automate complex work across industries with neural agent precision.",
+    quote:
+      "“Pioneering next-generation AI architectures, autonomous neural pipelines, and intelligent automation systems.”",
     capabilities: [
-      "AI",
-      "Agents",
-      "Automation",
+      "Neural AI",
+      "LLM Pipelines",
+      "Autonomous Agents",
       "R&D",
-      "Intelligent Systems",
+      "Machine Learning",
     ],
-    builtFor: "Autonomous Swarm Engineering & R&D Teams",
-    icon: BrainCircuit,
-    accentColor: "#8B5CF6",
-    accent: "#8B5CF6",
-    gradient: ["#7C3AED", "#A855F7"],
-    layer: "INTELLIGENCE",
+    builtFor: "AI Startups, Enterprise R&D & Tech Innovators",
     image: "/images/neirah_lab.png",
-    stats: { label: "Task Processing", value: "10M+/day" },
-    rating: "5.0 ★",
-    status: "Active R&D Swarm",
+
+    // BLUE INDIGO
+    accent: "#6366F1",
+
+    position: "right" as const,
   },
+
   {
-    phase: 3,
+    id: "neirah-iot",
     number: "03",
-    id: "neirah-iot-drone",
-    name: "Neirah IoT & Drone",
-    category: "IoT, Embedded, Drones & Smart Agriculture",
-    description:
-      "Connecting software with the physical world through intelligent devices, autonomous aerial drones, environmental telemetry, and smart sensor mesh systems.",
+    eyebrow: "03. NEIRAH IOT",
+    name: "Neirah IoT",
+    category: "IoT, Embedded & Smart Systems",
+    quote:
+      "“Bridging physical environments with real-time digital intelligence, sensor meshes, and edge telemetry.”",
     capabilities: [
-      "IoT",
-      "Embedded",
-      "Drones",
-      "Autonomous Systems",
-      "Agriculture",
-      "Organic Farming",
-      "Sensors",
-      "Automation",
+      "Edge Computing",
+      "Sensor Mesh",
+      "Telemetry",
+      "Smart Systems",
+      "Hardware Integration",
     ],
-    builtFor: "GIS Operators, Smart Cities & Precision Agriculture Networks",
-    icon: Plane,
-    accentColor: "#06B6D4",
-    accent: "#06B6D4",
-    gradient: ["#0891B2", "#06B6D4"],
-    layer: "PHYSICAL WORLD",
+    builtFor: "Smart Infrastructure, Industrial IoT & AgTech",
     image: "/images/drone and iot.png",
-    stats: { label: "Flight Area Coverage", value: "500 ha/hr" },
-    rating: "4.9 ★",
-    status: "Flight Operational",
+
+    // CYAN / BLUE
+    accent: "#0891B2",
+
+    position: "left" as const,
   },
+
   {
-    phase: 4,
+    id: "neirah-drone",
     number: "04",
+    eyebrow: "04. NEIRAH DRONE",
+    name: "Neirah Drone",
+    category: "Drone Engineering & Aerial Intelligence",
+    quote:
+      "“Engineering autonomous aerial systems and geospatial LiDAR intelligence for complex real-world operations.”",
+    capabilities: [
+      "Autonomous Flight",
+      "Aerial Mapping",
+      "Thermal LiDAR",
+      "Geospatial Data",
+      "Robotics",
+    ],
+    builtFor: "Surveying, Energy Grid, Defense & Precision Mapping",
+    image: "/images/drone and iot.png",
+
+    // ELECTRIC BLUE
+    accent: "#2563EB",
+
+    position: "right" as const,
+  },
+
+  {
     id: "mugilix",
+    number: "05",
+    eyebrow: "05. MUGILIX",
     name: "Mugilix",
     category: "Business Operating System",
-    description:
-      "One connected platform for managing the core operations of modern businesses—ERP, CRM, tax payroll, and real-time workflows.",
+    quote:
+      "“Unifying enterprise operations, resource allocation, and automated workflows into one intelligent command center.”",
     capabilities: [
-      "CRM",
-      "ERP",
-      "HRM",
-      "Payroll",
-      "Operations",
+      "Enterprise OS",
+      "ERP Architecture",
       "Workflow Automation",
+      "Data Vault",
+      "Analytics",
     ],
-    builtFor: "Global Corporate Operations & Financial Directors",
-    icon: Building2,
-    accentColor: "#6366F1",
-    accent: "#6366F1",
-    gradient: ["#4F46E5", "#6366F1"],
-    layer: "BUSINESS",
+    builtFor: "High-Growth Corporations & Scaled Organizations",
     image: "/images/mugilix.png",
-    stats: { label: "Active Users", value: "2.4M+" },
-    rating: "4.9 ★",
-    status: "Global Scale",
+
+    // VIOLET
+    accent: "#7C3AED",
+
+    position: "left" as const,
   },
+
   {
-    phase: 5,
-    number: "05",
     id: "hrvio",
+    number: "06",
+    eyebrow: "06. HRVIO",
     name: "HRVio",
     category: "Human Intelligence",
-    description:
-      "Transforming workforce data into intelligent insights for better people decisions, performance telemetry, and business growth.",
+    quote:
+      "“Empowering organizations with deep human intelligence, talent analytics, and pulse workforce insights.”",
     capabilities: [
-      "HR Intelligence",
-      "Analytics",
-      "Performance",
-      "Workforce Planning",
-      "Automation",
+      "People Analytics",
+      "Talent Intelligence",
+      "Culture OS",
+      "Performance Metrics",
+      "HR Tech",
     ],
-    builtFor: "Chief People Officers & Workforce Leaders",
-    icon: Users,
-    accentColor: "#EC4899",
-    accent: "#EC4899",
-    gradient: ["#DB2777", "#EC4899"],
-    layer: "INTELLIGENCE",
+    builtFor: "People-First Companies & Global HR Operations",
     image: "/images/hr.png",
-    stats: { label: "Workforce Insights", value: "99.4%" },
-    rating: "4.8 ★",
-    status: "Live Platform",
+
+    // PURPLE
+    accent: "#9333EA",
+
+    position: "right" as const,
   },
+
   {
-    phase: 6,
-    number: "06",
     id: "pothify",
+    number: "07",
+    eyebrow: "07. POTHIFY",
     name: "Pothify",
     category: "Delivery Management SaaS",
-    description:
-      "The technology infrastructure behind modern delivery businesses. Pothify helps businesses manage their complete delivery operation from one intelligent platform.",
+    quote:
+      "“Streamlining complex delivery networks, live driver dispatch, and automated route optimization.”",
     capabilities: [
-      "Order Management",
-      "Delivery Management",
-      "Driver Management",
-      "Dispatch",
-      "Tracking",
-      "Business Analytics",
-      "Automation",
+      "Live Dispatch",
+      "Route Optimization",
+      "Fleet Analytics",
+      "Last-Mile SaaS",
+      "Geo Tracking",
     ],
-    builtFor:
-      "Restaurants, retailers, pharmacies, supermarkets, logistics companies and delivery businesses.",
-    icon: Truck,
-    accentColor: "#10B981",
-    accent: "#10B981",
-    gradient: ["#059669", "#10B981"],
-    layer: "DELIVERY & MOBILITY",
+    builtFor: "Logistics Providers, Couriers & Enterprise Fleets",
     image: "/images/veera.png",
-    stats: { label: "Dispatch Latency", value: "< 2.1 sec" },
-    rating: "5.0 ★",
-    status: "Enterprise Dispatch",
+
+    // DEEP TEAL
+    accent: "#0F766E",
+
+    position: "left" as const,
   },
+
   {
-    phase: 7,
-    number: "07",
-    id: "tricobites",
-    name: "Tricobites",
-    category: "Food Delivery Ecosystem",
-    description:
-      "A consumer-focused food delivery platform connecting customers, restaurants and delivery partners through an ultra-fast digital experience.",
-    capabilities: [
-      "Food Ordering",
-      "Restaurants",
-      "Delivery",
-      "Customers",
-      "Partners",
-    ],
-    builtFor: "Consumer Food Marketplaces & Restaurant Networks",
-    icon: Utensils,
-    accentColor: "#F97316",
-    accent: "#F97316",
-    gradient: ["#EA580C", "#F97316"],
-    layer: "DELIVERY & MOBILITY",
-    image: "/images/trincobites.png",
-    stats: { label: "Active Orders", value: "50k+/day" },
-    rating: "4.9 ★",
-    status: "Live Marketplace",
-  },
-  {
-    phase: 8,
+    id: "trincobites",
     number: "08",
+    eyebrow: "08. TRINCOBITES",
+    name: "Trincobites",
+    category: "Food Delivery Ecosystem",
+    quote:
+      "“Connecting kitchens, customers, and delivery fleets into a unified high-speed culinary ecosystem.”",
+    capabilities: [
+      "Kitchen OS",
+      "Multi-Tenant Ordering",
+      "Driver Fleet",
+      "POS Sync",
+      "Food Tech",
+    ],
+    builtFor: "Restaurant Chains, Dark Kitchens & Food Delivery Platforms",
+    image: "/images/trincobites.png",
+
+    // SKY BLUE
+    accent: "#0284C7",
+
+    position: "right" as const,
+  },
+
+  {
     id: "rideya",
+    number: "09",
+    eyebrow: "09. RIDEYA",
     name: "Rideya",
     category: "Mobility Ecosystem",
-    description:
-      "Connecting passengers, drivers and transportation businesses through intelligent mobility technology, fleet dispatch, and instant payments.",
+    quote:
+      "“Architecting next-generation mobility platforms with dynamic dispatch and intelligent transit routing.”",
     capabilities: [
-      "Ride Booking",
-      "Drivers",
-      "Fleet",
-      "Tracking",
-      "Payments",
-      "Analytics",
+      "Fleet Engine",
+      "Dynamic Dispatch",
+      "Smart Transit",
+      "Rider App",
+      "Fare Optimization",
     ],
-    builtFor: "Transit Operators & Urban Fleet Networks",
-    icon: Car,
-    accentColor: "#0284C7",
-    accent: "#0284C7",
-    gradient: ["#0369A1", "#0284C7"],
-    layer: "DELIVERY & MOBILITY",
-    image: "/images/ridiya.png",
-    stats: { label: "Trip Telemetry", value: "99.9%" },
-    rating: "4.9 ★",
-    status: "Operational",
+    builtFor: "Urban Transit Networks, Taxi Fleets & Mobility Platforms",
+    image: "/images/veera.png",
+
+    // INDIGO
+    accent: "#4F46E5",
+
+    position: "left" as const,
   },
+
   {
-    phase: 9,
-    number: "09",
-    id: "brandos",
+    id: "neirah-brandos",
+    number: "10",
+    eyebrow: "10. NEIRAH BRANDOS",
     name: "Neirah BrandOS",
     category: "Brand & Growth Infrastructure",
-    description:
-      "Helping businesses build their identity, communicate with customers and automate their digital presence through integrated messaging and growth engines.",
+    quote:
+      "“Building scalable brand infrastructure, design token vaults, and growth engines for ambitious companies.”",
     capabilities: [
-      "Branding",
-      "Storytelling",
-      "Social Media",
-      "WhatsApp",
-      "SMS",
-      "Content",
-      "Marketing Automation",
+      "Identity Engine",
+      "Design Tokens",
+      "Asset Infrastructure",
+      "Brand Vault",
+      "Growth Systems",
     ],
-    builtFor: "Growth Marketers & Digital Brand Operations",
-    icon: Megaphone,
-    accentColor: "#84CC16",
-    accent: "#84CC16",
-    gradient: ["#65A30D", "#84CC16"],
-    layer: "BUSINESS",
+    builtFor: "Scaling Brands, Agencies & Enterprise Design Teams",
     image: "/images/brandos.png",
-    stats: { label: "Reach Velocity", value: "+450%" },
-    rating: "4.9 ★",
-    status: "Active Infrastructure",
+
+    // VIOLET
+    accent: "#7C3AED",
+
+    position: "right" as const,
   },
 ];
 
-// Compatibility exports
-export const EDITORIAL_PROJECTS: EcosystemProduct[] = NEIRAH_ECOSYSTEM_PRODUCTS;
-export const PRODUCTS: MiniatureProduct[] = NEIRAH_ECOSYSTEM_PRODUCTS;
-export const products: Product[] = PRODUCTS;
+export type Product = (typeof products)[number];
 
 /* =========================================================
-   MAIN FEATURED PROJECTS COMPONENT — VERTICAL ANIMATED RUNWAY
+   PRODUCT SCENE
 ========================================================= */
 
-export default function FeaturedProjects() {
-  const [selectedProduct, setSelectedProduct] = useState<EcosystemProduct | null>(null);
-  const [schedulerOpen, setSchedulerOpen] = useState(false);
+function ProductScene({
+  product,
+  index,
+  progress,
+}: {
+  product: Product;
+  index: number;
+  progress: any;
+}) {
+  const introOffset = 0.08;
+
+  const totalProductSpan = 0.83;
+
+  const slotSize = totalProductSpan / products.length;
+
+  const start = introOffset + index * slotSize;
+
+  const end = introOffset + (index + 1) * slotSize;
+
+  const enterStart =
+    index === 0 ? start : start - 0.015;
+
+  const enterEnd = start + 0.025;
+
+  const exitStart = end - 0.025;
+
+  const exitEnd =
+    index === products.length - 1
+      ? end
+      : end + 0.015;
+
+  /* =====================================================
+     SCENE OPACITY
+  ===================================================== */
+
+  const opacity = useTransform(
+    progress,
+    [
+      enterStart,
+      enterEnd,
+      exitStart,
+      exitEnd,
+    ],
+    [0, 1, 1, 0]
+  );
+
+  /* =====================================================
+     SCENE MOVEMENT
+  ===================================================== */
+
+  const y = useTransform(
+    progress,
+    [
+      enterStart,
+      enterEnd,
+      exitStart,
+      exitEnd,
+    ],
+    [70, 0, 0, -70]
+  );
+
+  /* =====================================================
+     SCENE SCALE
+  ===================================================== */
+
+  const scale = useTransform(
+    progress,
+    [
+      enterStart,
+      enterEnd,
+      exitStart,
+      exitEnd,
+    ],
+    [0.9, 1, 1, 0.94]
+  );
+
+  /* =====================================================
+     IMAGE MOVEMENT
+  ===================================================== */
+
+  const imageY = useTransform(
+    progress,
+    [
+      enterStart,
+      enterEnd,
+      exitStart,
+      exitEnd,
+    ],
+    [60, 0, 0, -30]
+  );
+
+  /* =====================================================
+     IMAGE ROTATION
+  ===================================================== */
+
+  const imageRotate = useTransform(
+    progress,
+    [
+      enterStart,
+      enterEnd,
+      exitStart,
+      exitEnd,
+    ],
+    [
+      product.position === "left"
+        ? -6
+        : 6,
+
+      product.position === "left"
+        ? -1.5
+        : 1.5,
+
+      product.position === "left"
+        ? 1.5
+        : -1.5,
+
+      product.position === "left"
+        ? 5
+        : -5,
+    ]
+  );
+
+  /* =====================================================
+     SIGNAL LINE
+  ===================================================== */
+
+  const lineScale = useTransform(
+    progress,
+    [enterStart, enterEnd],
+    [0, 1]
+  );
+
+  const isLeft =
+    product.position === "left";
+
+  return (
+    <motion.div
+      className="
+        pointer-events-none
+        absolute
+        inset-0
+      "
+      style={{
+        opacity,
+        y,
+        scale,
+      }}
+    >
+      {/* =================================================
+          MOBILE PRODUCT CARD (< md)
+      ================================================= */}
+
+      <div
+        className="
+          absolute
+          inset-x-3
+          top-1/2
+          z-20
+          flex
+          max-h-[85vh]
+          -translate-y-1/2
+          flex-col
+          items-center
+          justify-center
+          overflow-y-auto
+          py-2
+          text-center
+          md:hidden
+        "
+      >
+        {/* EYEBROW */}
+
+        <div
+          className="
+            mb-1.5
+            inline-flex
+            items-center
+            gap-1.5
+            rounded-full
+            px-3
+            py-1
+            font-mono
+            text-[10px]
+            font-bold
+            uppercase
+            tracking-wider
+            shadow-xs
+            backdrop-blur-md
+          "
+          style={{
+            backgroundColor: `${product.accent}12`,
+
+            color: product.accent,
+
+            border: `1px solid ${product.accent}30`,
+          }}
+        >
+          <span
+            className="
+              h-1.5
+              w-1.5
+              rounded-full
+            "
+            style={{
+              backgroundColor: product.accent,
+            }}
+          />
+
+          <span>{product.eyebrow}</span>
+        </div>
+
+        {/* TITLE */}
+
+        <h3
+          className="
+            text-2xl
+            font-black
+            leading-tight
+            tracking-tight
+            text-slate-950
+            xs:text-3xl
+          "
+        >
+          {product.name}
+        </h3>
+
+        {/* MOBILE FLOATING IMAGE */}
+
+        <motion.div
+          className="
+            relative
+            my-1.5
+            flex
+            h-[110px]
+            w-full
+            max-w-[200px]
+            items-center
+            justify-center
+            xs:h-[130px]
+          "
+          style={{
+            y: imageY,
+
+            rotate: imageRotate,
+          }}
+        >
+          <div
+            className="
+              absolute
+              h-24
+              w-24
+              rounded-full
+              opacity-[0.18]
+              blur-2xl
+            "
+            style={{
+              backgroundColor: product.accent,
+            }}
+          />
+
+          <img
+            src={product.image}
+            alt={product.name}
+            draggable={false}
+            className="
+              relative
+              z-10
+              max-h-[105px]
+              w-auto
+              select-none
+              object-contain
+              drop-shadow-md
+              xs:max-h-[125px]
+            "
+          />
+        </motion.div>
+
+        {/* QUOTE */}
+
+        <div
+          className="
+            my-1.5
+            max-w-xs
+            border-y
+            border-slate-900/10
+            px-2
+            py-1
+          "
+        >
+          <p
+            className="
+              font-serif
+              text-xs
+              italic
+              leading-snug
+              text-slate-800
+            "
+          >
+            {product.quote}
+          </p>
+        </div>
+
+        {/* CAPABILITIES LABEL */}
+
+        <div
+          className="
+            mb-1
+            mt-1
+            font-mono
+            text-[9px]
+            font-bold
+            uppercase
+            tracking-widest
+            text-slate-400
+          "
+        >
+          CAPABILITIES & STACK
+        </div>
+
+        {/* CAPABILITIES */}
+
+        <div
+          className="
+            flex
+            max-w-xs
+            flex-wrap
+            justify-center
+            gap-1
+          "
+        >
+          {product.capabilities.map((capability) => (
+            <span
+              key={capability}
+              className="
+                rounded-full
+                border
+                border-slate-900/10
+                bg-white/95
+                px-2.5
+                py-0.5
+                text-[10px]
+                font-semibold
+                text-slate-800
+                shadow-2xs
+                backdrop-blur-md
+              "
+            >
+              {capability}
+            </span>
+          ))}
+        </div>
+
+        {/* BUILT FOR */}
+
+        <div
+          className="
+            mt-1.5
+            flex
+            items-center
+            justify-center
+            gap-1
+            font-mono
+            text-[10px]
+            text-slate-500
+          "
+        >
+          <span className="font-bold text-slate-800">Built for:</span>
+
+          <span className="max-w-[220px] truncate font-medium text-slate-600">
+            {product.builtFor}
+          </span>
+        </div>
+
+        {/* CTA */}
+
+        <div className="mt-2.5">
+          <a
+            href="/projects"
+            className="
+              pointer-events-auto
+              group
+              inline-flex
+              items-center
+              gap-2
+              rounded-full
+              bg-slate-950
+              px-4
+              py-2
+              text-[10px]
+              font-bold
+              uppercase
+              tracking-widest
+              text-white
+              shadow-md
+              transition-all
+              hover:bg-slate-800
+            "
+          >
+            <span>Explore System</span>
+
+            <ArrowUpRight size={12} strokeWidth={2.5} />
+          </a>
+        </div>
+      </div>
+
+      {/* =================================================
+          DESKTOP PRODUCT NUMBER (>= md)
+      ================================================= */}
+
+      <div
+        className="
+          absolute
+          left-6
+          top-1/2
+          z-20
+          hidden
+          -translate-y-1/2
+          md:flex
+          sm:left-10
+          lg:left-14
+        "
+      >
+        <div className="flex items-center gap-3">
+          <span
+            className="
+              font-mono
+              text-xs
+              font-bold
+              tracking-[0.2em]
+            "
+            style={{
+              color: product.accent,
+            }}
+          >
+            {product.number}
+          </span>
+
+          <div
+            className="
+              h-px
+              w-8
+              bg-slate-900/15
+            "
+          />
+        </div>
+      </div>
+
+      {/* =================================================
+          DESKTOP MAIN PRODUCT CONTENT (>= md)
+      ================================================= */}
+
+      <div
+        className={`
+          absolute
+          top-1/2
+          z-20
+          hidden
+          w-[min(460px,38vw)]
+          -translate-y-1/2
+          px-2
+          md:block
+          sm:px-4
+
+          ${
+            isLeft
+              ? "left-[4%] text-left sm:left-[6%] lg:left-[8%]"
+              : "right-[4%] text-right sm:right-[6%] lg:right-[8%]"
+          }
+        `}
+      >
+        {/* =================================================
+            EYEBROW
+        ================================================= */}
+
+        <div
+          className={`
+            mb-3.5
+            inline-flex
+            items-center
+            gap-2
+            rounded-full
+            px-4
+            py-1.5
+            font-mono
+            text-xs
+            font-bold
+            uppercase
+            tracking-wider
+            shadow-sm
+            backdrop-blur-md
+
+            ${
+              isLeft
+                ? ""
+                : "ml-auto"
+            }
+          `}
+          style={{
+            backgroundColor:
+              `${product.accent}10`,
+
+            color:
+              product.accent,
+
+            border:
+              `1px solid ${product.accent}25`,
+          }}
+        >
+          <span
+            className="
+              h-1.5
+              w-1.5
+              rounded-full
+            "
+            style={{
+              backgroundColor:
+                product.accent,
+            }}
+          />
+
+          <span>
+            {product.eyebrow}
+          </span>
+        </div>
+
+        {/* =================================================
+            TITLE
+        ================================================= */}
+
+        <h3
+          className="
+            text-[clamp(3.2rem,6.2vw,6.5rem)]
+            font-black
+            leading-[0.85]
+            tracking-[-0.065em]
+            text-slate-950
+          "
+        >
+          {product.name}
+        </h3>
+
+        {/* =================================================
+            QUOTE
+        ================================================= */}
+
+        <div
+          className={`
+            my-4
+            max-w-xl
+
+            ${
+              isLeft
+                ? "border-l-2 pl-4 text-left"
+                : "ml-auto border-r-2 pr-4 text-right"
+            }
+          `}
+          style={{
+            borderColor:
+              product.accent,
+          }}
+        >
+          <p
+            className="
+              font-serif
+              text-base
+              font-normal
+              italic
+              leading-relaxed
+              text-slate-800
+              sm:text-lg
+              lg:text-xl
+            "
+          >
+            {product.quote}
+          </p>
+        </div>
+
+        {/* =================================================
+            CAPABILITIES LABEL
+        ================================================= */}
+
+        <div
+          className="
+            mb-2.5
+            mt-5
+            font-mono
+            text-[10px]
+            font-bold
+            uppercase
+            tracking-[0.22em]
+            text-slate-400
+          "
+        >
+          CAPABILITIES & STACK:
+        </div>
+
+        {/* =================================================
+            CAPABILITIES
+        ================================================= */}
+
+        <div
+          className={`
+            flex
+            flex-wrap
+            gap-2
+
+            ${
+              isLeft
+                ? "justify-start"
+                : "justify-end"
+            }
+          `}
+        >
+          {product.capabilities.map(
+            (capability) => (
+              <span
+                key={capability}
+                className="
+                  rounded-full
+                  border
+                  border-slate-900/8
+                  bg-white/95
+                  px-3.5
+                  py-1
+                  text-xs
+                  font-semibold
+                  text-slate-800
+                  shadow-[0_2px_8px_rgba(0,0,0,0.03)]
+                  backdrop-blur-md
+                  transition-all
+                  duration-300
+                  hover:border-slate-900/20
+                  hover:shadow-md
+                "
+              >
+                {capability}
+              </span>
+            )
+          )}
+        </div>
+
+        {/* =================================================
+            BUILT FOR
+        ================================================= */}
+
+        <div
+          className={`
+            mt-5
+            flex
+            items-center
+            gap-1.5
+            font-mono
+            text-xs
+            text-slate-500
+
+            ${
+              isLeft
+                ? "justify-start"
+                : "justify-end"
+            }
+          `}
+        >
+          <span
+            className="
+              font-bold
+              text-slate-900
+            "
+          >
+            Built for:
+          </span>
+
+          <span
+            className="
+              font-medium
+              text-slate-600
+            "
+          >
+            {product.builtFor}
+          </span>
+        </div>
+
+        {/* =================================================
+            CTA
+        ================================================= */}
+
+        <div
+          className={`
+            mt-6
+            flex
+
+            ${
+              isLeft
+                ? "justify-start"
+                : "justify-end"
+            }
+          `}
+        >
+          <a
+            href="/projects"
+            className="
+              pointer-events-auto
+              group
+              inline-flex
+              items-center
+              gap-3
+              rounded-full
+              bg-slate-950
+              px-6
+              py-3
+              text-xs
+              font-bold
+              uppercase
+              tracking-[0.18em]
+              text-white
+              shadow-lg
+              shadow-slate-950/10
+              transition-all
+              duration-300
+              hover:shadow-xl
+              hover:shadow-slate-950/20
+            "
+          >
+            <span>
+              Explore System
+            </span>
+
+            <span
+              className="
+                flex
+                h-7
+                w-7
+                items-center
+                justify-center
+                rounded-full
+                bg-white/15
+                transition-all
+                duration-300
+                group-hover:bg-white
+                group-hover:text-slate-950
+              "
+            >
+              <ArrowUpRight
+                size={14}
+                strokeWidth={2}
+                className="
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-0.5
+                  group-hover:-translate-y-0.5
+                "
+              />
+            </span>
+          </a>
+        </div>
+      </div>
+
+      {/* =================================================
+          DESKTOP FLOATING PRODUCT IMAGE (>= md)
+      ================================================= */}
+
+      <motion.div
+        className={`
+          absolute
+          top-1/2
+          z-10
+          hidden
+          h-[360px]
+          w-[300px]
+          -translate-y-1/2
+          items-center
+          justify-center
+          md:flex
+
+          ${
+            isLeft
+              ? "right-[4%] sm:right-[6%] lg:right-[8%]"
+              : "left-[4%] sm:left-[6%] lg:left-[8%]"
+          }
+        `}
+        style={{
+          y: imageY,
+          rotate: imageRotate,
+        }}
+      >
+        {/* =================================================
+            AMBIENT PRODUCT GLOW
+        ================================================= */}
+
+        <div
+          className="
+            absolute
+            h-48
+            w-48
+            rounded-full
+            opacity-[0.16]
+            blur-3xl
+          "
+          style={{
+            backgroundColor:
+              product.accent,
+          }}
+        />
+
+        {/* =================================================
+            GROUND SHADOW
+        ================================================= */}
+
+        <div
+          className="
+            absolute
+            bottom-6
+            h-4
+            w-44
+            rounded-full
+            bg-slate-950/10
+            blur-lg
+          "
+        />
+
+        {/* =================================================
+            PRODUCT IMAGE
+        ================================================= */}
+
+        <img
+          src={product.image}
+          alt={product.name}
+          draggable={false}
+          className="
+            relative
+            z-10
+            max-h-[320px]
+            w-auto
+            max-w-[280px]
+            select-none
+            object-contain
+            drop-shadow-[0_20px_35px_rgba(0,0,0,0.18)]
+            transition-transform
+            duration-500
+            hover:scale-105
+          "
+        />
+      </motion.div>
+
+      {/* =================================================
+          DESKTOP CONNECTING SIGNAL BEAM (>= md)
+      ================================================= */}
+
+      <motion.div
+        className={`
+          absolute
+          top-1/2
+          z-0
+          hidden
+          h-px
+          origin-left
+          md:block
+
+          ${
+            isLeft
+              ? "left-1/2 right-[32%]"
+              : "left-[32%] right-1/2"
+          }
+        `}
+        style={{
+          scaleX: lineScale,
+
+          transformOrigin:
+            isLeft
+              ? "left"
+              : "right",
+
+          backgroundImage:
+            `linear-gradient(
+              90deg,
+              ${product.accent}70,
+              ${product.accent}12
+            )`,
+        }}
+      />
+
+      {/* =================================================
+          DESKTOP CENTRAL SIGNAL DOT (>= md)
+      ================================================= */}
+
+      <motion.div
+        className="
+          absolute
+          left-1/2
+          top-1/2
+          z-30
+          hidden
+          h-4
+          w-4
+          -translate-x-1/2
+          -translate-y-1/2
+          items-center
+          justify-center
+          md:flex
+        "
+        style={{
+          scale: lineScale,
+        }}
+      >
+        <span
+          className="
+            absolute
+            inline-flex
+            h-full
+            w-full
+            animate-ping
+            rounded-full
+            opacity-75
+          "
+          style={{
+            backgroundColor:
+              product.accent,
+          }}
+        />
+
+        <span
+          className="
+            relative
+            inline-flex
+            h-2.5
+            w-2.5
+            rounded-full
+            shadow-sm
+          "
+          style={{
+            backgroundColor:
+              product.accent,
+          }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* =========================================================
+   MAIN COMPONENT
+========================================================= */
+
+export default function ProductSignals() {
+  const sectionRef =
+    useRef<HTMLDivElement>(null);
+
+  const [activeIndex, setActiveIndex] =
+    useState(0);
+
+  /* =====================================================
+     SCROLL PROGRESS
+  ===================================================== */
+
+  const {
+    scrollYProgress,
+  } = useScroll({
+    target: sectionRef,
+
+    offset: [
+      "start start",
+      "end end",
+    ],
+  });
+
+  /* =====================================================
+     SMOOTH SPRING
+  ===================================================== */
+
+  const progress = useSpring(
+    scrollYProgress,
+    {
+      stiffness: 70,
+      damping: 24,
+      mass: 0.5,
+    }
+  );
+
+  /* =====================================================
+     ACTIVE PRODUCT
+  ===================================================== */
+
+  useMotionValueEvent(
+    scrollYProgress,
+    "change",
+    (latest) => {
+      const productProgress =
+        Math.max(
+          0,
+          Math.min(
+            1,
+            (latest - 0.08) /
+              0.83
+          )
+        );
+
+      const index = Math.min(
+        products.length - 1,
+        Math.floor(
+          productProgress *
+            products.length
+        )
+      );
+
+      setActiveIndex(
+        (previous) =>
+          previous === index
+            ? previous
+            : index
+      );
+    }
+  );
+
+  const activeProduct =
+    products[activeIndex];
+
+  /* =====================================================
+     TIMELINE PROGRESS
+  ===================================================== */
+
+  const progressHeight =
+    useTransform(
+      progress,
+      [0.08, 0.91],
+      ["0%", "100%"]
+    );
+
+  /* =====================================================
+     INTRO ANIMATION
+  ===================================================== */
+
+  const introOpacity =
+    useTransform(
+      progress,
+      [0, 0.04, 0.08],
+      [1, 1, 0]
+    );
+
+  const introY =
+    useTransform(
+      progress,
+      [0, 0.08],
+      [0, -80]
+    );
+
+  /* =====================================================
+     OUTRO ANIMATION
+  ===================================================== */
+
+  const endingOpacity =
+    useTransform(
+      progress,
+      [0.91, 0.96, 1],
+      [0, 1, 1]
+    );
+
+  const endingScale =
+    useTransform(
+      progress,
+      [0.91, 1],
+      [0.8, 1]
+    );
+
+  /* =====================================================
+     NAVIGATE TO PRODUCT
+  ===================================================== */
+
+  const navigateToProduct =
+    (index: number) => {
+      const targetEl =
+        sectionRef.current;
+
+      if (!targetEl) return;
+
+      const rect =
+        targetEl.getBoundingClientRect();
+
+      const targetProgress =
+        0.08 +
+        (index + 0.5) *
+          (0.83 /
+            products.length);
+
+      const scrollTop =
+        window.scrollY +
+        rect.top +
+        targetProgress *
+          (rect.height -
+            window.innerHeight);
+
+      window.scrollTo({
+        top: scrollTop,
+        behavior: "smooth",
+      });
+    };
 
   return (
     <section
-      id="featured-projects"
-      className="relative overflow-hidden bg-[#FAF9F5] text-[#1C1917] py-24 sm:py-32"
+      ref={sectionRef}
+      className="
+        relative
+        h-[1100vh]
+        bg-[#F7F8FF]
+        text-slate-950
+      "
     >
-      {/* BACKGROUND FLOATING LIGHT ORBS */}
-      <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 bg-sky-300/20 rounded-full blur-3xl" />
-      <div className="pointer-events-none absolute top-1/2 -right-40 w-[500px] h-[500px] bg-indigo-300/15 rounded-full blur-3xl" />
+      {/* ===================================================
+          STICKY VIEWPORT
+      =================================================== */}
 
-      {/* HEADER & BRAND INTRO */}
-      <div className="px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto space-y-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-2 font-mono text-xs font-bold text-stone-600 shadow-sm hover:shadow-md transition-shadow"
+      <div
+        className="
+          sticky
+          top-0
+          h-screen
+          overflow-hidden
+        "
+      >
+        {/* =================================================
+            BACKGROUND SYSTEM
+        ================================================= */}
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+          "
         >
-          <Compass size={14} className="text-sky-500" />
-          <span>ONE NEIRAH • NINE TECHNOLOGY ECOSYSTEMS</span>
-        </motion.div>
+          {/* =================================================
+              SOFT INDIGO AMBIENT GLOW
 
-        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-stone-950 leading-[1.08] max-w-4xl mx-auto">
-          Neirah Product Ecosystem <br />
-          <span className="bg-gradient-to-r from-sky-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
-            Technology for Every Layer of Business.
-          </span>
-        </h2>
+              IMPORTANT:
+              No red/orange colors.
+              Low opacity prevents heavy tint.
+          ================================================= */}
 
-        <p className="text-stone-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-normal pt-2">
-          Neirah builds products that connect people, businesses, intelligence and the physical world.
-        </p>
-      </div>
-
-      {/* 9 PRODUCTS VERTICAL EDITORIAL RUNWAY WITH ANIMATEPRESENCE LAYOUT */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-20 space-y-24">
-        <AnimatePresence mode="popLayout">
-          {NEIRAH_ECOSYSTEM_PRODUCTS.map((product, index) => (
-            <VerticalEditorialProjectCard
-              key={product.id}
-              product={product}
-              index={index}
-              onInspect={() => setSelectedProduct(product)}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
-
-      {/* "THE BIGGER IDEA" ECOSYSTEM SYNERGY SECTION */}
-      <EcosystemSynergySection />
-
-      {/* PRODUCT INSPECTOR BLUEPRINT MODAL */}
-      <AnimatePresence>
-        {selectedProduct && (
-          <ProductInspectorModal
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
-            onBookDemo={() => {
-              setSelectedProduct(null);
-              setSchedulerOpen(true);
+          <div
+            className="
+              absolute
+              left-1/2
+              top-1/2
+              h-[600px]
+              w-[600px]
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              opacity-[0.10]
+              blur-[150px]
+              transition-colors
+              duration-1000
+              ease-in-out
+              sm:h-[800px]
+              sm:w-[800px]
+            "
+            style={{
+              backgroundColor:
+                activeProduct.accent,
             }}
           />
-        )}
-      </AnimatePresence>
 
-      <SchedulerModal
-        isOpen={schedulerOpen}
-        onClose={() => setSchedulerOpen(false)}
-      />
-    </section>
-  );
-}
+          {/* =================================================
+              ICE BLUE GRID
+          ================================================= */}
 
-/* =========================================================
-   VERTICAL EDITORIAL PROJECT CARD WITH 3D TILT & HOVER MOTION
-========================================================= */
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              opacity-[0.20]
 
-function VerticalEditorialProjectCard({
-  product,
-  index,
-  onInspect,
-}: {
-  product: EcosystemProduct;
-  index: number;
-  onInspect: () => void;
-}) {
-  const isEven = index % 2 === 0;
+              [background-image:linear-gradient(rgba(79,70,229,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(79,70,229,.045)_1px,transparent_1px)]
 
-  // 3D Perspective Tilt Mechanics
-  const cardRef = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+              [background-size:64px_64px]
+            "
+          />
 
-  const smoothX = useSpring(mouseX, { stiffness: 100, damping: 20 });
-  const smoothY = useSpring(mouseY, { stiffness: 100, damping: 20 });
+          {/* =================================================
+              TOP FADE
+          ================================================= */}
 
-  const rotateX = useTransform(smoothY, [-150, 150], [6, -6]);
-  const rotateY = useTransform(smoothX, [-200, 200], [-6, 6]);
+          <div
+            className="
+              absolute
+              left-0
+              right-0
+              top-0
+              z-20
+              h-32
+              bg-gradient-to-b
+              from-[#F7F8FF]
+              via-[#F7F8FF]/80
+              to-transparent
+            "
+          />
 
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const rect = cardRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    mouseX.set(e.clientX - rect.left - rect.width / 2);
-    mouseY.set(e.clientY - rect.top - rect.height / 2);
-  }
+          {/* =================================================
+              BOTTOM FADE
+          ================================================= */}
 
-  function handleMouseLeave() {
-    mouseX.set(0);
-    mouseY.set(0);
-  }
+          <div
+            className="
+              absolute
+              bottom-0
+              left-0
+              right-0
+              z-20
+              h-32
+              bg-gradient-to-t
+              from-[#F7F8FF]
+              via-[#F7F8FF]/80
+              to-transparent
+            "
+          />
+        </div>
 
-  return (
-    <motion.article
-      layout
-      initial={{ opacity: 0, y: 40, scale: 0.97 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95, y: -20 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="space-y-6 pt-12 border-t border-[#E5E5E0]"
-    >
-      {/* METADATA HEADER */}
-      <div className="flex items-center justify-between text-xs font-mono font-bold text-stone-400 uppercase tracking-widest pb-2">
-        <span className="flex items-center gap-2 text-stone-900 font-extrabold">
-          <span>{product.number} / 09</span>
-          <span>•</span>
-          <span className="text-sky-600">{product.layer} LAYER</span>
-        </span>
-        <span className="hidden sm:inline">{product.category}</span>
-      </div>
+        {/* ===================================================
+            HEADER
+        =================================================== */}
 
-      {/* ASYMMETRIC 12-COLUMN GRID WITH 3D TILT */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-        {/* HERO EDITORIAL IMAGE COLUMN WITH 3D PERSPECTIVE */}
-        <motion.div
-          ref={cardRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          onClick={onInspect}
-          style={{ rotateX, rotateY, transformPerspective: 1200 }}
-          className={`lg:col-span-7 relative group overflow-hidden rounded-3xl bg-stone-900 p-2 shadow-2xl cursor-pointer ${
-            isEven ? "lg:order-1 order-1" : "lg:order-2 order-1"
-          }`}
+        <header
+          className="
+            absolute
+            left-0
+            right-0
+            top-0
+            z-50
+            flex
+            items-start
+            justify-between
+            px-6
+            py-6
+            sm:px-10
+            sm:py-8
+            lg:px-16
+          "
         >
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-stone-950">
-            {/* Glowing Platform Ring */}
-            <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-sky-500/20 rounded-full blur-2xl animate-pulse" />
+          <div>
+            <div
+              className="
+                flex
+                items-center
+                gap-2
+              "
+            >
+              <span
+                className="
+                  relative
+                  flex
+                  h-2
+                  w-2
+                "
+              >
+                <span
+                  className="
+                    absolute
+                    inline-flex
+                    h-full
+                    w-full
+                    animate-ping
+                    rounded-full
+                    opacity-75
+                  "
+                  style={{
+                    backgroundColor:
+                      activeProduct.accent,
+                  }}
+                />
 
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              sizes="(max-width: 1024px) 100vw, 600px"
-              className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700 drop-shadow-2xl"
-            />
-            <div className="absolute inset-0 bg-stone-950/20 transition-opacity group-hover:opacity-0" />
+                <span
+                  className="
+                    relative
+                    inline-flex
+                    h-2
+                    w-2
+                    rounded-full
+                  "
+                  style={{
+                    backgroundColor:
+                      activeProduct.accent,
+                  }}
+                />
+              </span>
 
-            {/* TELEMETRY BADGE */}
-            {product.status && (
-              <div className="absolute top-4 left-4 bg-stone-950/80 backdrop-blur-md text-stone-200 text-[10px] font-mono font-bold px-3.5 py-1.5 rounded-full border border-stone-800 flex items-center gap-2 shadow-lg">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span>{product.status}</span>
+              <p
+                className="
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.3em]
+                  text-slate-500
+                  sm:text-xs
+                "
+              >
+                Neirah / Ecosystem
+              </p>
+            </div>
+
+            <p
+              className="
+                mt-1.5
+                text-xs
+                font-medium
+                text-slate-500
+              "
+            >
+              10 Systems. One Connected Vision.
+            </p>
+          </div>
+
+          {/* DESKTOP SCROLL INDICATOR */}
+
+          <div
+            className="
+              hidden
+              items-center
+              gap-3
+              rounded-full
+              border
+              border-slate-900/10
+              bg-white/60
+              px-4
+              py-2
+              shadow-sm
+              backdrop-blur-md
+              sm:flex
+            "
+          >
+            <span
+              className="
+                text-[11px]
+                font-semibold
+                uppercase
+                tracking-[0.18em]
+                text-slate-500
+              "
+            >
+              Scroll to explore
+            </span>
+
+            <motion.div
+              animate={{
+                y: [0, 4, 0],
+              }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <ArrowDown
+                size={14}
+                className="text-indigo-600"
+                strokeWidth={2}
+              />
+            </motion.div>
+          </div>
+        </header>
+
+        {/* ===================================================
+            INTRO
+        =================================================== */}
+
+        <motion.div
+          style={{
+            opacity: introOpacity,
+            y: introY,
+          }}
+          className="
+            absolute
+            inset-0
+            z-30
+            flex
+            items-center
+            justify-center
+            px-6
+          "
+        >
+          <div
+            className="
+              mx-auto
+              max-w-4xl
+              text-center
+            "
+          >
+            {/* STATUS */}
+
+            <div
+              className="
+                mx-auto
+                mb-6
+                inline-flex
+                items-center
+                gap-2.5
+                rounded-full
+                border
+                border-slate-900/10
+                bg-white/90
+                px-4
+                py-1.5
+                shadow-sm
+                backdrop-blur-md
+              "
+            >
+              <span
+                className="
+                  relative
+                  flex
+                  h-2
+                  w-2
+                "
+              >
+                <span
+                  className="
+                    absolute
+                    inline-flex
+                    h-full
+                    w-full
+                    animate-ping
+                    rounded-full
+                    bg-indigo-400
+                    opacity-75
+                  "
+                />
+
+                <span
+                  className="
+                    relative
+                    inline-flex
+                    h-2
+                    w-2
+                    rounded-full
+                    bg-indigo-500
+                  "
+                />
+              </span>
+
+              <span
+                className="
+                  font-mono
+                  text-xs
+                  font-bold
+                  uppercase
+                  tracking-[0.25em]
+                  text-slate-800
+                "
+              >
+                Featured Ecosystem
+              </span>
+            </div>
+
+            {/* HEADLINE */}
+
+            <h2
+              className="
+                text-[clamp(2.75rem,5.5vw,5.5rem)]
+                font-black
+                leading-[0.98]
+                tracking-[-0.05em]
+                text-slate-950
+              "
+            >
+              Technology for{" "}
+              <span
+                className="
+                  bg-clip-text
+                  text-transparent
+                "
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, #3730A3 0%, #4F46E5 45%, #7C3AED 100%)",
+                }}
+              >
+                every layer
+              </span>{" "}
+              of business.
+            </h2>
+
+            {/* DESCRIPTION */}
+
+            <p
+              className="
+                mx-auto
+                mt-6
+                max-w-2xl
+                text-base
+                font-medium
+                leading-relaxed
+                text-slate-600
+                sm:text-lg
+              "
+            >
+              Ten specialized software platforms
+              built to solve real-world enterprise
+              challenges, unified into one connected
+              intelligent ecosystem.
+            </p>
+
+            {/* SCROLL CTA */}
+
+            <div
+              className="
+                mt-8
+                flex
+                justify-center
+              "
+            >
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-3
+                  rounded-full
+                  border
+                  border-slate-900/10
+                  bg-white/80
+                  px-5
+                  py-2.5
+                  shadow-md
+                  backdrop-blur-md
+                  transition-all
+                  duration-300
+                  hover:bg-white
+                  hover:shadow-lg
+                "
+              >
+                <span
+                  className="
+                    font-mono
+                    text-xs
+                    font-bold
+                    uppercase
+                    tracking-[0.2em]
+                    text-slate-700
+                  "
+                >
+                  Scroll to explore
+                </span>
+
+                <motion.div
+                  animate={{
+                    y: [0, 4, 0],
+                  }}
+                  transition={{
+                    duration: 1.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <ArrowDown
+                    size={14}
+                    className="text-indigo-600"
+                    strokeWidth={2.5}
+                  />
+                </motion.div>
               </div>
-            )}
-
-            <div className="absolute bottom-4 right-4 bg-stone-950/90 text-white text-xs font-mono font-bold px-4 py-2 rounded-full border border-white/20 flex items-center gap-2 shadow-xl group-hover:scale-105 transition-transform">
-              <span>INSPECT SPEC</span>
-              <ArrowRight size={14} />
             </div>
           </div>
         </motion.div>
 
-        {/* PROJECT INFORMATION COLUMN */}
+        {/* ===================================================
+            CENTER TIMELINE (>= md)
+        =================================================== */}
+
         <div
-          className={`lg:col-span-5 space-y-5 ${
-            isEven ? "lg:order-2 order-2" : "lg:order-1 order-2"
-          }`}
+          className="
+            absolute
+            bottom-[10%]
+            left-1/2
+            top-[10%]
+            z-10
+            hidden
+            w-px
+            -translate-x-1/2
+            bg-slate-900/10
+            md:block
+          "
         >
-          <div className="space-y-2">
+          <motion.div
+            className="
+              absolute
+              left-0
+              top-0
+              w-full
+              origin-top
+            "
+            style={{
+              height:
+                progressHeight,
+
+              backgroundColor:
+                activeProduct.accent,
+            }}
+          />
+        </div>
+
+        {/* ===================================================
+            PRODUCT SCENES
+        =================================================== */}
+
+        <div
+          className="
+            absolute
+            inset-0
+          "
+        >
+          {products.map(
+            (product, index) => (
+              <ProductScene
+                key={product.id}
+                product={product}
+                index={index}
+                progress={progress}
+              />
+            )
+          )}
+        </div>
+
+        {/* ===================================================
+            BOTTOM HUD
+        =================================================== */}
+
+        <div
+          className="
+            absolute
+            bottom-6
+            left-1/2
+            z-50
+            flex
+            -translate-x-1/2
+            flex-col
+            items-center
+            gap-2.5
+          "
+        >
+          {/* DOT NAV */}
+
+          <div
+            className="
+              flex
+              items-center
+              gap-1.5
+            "
+          >
+            {products.map(
+              (product, index) => (
+                <button
+                  key={product.id}
+                  type="button"
+                  onClick={() =>
+                    navigateToProduct(
+                      index
+                    )
+                  }
+                  title={product.name}
+                  aria-label={`Go to ${product.name}`}
+                  className={`
+                    h-1.5
+                    rounded-full
+                    transition-all
+                    duration-300
+
+                    ${
+                      index ===
+                      activeIndex
+                        ? "w-6"
+                        : "w-1.5 bg-slate-950/20 hover:bg-slate-950/40"
+                    }
+                  `}
+                  style={{
+                    backgroundColor:
+                      index ===
+                      activeIndex
+                        ? activeProduct.accent
+                        : undefined,
+                  }}
+                />
+              )
+            )}
+          </div>
+
+          {/* PROGRESS */}
+
+          <div
+            className="
+              flex
+              items-center
+              gap-3
+            "
+          >
             <span
-              className="font-mono text-xs font-black uppercase px-3.5 py-1 rounded-full border inline-block"
+              className="
+                font-mono
+                text-xs
+                font-bold
+              "
               style={{
-                color: product.accentColor,
-                backgroundColor: `${product.accentColor}10`,
-                borderColor: `${product.accentColor}30`,
+                color:
+                  activeProduct.accent,
               }}
             >
-              {product.number}. {product.name}
+              {activeProduct.number}
             </span>
 
-            <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight leading-tight">
-              {product.name}
-            </h3>
-
-            <p className="text-lg sm:text-xl font-serif italic text-stone-800 leading-snug font-normal pt-1">
-              “{product.description}”
-            </p>
-          </div>
-
-          {/* ANIMATED CAPABILITIES TAGS WITH HOVER POP */}
-          <div className="space-y-2">
-            <span className="text-[10px] font-mono font-bold uppercase text-stone-400 tracking-wider block">
-              CAPABILITIES & STACK:
-            </span>
-            <div className="flex flex-wrap gap-2 text-xs font-mono font-semibold text-stone-700">
-              {product.capabilities.map((cap, cIdx) => (
-                <motion.span
-                  key={cIdx}
-                  whileHover={{ scale: 1.08, y: -2 }}
-                  className="px-3 py-1 rounded-full bg-white text-stone-800 border border-stone-200 shadow-sm hover:border-sky-400 hover:text-sky-600 transition-colors cursor-default"
-                >
-                  {cap}
-                </motion.span>
-              ))}
-            </div>
-          </div>
-
-          {product.builtFor && (
-            <p className="text-xs text-stone-500 font-mono">
-              <strong className="text-stone-700">Built for:</strong> {product.builtFor}
-            </p>
-          )}
-
-          {/* ACTION BUTTON */}
-          <div className="pt-2">
-            <motion.button
-              type="button"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={onInspect}
-              className="inline-flex items-center gap-3 px-7 py-3 rounded-full border border-stone-900 text-stone-950 font-mono text-xs font-bold uppercase tracking-wider transition-all hover:bg-stone-950 hover:text-white cursor-pointer shadow-sm hover:shadow-md"
+            <div
+              className="
+                h-1
+                w-24
+                overflow-hidden
+                rounded-full
+                bg-slate-950/10
+                sm:w-36
+              "
             >
-              <span>EXPLORE BLUEPRINT SPEC</span>
-              <ArrowRight size={14} />
-            </motion.button>
+              <motion.div
+                className="
+                  h-full
+                  rounded-full
+                "
+                style={{
+                  width: `${
+                    ((activeIndex + 1) /
+                      products.length) *
+                    100
+                  }%`,
+
+                  backgroundColor:
+                    activeProduct.accent,
+                }}
+              />
+            </div>
+
+            <span
+              className="
+                font-mono
+                text-xs
+                font-semibold
+                text-slate-400
+              "
+            >
+              10
+            </span>
           </div>
         </div>
-      </div>
-    </motion.article>
-  );
-}
 
-/* =========================================================
-   "THE BIGGER IDEA" ECOSYSTEM SYNERGY SECTION WITH ANIMATED FLOW STREAM
-========================================================= */
+        {/* ===================================================
+            SIDE SYSTEM LABEL
+        =================================================== */}
 
-function EcosystemSynergySection() {
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 40, rotate: -2.5, scale: 0.97 }}
-      whileInView={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-      className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mt-32 origin-center"
-    >
-      <div
-        className="relative overflow-hidden rounded-[40px] border-2 border-white/20 bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-indigo-950/90 backdrop-blur-2xl p-8 sm:p-14 lg:p-16 space-y-12 shadow-[0_30px_90px_rgba(14,165,233,0.2)]"
-      >
-        {/* Background Sheen Glow */}
-        <div className="pointer-events-none absolute -top-32 -left-32 w-96 h-96 bg-sky-500/20 rounded-full blur-[100px]" />
-        <div className="pointer-events-none absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-500/20 rounded-full blur-[100px]" />
-        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-purple-500/10 rounded-full blur-[120px]" />
+        <div
+          className="
+            absolute
+            bottom-7
+            left-6
+            z-40
+            hidden
+            items-center
+            gap-2
+            lg:flex
+          "
+        >
+          <span
+            className="
+              h-2
+              w-2
+              rounded-full
+            "
+            style={{
+              backgroundColor:
+                activeProduct.accent,
+            }}
+          />
 
-        {/* TITLE & DESCRIPTION WITH RIGHT NEIRO.PNG SHOWCASE */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-          <div className="space-y-4 max-w-2xl text-left">
-            <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-4 py-1.5 font-mono text-xs font-bold text-sky-300 backdrop-blur-md shadow-sm">
-              <Sparkles size={14} className="text-sky-300" />
-              <span>THE BIGGER IDEA</span>
+          <p
+            className="
+              text-[9px]
+              font-bold
+              uppercase
+              tracking-[0.25em]
+              text-slate-500
+            "
+          >
+            System #
+            {activeProduct.number}
+            {" — "}
+            {activeProduct.name}
+          </p>
+        </div>
+
+        {/* ===================================================
+            OUTRO
+        =================================================== */}
+
+        <motion.div
+          style={{
+            opacity:
+              endingOpacity,
+
+            scale:
+              endingScale,
+          }}
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+            z-40
+            flex
+            items-center
+            justify-center
+            bg-[#F7F8FF]/95
+            px-6
+            backdrop-blur-md
+          "
+        >
+          <div
+            className="
+              text-center
+            "
+          >
+            {/* BADGE */}
+
+            <div
+              className="
+                mx-auto
+                mb-4
+                inline-flex
+                items-center
+                gap-2
+                rounded-full
+                border
+                border-slate-900/10
+                bg-white/80
+                px-4
+                py-1.5
+                shadow-sm
+                backdrop-blur-md
+              "
+            >
+              <Sparkles
+                size={13}
+                className="text-indigo-500"
+              />
+
+              <span
+                className="
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.35em]
+                  text-slate-600
+                "
+              >
+                10 Systems Integrated
+              </span>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-              Neirah doesn&apos;t build isolated products. <br />
-              <span className="bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                We build technology that connects with technology.
+            {/* FINAL HEADLINE */}
+
+            <h2
+              className="
+                mt-4
+                text-[clamp(3.5rem,11vw,11rem)]
+                font-black
+                leading-[0.78]
+                tracking-[-0.09em]
+                text-slate-950
+              "
+            >
+              ONE
+              <br />
+
+              <span
+                className="
+                  bg-clip-text
+                  text-transparent
+                "
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, #3730A3 0%, #4F46E5 45%, #7C3AED 100%)",
+                }}
+              >
+                NEIRAH
               </span>
             </h2>
 
-            <p className="text-stone-300 text-sm sm:text-base leading-relaxed font-normal pt-2">
-              That&apos;s the real Neirah story. One ecosystem. Many industries. Infinite possibilities.
+            {/* DESCRIPTION */}
+
+            <p
+              className="
+                mx-auto
+                mt-6
+                max-w-md
+                text-sm
+                leading-6
+                text-slate-600
+                sm:text-base
+              "
+            >
+              Many technologies. One connected
+              ecosystem.
             </p>
+
+            
           </div>
-
-          {/* RIGHT SPACE: NEIRO.PNG SHOWCASE */}
-          <div className="relative shrink-0 flex items-center justify-center lg:justify-end pt-4 lg:pt-0">
-            <div className="relative h-48 w-48 sm:h-56 sm:w-56 lg:h-64 lg:w-64 group">
-              <Image
-                src="/images/Neiro.png"
-                alt="Neirah Ecosystem Mascot - Neiro"
-                fill
-                sizes="(max-width: 640px) 192px, 256px"
-                className="h-full w-full object-contain drop-shadow-[0_16px_35px_rgba(56,189,248,0.35)] transition-transform duration-500 group-hover:scale-105"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* 5 LAYERS SUMMARY */}
-        <div className="pt-4 border-t border-stone-800 space-y-4">
-          <span className="font-mono text-xs font-bold uppercase text-stone-400 tracking-widest block">
-            ONE NEIRAH • NINE TECHNOLOGY ECOSYSTEMS:
-          </span>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 font-mono text-xs">
-            <div className="bg-stone-900/90 p-4 rounded-2xl border border-stone-800 space-y-1 hover:border-amber-500/50 transition-colors">
-              <span className="text-amber-400 font-extrabold uppercase block text-[10px]">DESIGN</span>
-              <p className="text-white font-bold">Lantriva</p>
-            </div>
-
-            <div className="bg-stone-900/90 p-4 rounded-2xl border border-stone-800 space-y-1 hover:border-purple-500/50 transition-colors">
-              <span className="text-purple-400 font-extrabold uppercase block text-[10px]">INTELLIGENCE</span>
-              <p className="text-white font-bold">Neirah Lab • HRVio</p>
-            </div>
-
-            <div className="bg-stone-900/90 p-4 rounded-2xl border border-stone-800 space-y-1 hover:border-indigo-500/50 transition-colors">
-              <span className="text-indigo-400 font-extrabold uppercase block text-[10px]">BUSINESS</span>
-              <p className="text-white font-bold">Mugilix • BrandOS</p>
-            </div>
-
-            <div className="bg-stone-900/90 p-4 rounded-2xl border border-stone-800 space-y-1 hover:border-emerald-500/50 transition-colors">
-              <span className="text-emerald-400 font-extrabold uppercase block text-[10px]">DELIVERY & MOBILITY</span>
-              <p className="text-white font-bold">Pothify • Tricobites • Rideya</p>
-            </div>
-
-            <div className="bg-stone-900/90 p-4 rounded-2xl border border-stone-800 space-y-1 hover:border-cyan-500/50 transition-colors">
-              <span className="text-cyan-400 font-extrabold uppercase block text-[10px]">PHYSICAL WORLD</span>
-              <p className="text-white font-bold">Neirah IoT & Drone</p>
-            </div>
-          </div>
-        </div>
-
-        {/* CONNECTED INDUSTRY EXAMPLES WITH ANIMATED FLOW PARTICLES */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-          {/* RESTAURANT ECOSYSTEM EXAMPLE */}
-          <div className="bg-stone-900/90 p-6 sm:p-8 rounded-3xl border border-stone-800 space-y-4 hover:border-sky-500/40 transition-colors">
-            <span className="font-mono text-xs font-bold text-amber-400 uppercase tracking-wider block flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-amber-400" />
-              <span>A RESTAURANT COULD USE:</span>
-            </span>
-
-            <div className="flex flex-wrap items-center gap-2 font-mono text-xs font-bold">
-              <span className="px-3.5 py-1.5 rounded-full bg-stone-800 text-amber-300 border border-amber-500/30">
-                Lantriva → design
-              </span>
-              <span className="text-stone-500">➔</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-stone-800 text-indigo-300 border border-indigo-500/30">
-                Mugilix → business
-              </span>
-              <span className="text-stone-500">➔</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-stone-800 text-emerald-300 border border-emerald-500/30">
-                Pothify → delivery
-              </span>
-              <span className="text-stone-500">➔</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-stone-800 text-purple-300 border border-purple-500/30">
-                Neirah Lab → AI
-              </span>
-              <span className="text-stone-500">➔</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-stone-800 text-lime-300 border border-lime-500/30">
-                BrandOS → comms
-              </span>
-            </div>
-          </div>
-
-          {/* AGRICULTURE ECOSYSTEM EXAMPLE */}
-          <div className="bg-stone-900/90 p-6 sm:p-8 rounded-3xl border border-stone-800 space-y-4 hover:border-emerald-500/40 transition-colors">
-            <span className="font-mono text-xs font-bold text-emerald-400 uppercase tracking-wider block flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span>AN AGRICULTURE COMPANY COULD USE:</span>
-            </span>
-
-            <div className="flex flex-wrap items-center gap-2 font-mono text-xs font-bold">
-              <span className="px-3.5 py-1.5 rounded-full bg-stone-800 text-cyan-300 border border-cyan-500/30">
-                Neirah IoT & Drone → sensors & aerial
-              </span>
-              <span className="text-stone-500">➔</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-stone-800 text-purple-300 border border-purple-500/30">
-                Neirah Lab → AI analysis
-              </span>
-              <span className="text-stone-500">➔</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-stone-800 text-indigo-300 border border-indigo-500/30">
-                Mugilix → operations
-              </span>
-            </div>
-          </div>
-        </div>
+        </motion.div>
       </div>
-    </motion.section>
-  );
-}
-
-/* =========================================================
-   PRODUCT INSPECTOR BLUEPRINT MODAL
-========================================================= */
-
-function ProductInspectorModal({
-  product,
-  onClose,
-  onBookDemo,
-}: {
-  product: EcosystemProduct;
-  onClose: () => void;
-  onBookDemo: () => void;
-}) {
-  const Icon = product.icon;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-stone-950/70 backdrop-blur-md">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ duration: 0.3 }}
-        className="relative w-full max-w-2xl overflow-hidden rounded-[40px] border-2 border-white bg-white p-6 sm:p-8 shadow-2xl text-left space-y-6 text-stone-900"
-      >
-        {/* Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close modal"
-          className="absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-stone-100 text-stone-700 transition-all hover:bg-stone-900 hover:text-white cursor-pointer"
-        >
-          <X size={18} />
-        </button>
-
-        {/* Modal Top Header */}
-        <div className="flex items-center gap-4 border-b border-stone-100 pb-5">
-          <div
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-white shadow-lg"
-            style={{ background: `linear-gradient(135deg, ${product.gradient[0]}, ${product.gradient[1]})` }}
-          >
-            <Icon size={26} />
-          </div>
-
-          <div>
-            <span className="font-mono text-xs font-black uppercase text-sky-600 bg-sky-50 px-3 py-0.5 rounded-full border border-sky-200">
-              {product.category} • Venture #{product.number}
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight mt-1">
-              {product.name}
-            </h3>
-          </div>
-        </div>
-
-        {/* Image & Key Spec Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="relative h-44 rounded-2xl overflow-hidden border border-stone-200 shadow-md">
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              sizes="(max-width: 640px) 100vw, 300px"
-              className="h-full w-full object-cover"
-            />
-            {product.status && (
-              <div className="absolute top-2.5 left-2.5 bg-stone-900/80 backdrop-blur-md text-white text-[10px] font-mono font-bold px-3 py-1 rounded-full">
-                Status: {product.status}
-              </div>
-            )}
-          </div>
-
-          <div className="flex flex-col justify-between p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-3">
-            {product.builtFor && (
-              <div>
-                <span className="text-[10px] font-mono font-bold text-stone-400 uppercase">Target Audience:</span>
-                <p className="text-xs font-bold text-stone-800 mt-0.5">{product.builtFor}</p>
-              </div>
-            )}
-
-            {product.stats && (
-              <div>
-                <span className="text-[10px] font-mono font-bold text-stone-400 uppercase">Telemetry Metric:</span>
-                <p className="font-mono text-lg font-black text-sky-600">{product.stats.label}: {product.stats.value}</p>
-              </div>
-            )}
-
-            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-700">
-              <ShieldCheck size={14} className="text-emerald-500" />
-              <span>Full Neirah Shader Security Verified</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Full Description & Capabilities */}
-        <div className="space-y-4">
-          <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-            {product.description}
-          </p>
-
-          <div className="space-y-2">
-            <span className="text-[11px] font-black uppercase tracking-wider text-stone-400 block">
-              Core Technical Capabilities:
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {product.capabilities.map((cap, i) => (
-                <span
-                  key={i}
-                  className="flex items-center gap-1.5 text-xs font-bold text-stone-800 bg-slate-100 px-3.5 py-1.5 rounded-full border border-slate-200"
-                >
-                  <CheckCircle2 size={13} className="text-emerald-500" />
-                  {cap}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="pt-4 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={onBookDemo}
-            className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-stone-900 px-6 py-3.5 text-xs font-extrabold text-white shadow-xl transition-all hover:bg-sky-500 hover:shadow-sky-500/25 active:scale-95 cursor-pointer"
-          >
-            <span>Book Live Product Demo</span>
-            <ArrowRight size={15} />
-          </button>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-6 py-3.5 rounded-full border border-stone-200 text-xs font-bold text-stone-600 hover:bg-stone-100 cursor-pointer"
-          >
-            Close Spec
-          </button>
-        </div>
-      </motion.div>
-    </div>
+    </section>
   );
 }

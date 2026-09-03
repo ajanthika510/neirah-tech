@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -10,6 +9,7 @@ import {
   MapPin,
   Phone,
   Sparkles,
+  Globe,
 } from "lucide-react";
 
 import RevealText from "../ui/RevealText";
@@ -25,7 +25,7 @@ function FacebookIcon({ size = 15 }: { size?: number }) {
 function InstagramIcon({ size = 15 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.28-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
     </svg>
   );
 }
@@ -43,101 +43,95 @@ const footerLinks = {
     { name: "About Us", href: "/about" },
     { name: "Services", href: "/services" },
     { name: "Projects", href: "/projects" },
+    { name: "Case Studies", href: "/case-studies" },
+    { name: "Careers", href: "/careers" },
     { name: "Contact", href: "/contact" },
   ],
 
   services: [
     { name: "Business Website", href: "/services" },
     { name: "Mobile Apps", href: "/services" },
-    { name: "AI Assistant", href: "/services" },
+    { name: "AI Assistant & Agents", href: "/services" },
     { name: "Digital Marketing", href: "/services" },
-    { name: "Business Software", href: "/services" },
-    { name: "Consulting", href: "/services" },
+    { name: "Enterprise Software", href: "/services" },
     { name: "Smart Devices & IoT", href: "/services" },
-    { name: "Innovation Lab", href: "/services" },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 overflow-hidden border-t border-white/10 bg-[#020617] text-white pointer-events-auto">
-
-      {/* BACKGROUND */}
-      <div className="pointer-events-none absolute inset-0">
+    <footer className="relative z-10 overflow-hidden border-t border-slate-800/80 bg-[#020617] text-white pointer-events-auto select-none">
+      {/* AMBIENT FLOATING GLOW LIGHTS */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Subtle Precision Grid */}
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
+              "linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px)",
+            backgroundSize: "70px 70px",
           }}
         />
 
         <motion.div
           animate={{
-            x: [0, 60, 0],
-            y: [0, -20, 0],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute -left-32 bottom-0 h-[220px] w-[220px] rounded-full bg-sky-500/10 blur-[90px]"
-        />
-
-        <motion.div
-          animate={{
-            x: [0, -50, 0],
-            y: [0, 30, 0],
-            scale: [1, 1.1, 1],
+            x: [0, 80, 0],
+            y: [0, -30, 0],
+            scale: [1, 1.12, 1],
           }}
           transition={{
             duration: 15,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute -right-32 top-5 h-[220px] w-[220px] rounded-full bg-indigo-500/10 blur-[90px]"
+          className="absolute -left-40 bottom-0 h-[380px] w-[380px] rounded-full bg-sky-500/15 blur-[120px]"
         />
+
+        <motion.div
+          animate={{
+            x: [0, -60, 0],
+            y: [0, 40, 0],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute -right-40 top-10 h-[420px] w-[420px] rounded-full bg-indigo-500/15 blur-[130px]"
+        />
+
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[300px] rounded-full bg-cyan-400/10 blur-[100px]" />
       </div>
 
-      {/* MAIN FOOTER CONTAINER */}
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* MAIN CONTAINER */}
+      <div className="relative mx-auto max-w-7xl px-5 pt-10 pb-6 sm:px-8 sm:pt-14 sm:pb-8 lg:px-10">
+        {/* =========================================================
+            STREAMLINED COMPACT CALL-TO-ACTION BAR
+        ========================================================= */}
+        <div className="relative overflow-hidden rounded-2xl border border-sky-400/20 bg-slate-900/80 p-4 sm:p-5 backdrop-blur-xl shadow-lg transition-all duration-300 hover:border-sky-400/40">
+          <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-sky-500/10 blur-[40px]" />
 
-        {/* COMPACT TOP CTA CARD */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-          <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-sky-500/10 blur-[60px]" />
-
-          <div className="relative flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div className="max-w-lg space-y-1">
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/20 bg-sky-400/[0.06] px-3 py-0.5">
-                <Sparkles size={11} className="text-sky-400" />
-                <RevealText
-                  as="span"
-                  text="LET'S BUILD SOMETHING"
-                  stagger={0.03}
-                  duration={0.3}
-                  blurAmount={2}
-                  className="text-[10px] font-bold tracking-[0.18em] text-sky-300"
-                />
+          <div className="relative flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-400/20 text-sky-400">
+                <Sparkles size={15} />
               </div>
-
-              <h2 className="text-lg sm:text-xl font-black leading-tight">
-                <RevealText text="Have a problem?" stagger={0.04} duration={0.35} blurAmount={3} />{" "}
-                <span className="inline-block bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
-                  <RevealText text="Let's start a conversation." delay={0.1} stagger={0.04} duration={0.35} blurAmount={3} />
-                </span>
-              </h2>
+              <div>
+                <h4 className="text-xs sm:text-sm font-bold text-white leading-tight">
+                  Have a problem? <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Let&apos;s start a conversation.</span>
+                </h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Partner with our engineering team to build your next digital product.</p>
+              </div>
             </div>
 
             <motion.a
-              href="https://wa.me/94760041594?text=Hello%2C%20I%20would%20like%20to%20start%20a%20conversation"
+              href="https://wa.me/94760041594?text=Hello%2C%20I%20would%20like%20to%20start%20a%20conversation%20with%20Neirah%20Tech"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer"
+              className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-2 text-xs font-bold text-white shadow-md transition-all hover:shadow-sky-500/25 cursor-pointer"
             >
               <span>Start a Conversation</span>
               <ArrowUpRight
@@ -148,165 +142,162 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* COMPACT FOOTER COLUMNS */}
-        <div className="grid gap-6 py-6 md:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_1.2fr_1fr]">
-
-          {/* BRAND */}
-          <div className="space-y-2.5">
-            <Link href="/" className="group inline-flex items-center gap-2.5">
-              <div className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-white shadow-sm">
+        {/* =========================================================
+            FOUR-COLUMN ENTERPRISE FOOTER NAVIGATION
+        ========================================================= */}
+        <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-10 text-center sm:grid-cols-2 lg:grid-cols-12 lg:text-left items-start border-b border-slate-800/80 pb-10">
+          
+          {/* COLUMN 1: BRAND IDENTITY */}
+          <div className="lg:col-span-4 space-y-4 flex flex-col items-center lg:items-start">
+            <Link href="/" className="group inline-flex items-center gap-3">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 border border-sky-400/40 p-1.5 shadow-[0_0_20px_rgba(14,165,233,0.3)] transition-transform duration-300 group-hover:scale-105">
                 <Image
                   src="/images/logo.png"
-                  alt="Neirah Tech Solutions"
-                  width={30}
-                  height={30}
+                  alt="Neirah Tech Official Mark"
+                  width={34}
+                  height={34}
                   priority
-                  className="h-6 w-6 object-contain"
+                  className="h-full w-full object-contain drop-shadow"
                 />
               </div>
 
-              <div>
-                <p className="text-base font-black tracking-tight leading-none">
+              <div className="text-left">
+                <p className="text-lg font-black tracking-tight text-white leading-none">
                   Neirah<span className="text-sky-400">Tech</span>
                 </p>
-                <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-slate-600 mt-0.5">
-                  Solutions
+                <p className="mt-1 text-[9px] font-mono font-bold uppercase tracking-[0.25em] text-slate-400">
+                  SOLUTIONS
                 </p>
               </div>
             </Link>
 
-            <p className="max-w-xs text-[11px] leading-relaxed text-slate-400">
-              Technology solutions built around real business problems. From hardware beginnings to modern software platforms.
+            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+              Engineering high-impact digital experiences, autonomous AI systems, and smart connected software built around core business growth.
             </p>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-2 pt-0.5">
+            {/* LIVE SYSTEM STATUS BADGE */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-bold text-emerald-400 backdrop-blur-md">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Systems Operational • 99.9% Uptime</span>
+            </div>
+
+            {/* SOCIAL LINKS */}
+            <div className="flex items-center gap-2.5 pt-2">
               <SocialIcon href="https://lk.linkedin.com/company/neirah-tech-solution" label="LinkedIn">
-                <LinkedInIcon size={14} />
+                <LinkedInIcon size={15} />
               </SocialIcon>
-
               <SocialIcon href="https://www.facebook.com/neirahtech/" label="Facebook">
-                <FacebookIcon size={14} />
+                <FacebookIcon size={15} />
               </SocialIcon>
-
               <SocialIcon href="https://www.instagram.com/neirah_tech/" label="Instagram">
-                <InstagramIcon size={14} />
+                <InstagramIcon size={15} />
               </SocialIcon>
             </div>
           </div>
 
-          {/* COMPANY */}
-          <FooterColumn title="Company" links={footerLinks.company} />
-
-          {/* SOLUTIONS */}
-          <div>
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white">
-              Solutions
-            </h3>
-            <ul className="mt-2.5 grid grid-cols-2 gap-x-2 gap-y-1.5">
-              {footerLinks.services.map((link) => (
+          {/* COLUMN 2: COMPANY LINKS */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xs font-mono font-black uppercase tracking-[0.25em] text-sky-400">
+              Company
+            </h4>
+            <ul className="space-y-2.5 text-xs font-medium text-slate-400">
+              {footerLinks.company.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="group inline-flex items-center gap-1 text-[11px] text-slate-400 transition-colors duration-200 hover:text-white"
+                    className="group inline-flex items-center gap-1.5 transition-colors hover:text-white"
                   >
-                    <span className="truncate">{link.name}</span>
+                    <span>{link.name}</span>
+                    <ArrowUpRight
+                      size={12}
+                      className="text-sky-400 opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                    />
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* CONTACT */}
-          <div>
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white">
-              Get in touch
-            </h3>
+          {/* COLUMN 3: SERVICES & SOLUTIONS */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="text-xs font-mono font-black uppercase tracking-[0.25em] text-sky-400">
+              Solutions
+            </h4>
+            <ul className="space-y-2.5 text-xs font-medium text-slate-400">
+              {footerLinks.services.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="group inline-flex items-center gap-1.5 transition-colors hover:text-white"
+                  >
+                    <span>{link.name}</span>
+                    <ArrowUpRight
+                      size={12}
+                      className="text-sky-400 opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <div className="mt-2.5 space-y-2">
-              <ContactItem
-                icon={<Mail size={13} />}
-                text="info@neirahtech.com"
+          {/* COLUMN 4: DIRECT CONTACT & LOCATION */}
+          <div className="lg:col-span-3 space-y-4 flex flex-col items-center lg:items-start">
+            <h4 className="text-xs font-mono font-black uppercase tracking-[0.25em] text-sky-400">
+              Get In Touch
+            </h4>
+            <div className="space-y-3 w-full max-w-xs">
+              <ContactCard
+                icon={<Mail size={14} className="text-sky-400" />}
+                label="Direct Email"
+                value="info@neirahtech.com"
                 href="mailto:info@neirahtech.com"
               />
-
-              <ContactItem
-                icon={<Phone size={13} />}
-                text="+94 76 004 1594"
+              <ContactCard
+                icon={<Phone size={14} className="text-sky-400" />}
+                label="Phone Consultation"
+                value="+94 76 004 1594"
                 href="tel:+94760041594"
               />
-
-              <ContactItem
-                icon={<MapPin size={13} />}
-                text="Sri Lanka"
+              <ContactCard
+                icon={<MapPin size={14} className="text-sky-400" />}
+                label="Global Hub"
+                value="Sri Lanka • Worldwide"
                 href="/contact"
               />
             </div>
           </div>
         </div>
 
-        {/* BOTTOM COPYRIGHT */}
-        <div className="flex flex-col gap-3 border-t border-white/10 pt-4 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} Neirah Tech Solutions. All rights reserved.</p>
+        {/* =========================================================
+            BOTTOM COPYRIGHT BAR & LEGAL LINKS
+        ========================================================= */}
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-slate-800/80 pt-6 text-xs text-slate-500 sm:flex-row">
+          <p className="flex items-center gap-1.5 text-slate-400">
+            <span>© {new Date().getFullYear()} Neirah Tech Solutions. All rights reserved.</span>
+          </p>
 
-          <div className="flex items-center gap-5">
-            <Link href="/privacy" className="transition-colors hover:text-slate-300">
+          <div className="flex items-center gap-6 font-medium text-slate-400">
+            <Link href="/privacy" className="transition-colors hover:text-sky-400">
               Privacy Policy
             </Link>
-
-            <Link href="/terms" className="transition-colors hover:text-slate-300">
-              Terms
+            <span className="text-slate-700">•</span>
+            <Link href="/terms" className="transition-colors hover:text-sky-400">
+              Terms of Service
             </Link>
+            <span className="text-slate-700">•</span>
+            <span className="flex items-center gap-1 text-slate-500">
+              <Globe size={13} className="text-sky-500" /> English (US)
+            </span>
           </div>
         </div>
-
       </div>
     </footer>
   );
 }
 
 /* =========================================================
-   FOOTER COLUMN
-========================================================= */
-
-function FooterColumn({
-  title,
-  links,
-}: {
-  title: string;
-  links: {
-    name: string;
-    href: string;
-  }[];
-}) {
-  return (
-    <div>
-      <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white">
-        {title}
-      </h3>
-
-      <ul className="mt-2.5 space-y-1.5">
-        {links.map((link) => (
-          <li key={link.name}>
-            <Link
-              href={link.href}
-              className="group inline-flex items-center gap-1 text-[11px] text-slate-400 transition-colors duration-200 hover:text-white"
-            >
-              <span>{link.name}</span>
-              <ArrowUpRight
-                size={11}
-                className="opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100 text-sky-400"
-              />
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-/* =========================================================
-   SOCIAL ICON
+   HELPERS & SUBCOMPONENTS
 ========================================================= */
 
 function SocialIcon({
@@ -324,36 +315,40 @@ function SocialIcon({
       aria-label={label}
       target="_blank"
       rel="noopener noreferrer"
-      whileHover={{ y: -1 }}
+      whileHover={{ y: -2, scale: 1.08 }}
       whileTap={{ scale: 0.95 }}
-      className="flex h-7 w-7 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-sky-400/40 hover:bg-sky-400/10 hover:text-sky-400"
+      className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-slate-300 transition-all duration-300 hover:border-sky-400/50 hover:bg-sky-400/10 hover:text-sky-400 hover:shadow-[0_0_20px_rgba(14,165,233,0.3)]"
     >
       {children}
     </motion.a>
   );
 }
 
-/* =========================================================
-   CONTACT ITEM
-========================================================= */
-
-function ContactItem({
+function ContactCard({
   icon,
-  text,
+  label,
+  value,
   href,
 }: {
   icon: React.ReactNode;
-  text: string;
+  label: string;
+  value: string;
   href: string;
 }) {
   return (
-    <a href={href} className="group flex items-center gap-2.5">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white/[0.05] text-slate-400 transition-colors group-hover:bg-sky-400/10 group-hover:text-sky-400">
+    <a
+      href={href}
+      className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3 transition-all duration-300 hover:border-sky-400/40 hover:bg-sky-400/[0.06] hover:shadow-[0_4px_20px_rgba(14,165,233,0.15)]"
+    >
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-900 border border-slate-800 text-sky-400 transition-colors group-hover:border-sky-400/40">
         {icon}
       </div>
-      <span className="text-[11px] text-slate-400 transition-colors group-hover:text-white">
-        {text}
-      </span>
+      <div className="min-w-0 flex-1 text-left">
+        <p className="text-[10px] font-mono uppercase tracking-wider text-slate-400">{label}</p>
+        <p className="text-xs font-bold text-slate-200 truncate group-hover:text-sky-300 transition-colors">{value}</p>
+      </div>
+      <ArrowUpRight size={14} className="text-slate-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
     </a>
   );
 }
+

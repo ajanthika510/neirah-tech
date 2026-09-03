@@ -1086,7 +1086,7 @@ function ServiceExperience({
             max-w-[300px]
             sm:max-w-[480px]
             md:max-w-[560px]
-            text-[11px]
+            text-[14px]
             leading-5
             sm:text-sm
             sm:leading-6
@@ -1635,9 +1635,9 @@ export default function ServicesTunnel() {
               mt-2
               sm:mt-3
               max-w-md
-              text-[10px]
+              text-[14px]
               leading-4
-              sm:text-xs
+              sm:text-s
               sm:leading-5
               text-[#64748B]
               font-light

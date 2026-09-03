@@ -9,7 +9,6 @@ import {
   useTransform,
 } from "framer-motion";
 import {
-  ArrowDown,
   ArrowRight,
   Globe2,
   Sparkles,
@@ -69,20 +68,20 @@ function AmbientBackground({
       <div
         className={`absolute rounded-full blur-[130px] ${
           variant === "center"
-            ? "left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 bg-sky-200/20 sm:h-[600px] sm:w-[600px]"
-            : "left-[5%] top-[15%] h-[300px] w-[300px] bg-sky-200/20 sm:h-[420px] sm:w-[420px]"
+            ? "left-1/2 top-1/2 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2 bg-sky-200/20 sm:h-[520px] sm:w-[520px]"
+            : "left-[5%] top-[15%] h-[260px] w-[260px] bg-sky-200/20 sm:h-[360px] sm:w-[360px]"
         }`}
       />
 
       <div
         className={`absolute rounded-full blur-[130px] ${
           variant === "soft"
-            ? "bottom-[5%] right-[5%] h-[280px] w-[280px] bg-indigo-200/12 sm:h-[360px] sm:w-[360px]"
-            : "bottom-[5%] right-[8%] h-[320px] w-[320px] bg-indigo-200/15 sm:h-[440px] sm:w-[440px]"
+            ? "bottom-[5%] right-[5%] h-[240px] w-[240px] bg-indigo-200/10 sm:h-[320px] sm:w-[320px]"
+            : "bottom-[5%] right-[8%] h-[280px] w-[280px] bg-indigo-200/15 sm:h-[380px] sm:w-[380px]"
         }`}
       />
 
-      <div className="absolute left-[45%] top-[45%] h-[180px] w-[180px] rounded-full bg-violet-200/10 blur-[100px] sm:h-[260px] sm:w-[260px]" />
+      <div className="absolute left-[45%] top-[45%] h-[160px] w-[160px] rounded-full bg-violet-200/10 blur-[100px] sm:h-[220px] sm:w-[220px]" />
     </div>
   );
 }
@@ -188,12 +187,16 @@ function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, -180]);
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, -140]
+  );
 
   const scale = useTransform(
     scrollYProgress,
     [0, 1],
-    [1, 0.9]
+    [1, 0.92]
   );
 
   const opacity = useTransform(
@@ -207,11 +210,14 @@ function Hero() {
       ref={ref}
       className="
         relative
-        min-h-[100svh]
+        min-h-[58svh]
         overflow-hidden
         bg-[#f8fbff]
-        pt-20
-        sm:pt-24
+        pt-24
+        sm:min-h-[58svh]
+        sm:pt-28
+        lg:min-h-[60svh]
+        lg:pt-28
       "
     >
       <AmbientBackground variant="center" />
@@ -230,14 +236,18 @@ function Hero() {
           relative
           z-10
           flex
-          min-h-[calc(100svh-80px)]
+          min-h-[calc(58svh-96px)]
           flex-col
           items-center
           justify-center
           px-5
-          pb-12
+          pb-10
           text-center
+          sm:min-h-[calc(58svh-112px)]
           sm:px-6
+          sm:pb-12
+          lg:min-h-[calc(60svh-112px)]
+          lg:pb-14
         "
       >
         {/* EYEBROW */}
@@ -253,41 +263,55 @@ function Hero() {
           }}
           transition={{
             duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
           }}
           className="
-            mb-7
+            mb-4
             flex
             items-center
             gap-3
             text-[10px]
             font-bold
             uppercase
-            tracking-[0.3em]
+            tracking-[0.45em]
             text-sky-600
-            sm:mb-8
+            sm:mb-5
             sm:text-xs
           "
         >
-          <span className="h-px w-7 bg-sky-400 sm:w-8" />
+          <span className="h-px w-6 bg-sky-400/60 sm:w-10" />
 
-          Our story
+          <span>OUR STORY</span>
 
-          <span className="h-px w-7 bg-sky-400 sm:w-8" />
+          <span className="h-px w-6 bg-sky-400/60 sm:w-10" />
         </motion.div>
 
         {/* TITLE */}
 
-        <h1
+        <motion.h1
+          initial={{
+            opacity: 0,
+            y: 35,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.9,
+            delay: 0.15,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="
             max-w-6xl
-            text-5xl
+            text-4xl
             font-black
-            leading-[0.9]
+            leading-[0.92]
             tracking-[-0.055em]
             text-slate-950
-            sm:text-7xl
-            md:text-8xl
-            lg:text-[9rem]
+            sm:text-6xl
+            md:text-7xl
+            lg:text-8xl
           "
         >
           It started
@@ -305,68 +329,57 @@ function Hero() {
           >
             with two friends.
           </span>
-        </h1>
+        </motion.h1>
 
         {/* DESCRIPTION */}
 
         <motion.p
           initial={{
             opacity: 0,
+            y: 20,
           }}
           animate={{
             opacity: 1,
+            y: 0,
           }}
           transition={{
-            delay: 0.8,
+            delay: 0.45,
             duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
           }}
           className="
-            mt-7
+            mt-5
             max-w-xl
             text-sm
-            leading-7
+            leading-6
             text-slate-500
-            sm:mt-10
-            sm:text-lg
+            sm:mt-6
+            sm:text-base
+            sm:leading-7
           "
         >
           A conversation became an idea.
           <br />
           The idea became something much bigger.
         </motion.p>
-
-        {/* SCROLL INDICATOR */}
-
-        <motion.div
-          animate={{
-            y: [0, 8, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute
-            bottom-7
-            flex
-            flex-col
-            items-center
-            gap-3
-            text-[9px]
-            font-bold
-            uppercase
-            tracking-[0.25em]
-            text-sky-600
-            sm:bottom-10
-            sm:text-[10px]
-          "
-        >
-          Scroll to discover
-
-          <ArrowDown size={16} />
-        </motion.div>
       </motion.div>
+
+      {/* BOTTOM FADE */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-0
+          left-0
+          right-0
+          z-20
+          h-20
+          bg-gradient-to-t
+          from-[#f8fbff]
+          to-transparent
+        "
+      />
     </section>
   );
 }
@@ -386,7 +399,7 @@ function Intro() {
   const y = useTransform(
     scrollYProgress,
     [0, 1],
-    [40, -40]
+    [30, -30]
   );
 
   return (
@@ -397,10 +410,10 @@ function Intro() {
         overflow-hidden
         bg-[#f8fbff]
         px-5
-        py-24
+        py-2
         sm:px-6
-        sm:py-32
-        lg:py-36
+        sm:py-4
+        lg:py-5
       "
     >
       <AmbientBackground variant="soft" />
@@ -420,7 +433,7 @@ function Intro() {
         <div
           className="
             mx-auto
-            mb-7
+            mb-2
             flex
             items-center
             justify-center
@@ -430,11 +443,12 @@ function Intro() {
             uppercase
             tracking-[0.3em]
             text-sky-600
+            sm:mb-3
           "
         >
           <span className="h-px w-8 bg-sky-400" />
 
-          Chapter one
+          Let's Start
 
           <span className="h-px w-8 bg-sky-400" />
         </div>
@@ -448,13 +462,13 @@ function Intro() {
         <p
           className="
             mx-auto
-            mt-7
+            mt-3
             max-w-2xl
             text-base
-            leading-8
+            leading-7
             text-slate-500
-            sm:mt-8
-            sm:text-xl
+            sm:mt-4
+            sm:text-lg
           "
         >
           Ours didn&apos;t begin with a product, a pitch deck, or a
@@ -487,13 +501,13 @@ function StoryScene({
   const imageY = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
-    [70, 0, -70]
+    [50, 0, -50]
   );
 
   const imageScale = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
-    [0.88, 1, 0.92]
+    [0.9, 1, 0.94]
   );
 
   const imageRotate = useTransform(
@@ -510,10 +524,10 @@ function StoryScene({
     scrollYProgress,
     [0, 0.35, 0.65, 1],
     [
-      index % 2 === 0 ? -50 : 50,
+      index % 2 === 0 ? -40 : 40,
       0,
       0,
-      index % 2 === 0 ? 25 : -25,
+      index % 2 === 0 ? 20 : -20,
     ]
   );
 
@@ -530,92 +544,37 @@ function StoryScene({
       ref={ref}
       className="
         relative
-        min-h-[92svh]
         overflow-hidden
         bg-[#f8fbff]
-        sm:min-h-[98svh]
-        lg:min-h-[105svh]
+        py-1
+        sm:py-2
+        lg:py-3
       "
     >
       <AmbientBackground
         variant={index % 2 === 0 ? "default" : "soft"}
       />
 
-      {/* CHAPTER NUMBER */}
-
-      <div
-        className="
-          absolute
-          left-5
-          top-7
-          z-20
-          sm:left-8
-          sm:top-12
-          lg:left-10
-          lg:top-16
-        "
-      >
-        <span
-          className="
-            text-[9px]
-            font-bold
-            uppercase
-            tracking-[0.35em]
-            text-sky-500
-            sm:text-[10px]
-          "
-        >
-          Chapter
-        </span>
-
-        <div
-          className="
-            mt-1
-            text-3xl
-            font-black
-            tracking-[-0.05em]
-            text-slate-950
-            sm:text-4xl
-          "
-        >
-          {scene.number}
-        </div>
-      </div>
-
-      {/* CONTENT */}
-
       <div
         className="
           relative
           mx-auto
           flex
-          min-h-[92svh]
           max-w-7xl
           items-center
           px-5
-          py-20
-          sm:min-h-[98svh]
+          py-1
           sm:px-6
-          sm:py-24
-          lg:min-h-[105svh]
-          lg:py-28
+          sm:py-2
+          lg:py-2
         "
       >
         <div
-          className={`
-            grid
-            w-full
-            items-center
-            gap-8
-            sm:gap-10
-            lg:grid-cols-2
-            lg:gap-16
-            ${
-              isReversed
-                ? "lg:[&>*:first-child]:order-2"
-                : ""
-            }
-          `}
+          className={`grid w-full items-center gap-3 sm:gap-5 lg:grid-cols-2 lg:gap-8 ${
+            isReversed
+              ? "lg:[&>*:first-child]:order-2"
+              : ""
+          }`}
         >
           {/* IMAGE */}
 
@@ -629,9 +588,9 @@ function StoryScene({
               relative
               mx-auto
               w-full
-              max-w-[420px]
-              sm:max-w-[520px]
-              lg:max-w-[620px]
+              max-w-[260px]
+              sm:max-w-[340px]
+              lg:max-w-[420px]
             "
           >
             <div
@@ -645,12 +604,12 @@ function StoryScene({
                 -translate-y-1/2
                 rounded-full
                 bg-sky-300/20
-                blur-[80px]
-                sm:blur-[100px]
+                blur-[50px]
+                sm:blur-[70px]
               "
             />
 
-            <div className="relative aspect-square">
+            <div className="relative aspect-[1.15/1]">
               <Image
                 src={scene.image}
                 alt={scene.title}
@@ -659,8 +618,8 @@ function StoryScene({
                 sizes="(max-width: 640px) 88vw, (max-width: 1024px) 70vw, 50vw"
                 className="
                   object-contain
-                  drop-shadow-[0_25px_55px_rgba(15,23,42,0.12)]
-                  sm:drop-shadow-[0_35px_70px_rgba(15,23,42,0.14)]
+                  drop-shadow-[0_15px_30px_rgba(15,23,42,0.08)]
+                  sm:drop-shadow-[0_20px_40px_rgba(15,23,42,0.1)]
                 "
               />
             </div>
@@ -681,26 +640,23 @@ function StoryScene({
               max-w-xl
               text-center
               lg:text-left
-              ${
-                isReversed
-                  ? "lg:justify-self-end"
-                  : ""
-              }
+              ${isReversed ? "lg:justify-self-end" : ""}
             `}
           >
             {/* EYEBROW */}
 
             <div
               className="
-                mb-5
+                mb-2
                 flex
                 items-center
                 justify-center
                 gap-3
+                sm:mb-3
                 lg:justify-start
               "
             >
-              <span className="h-px w-8 bg-sky-500 sm:w-10" />
+              <span className="h-px w-6 bg-sky-500 sm:w-8" />
 
               <span
                 className="
@@ -720,14 +676,14 @@ function StoryScene({
 
             <h2
               className="
-                text-4xl
+                text-3xl
                 font-black
-                leading-[0.94]
+                leading-[0.96]
                 tracking-[-0.05em]
                 text-slate-950
-                sm:text-5xl
-                md:text-6xl
-                lg:text-7xl
+                sm:text-4xl
+                md:text-5xl
+                lg:text-6xl
               "
             >
               {scene.title}
@@ -738,14 +694,14 @@ function StoryScene({
             <p
               className="
                 mx-auto
-                mt-6
+                mt-2
                 max-w-lg
-                text-base
-                leading-7
+                text-sm
+                leading-6
                 text-slate-500
-                sm:mt-7
-                sm:text-lg
-                sm:leading-8
+                sm:mt-3
+                sm:text-base
+                sm:leading-7
                 lg:mx-0
               "
             >
@@ -756,27 +712,28 @@ function StoryScene({
 
             <div
               className="
-                mt-7
+                mt-3
                 flex
                 items-center
                 justify-center
-                gap-3
-                text-sm
+                gap-2
+                text-xs
                 font-bold
                 text-slate-950
-                sm:mt-8
+                sm:mt-4
+                sm:text-sm
                 lg:justify-start
               "
             >
               <span>Keep going</span>
 
               <ArrowRight
-                size={16}
+                size={15}
                 className="
                   text-sky-500
                   transition-transform
                   duration-300
-                  group-hover:translate-x-1
+                  group-hover:translate-x-2
                 "
               />
             </div>
@@ -828,11 +785,11 @@ function TurningPoint() {
       ref={ref}
       className="
         relative
-        min-h-[110svh]
         overflow-hidden
         bg-[#f8fbff]
-        sm:min-h-[125svh]
-        lg:min-h-[135svh]
+        py-3
+        sm:py-5
+        lg:py-6
       "
     >
       <AmbientBackground variant="center" />
@@ -858,28 +815,27 @@ function TurningPoint() {
           relative
           z-10
           flex
-          min-h-[110svh]
           flex-col
           items-center
           justify-center
-          px-5
+          px-4
+          py-2
           text-center
-          sm:min-h-[125svh]
           sm:px-6
-          lg:min-h-[135svh]
+          sm:py-4
         "
       >
         {/* LABEL */}
 
         <div
           className="
-            mb-7
+            mb-2
             text-[10px]
             font-bold
             uppercase
             tracking-[0.35em]
             text-sky-600
-            sm:mb-10
+            sm:mb-3
             sm:text-xs
           "
         >
@@ -891,13 +847,14 @@ function TurningPoint() {
         <h2
           className="
             max-w-5xl
-            text-5xl
+            text-3xl
             font-black
-            leading-[0.9]
+            leading-[0.92]
             tracking-[-0.055em]
             text-slate-950
-            sm:text-7xl
-            md:text-8xl
+            sm:text-5xl
+            md:text-6xl
+            lg:text-7xl
           "
         >
           We solved one problem.
@@ -922,12 +879,12 @@ function TurningPoint() {
         <div
           className="
             relative
-            mt-14
-            h-[250px]
+            mt-4
+            h-[180px]
             w-full
             max-w-5xl
-            sm:mt-20
-            sm:h-[320px]
+            sm:mt-6
+            sm:h-[240px]
           "
         >
           {/* DESKTOP CONNECTORS */}
@@ -942,14 +899,14 @@ function TurningPoint() {
               w-full
               sm:block
             "
-            viewBox="0 0 1000 320"
+            viewBox="0 0 1000 240"
             preserveAspectRatio="none"
           >
             <line
               x1="200"
-              y1="160"
+              y1="120"
               x2="500"
-              y2="160"
+              y2="120"
               stroke="rgba(14,165,233,.25)"
               strokeWidth="1"
               strokeDasharray="6 8"
@@ -957,9 +914,9 @@ function TurningPoint() {
 
             <line
               x1="800"
-              y1="160"
+              y1="120"
               x2="500"
-              y2="160"
+              y2="120"
               stroke="rgba(99,102,241,.25)"
               strokeWidth="1"
               strokeDasharray="6 8"
@@ -972,8 +929,8 @@ function TurningPoint() {
             className="
               absolute
               left-1/2
-              top-[58px]
-              h-[135px]
+              top-[35px]
+              h-[110px]
               w-px
               -translate-x-1/2
               bg-gradient-to-b
@@ -993,7 +950,7 @@ function TurningPoint() {
             className="
               absolute
               left-[1%]
-              top-[58px]
+              top-[35px]
               -translate-y-1/2
               sm:left-[8%]
               sm:top-1/2
@@ -1002,8 +959,8 @@ function TurningPoint() {
             <div
               className="
                 flex
-                h-20
-                w-20
+                h-16
+                w-16
                 items-center
                 justify-center
                 rounded-full
@@ -1017,10 +974,10 @@ function TurningPoint() {
                 uppercase
                 tracking-wider
                 text-sky-600
-                shadow-[0_20px_60px_rgba(14,165,233,0.12)]
+                shadow-[0_15px_40px_rgba(14,165,233,0.12)]
                 backdrop-blur-md
-                sm:h-28
-                sm:w-28
+                sm:h-24
+                sm:w-24
                 sm:text-xs
               "
             >
@@ -1037,7 +994,7 @@ function TurningPoint() {
             className="
               absolute
               right-[1%]
-              top-[58px]
+              top-[35px]
               -translate-y-1/2
               sm:right-[8%]
               sm:top-1/2
@@ -1046,8 +1003,8 @@ function TurningPoint() {
             <div
               className="
                 flex
-                h-20
-                w-20
+                h-16
+                w-16
                 items-center
                 justify-center
                 rounded-full
@@ -1061,10 +1018,10 @@ function TurningPoint() {
                 uppercase
                 tracking-wider
                 text-indigo-600
-                shadow-[0_20px_60px_rgba(99,102,241,0.12)]
+                shadow-[0_15px_40px_rgba(99,102,241,0.12)]
                 backdrop-blur-md
-                sm:h-28
-                sm:w-28
+                sm:h-24
+                sm:w-24
                 sm:text-xs
               "
             >
@@ -1081,10 +1038,10 @@ function TurningPoint() {
             className="
               absolute
               left-1/2
-              top-[190px]
+              top-[145px]
               flex
-              h-28
-              w-28
+              h-24
+              w-24
               -translate-x-1/2
               -translate-y-1/2
               items-center
@@ -1099,11 +1056,11 @@ function TurningPoint() {
               uppercase
               tracking-[0.18em]
               text-slate-950
-              shadow-[0_25px_80px_rgba(15,23,42,0.12)]
+              shadow-[0_20px_60px_rgba(15,23,42,0.12)]
               backdrop-blur-xl
               sm:top-1/2
-              sm:h-36
-              sm:w-36
+              sm:h-32
+              sm:w-32
               sm:text-xs
             "
           >
@@ -1117,13 +1074,14 @@ function TurningPoint() {
 
         <p
           className="
-            mt-5
+            mt-2
             max-w-2xl
-            text-base
-            leading-8
+            text-sm
+            leading-6
             text-slate-500
-            sm:mt-8
-            sm:text-lg
+            sm:mt-3
+            sm:text-base
+            sm:leading-7
           "
         >
           Communication. Data. Automation. Customers. Digital workflows.
@@ -1161,7 +1119,7 @@ function FutureSection() {
   const y = useTransform(
     scrollYProgress,
     [0, 1],
-    [70, -70]
+    [50, -50]
   );
 
   return (
@@ -1169,10 +1127,11 @@ function FutureSection() {
       ref={ref}
       className="
         relative
-        min-h-[105svh]
         overflow-hidden
         bg-[#f8fbff]
-        sm:min-h-[115svh]
+        py-3
+        sm:py-5
+        lg:py-6
       "
     >
       <AmbientBackground />
@@ -1182,24 +1141,22 @@ function FutureSection() {
           relative
           mx-auto
           flex
-          min-h-[105svh]
           max-w-7xl
           flex-col
           items-center
           justify-center
-          px-5
-          py-24
+          px-4
+          py-2
           text-center
-          sm:min-h-[115svh]
           sm:px-6
-          sm:py-32
+          sm:py-4
         "
       >
         {/* LABEL */}
 
         <div
           className="
-            mb-7
+            mb-2
             flex
             items-center
             gap-3
@@ -1208,7 +1165,7 @@ function FutureSection() {
             uppercase
             tracking-[0.3em]
             text-indigo-600
-            sm:mb-10
+            sm:mb-3
             sm:text-xs
           "
         >
@@ -1222,14 +1179,14 @@ function FutureSection() {
         <h2
           className="
             max-w-6xl
-            text-5xl
+            text-3xl
             font-black
-            leading-[0.99]
+            leading-[0.96]
             tracking-[-0.045em]
             text-slate-950
-            sm:text-7xl
-            md:text-8xl
-            lg:text-[8rem]
+            sm:text-5xl
+            md:text-6xl
+            lg:text-7xl
           "
         >
           From physical
@@ -1259,12 +1216,12 @@ function FutureSection() {
           }}
           className="
             relative
-            mt-12
-            h-[260px]
-            w-[260px]
-            sm:mt-16
-            sm:h-[430px]
-            sm:w-[430px]
+            mt-4
+            h-[200px]
+            w-[200px]
+            sm:mt-6
+            sm:h-[300px]
+            sm:w-[300px]
           "
         >
           <div
@@ -1276,7 +1233,7 @@ function FutureSection() {
               from-sky-300/25
               via-indigo-300/15
               to-violet-300/25
-              blur-3xl
+              blur-2xl
             "
           />
 
@@ -1313,8 +1270,8 @@ function FutureSection() {
               left-1/2
               top-1/2
               flex
-              h-20
-              w-20
+              h-16
+              w-16
               -translate-x-1/2
               -translate-y-1/2
               items-center
@@ -1327,9 +1284,9 @@ function FutureSection() {
               uppercase
               tracking-[0.18em]
               text-slate-950
-              shadow-[0_20px_70px_rgba(15,23,42,0.12)]
-              sm:h-28
-              sm:w-28
+              shadow-[0_15px_50px_rgba(15,23,42,0.12)]
+              sm:h-24
+              sm:w-24
               sm:text-xs
             "
           >
@@ -1361,8 +1318,8 @@ function FutureSection() {
                 absolute
                 ${position}
                 flex
-                h-10
-                min-w-10
+                h-8
+                min-w-8
                 items-center
                 justify-center
                 rounded-full
@@ -1375,16 +1332,16 @@ function FutureSection() {
                 uppercase
                 tracking-wider
                 text-slate-700
-                shadow-lg
-                sm:h-14
-                sm:min-w-14
-                sm:px-4
-                sm:text-[10px]
+                shadow-md
+                sm:h-11
+                sm:min-w-11
+                sm:px-3
+                sm:text-[9px]
               `}
               animate={{
                 y: [
                   0,
-                  index % 2 === 0 ? -8 : 8,
+                  index % 2 === 0 ? -6 : 6,
                   0,
                 ],
               }}
@@ -1403,13 +1360,14 @@ function FutureSection() {
 
         <p
           className="
-            mt-8
+            mt-3
             max-w-2xl
-            text-base
-            leading-8
+            text-sm
+            leading-6
             text-slate-500
-            sm:mt-12
-            sm:text-lg
+            sm:mt-4
+            sm:text-base
+            sm:leading-7
           "
         >
           Today, we&apos;re building digital products and connected
@@ -1438,9 +1396,10 @@ function Values() {
         overflow-hidden
         bg-[#f8fbff]
         px-5
-        py-28
+        py-4
         sm:px-6
-        sm:py-36
+        sm:py-6
+        lg:py-8
       "
     >
       <AmbientBackground variant="soft" />
@@ -1448,7 +1407,7 @@ function Values() {
       <div className="relative z-10 mx-auto max-w-6xl">
         {/* HEADER */}
 
-        <div className="mb-14 sm:mb-20">
+        <div className="mb-3 sm:mb-5">
           <span
             className="
               text-[10px]
@@ -1464,15 +1423,16 @@ function Values() {
 
           <h2
             className="
-              mt-5
+              mt-2
               max-w-4xl
-              text-5xl
+              text-3xl
               font-black
-              leading-[0.99]
+              leading-[0.96]
               tracking-[-0.05em]
               text-slate-950
-              sm:mt-6
-              sm:text-7xl
+              sm:mt-3
+              sm:text-5xl
+              md:text-6xl
             "
           >
             The idea changed.
@@ -1522,11 +1482,11 @@ function Values() {
                 justify-between
                 border-t
                 border-sky-100
-                py-7
-                sm:py-12
+                py-2.5
+                sm:py-4
               "
             >
-              <div className="flex min-w-0 items-center gap-4 sm:gap-6">
+              <div className="flex min-w-0 items-center gap-3 sm:gap-5">
                 <span
                   className="
                     shrink-0
@@ -1540,11 +1500,12 @@ function Values() {
 
                 <h3
                   className="
-                    text-lg
+                    text-base
                     font-black
                     tracking-[-0.035em]
                     text-slate-950
-                    sm:text-4xl
+                    sm:text-2xl
+                    md:text-3xl
                   "
                 >
                   {value}
@@ -1552,9 +1513,9 @@ function Values() {
               </div>
 
               <ArrowRight
-                size={20}
+                size={18}
                 className="
-                  ml-4
+                  ml-3
                   shrink-0
                   text-sky-300
                   transition-transform
@@ -1603,10 +1564,11 @@ function GlobalSection() {
         overflow-hidden
         bg-[#f8fbff]
         px-5
-        py-28
+        py-4
         text-slate-950
         sm:px-6
-        sm:py-40
+        sm:py-6
+        lg:py-8
       "
     >
       <AmbientBackground variant="center" />
@@ -1629,27 +1591,27 @@ function GlobalSection() {
           }}
           className="
             mx-auto
-            mb-8
+            mb-2
             flex
-            h-18
-            w-18
+            h-14
+            w-14
             items-center
             justify-center
             rounded-full
             border
             border-sky-200
             bg-white/70
-            shadow-[0_20px_70px_rgba(14,165,233,0.1)]
+            shadow-[0_15px_40px_rgba(14,165,233,0.1)]
             backdrop-blur-md
-            sm:mb-10
-            sm:h-20
-            sm:w-20
+            sm:mb-3
+            sm:h-16
+            sm:w-16
           "
         >
           <Globe2
-            size={38}
+            size={30}
             strokeWidth={1.2}
-            className="text-sky-500 sm:h-10 sm:w-10"
+            className="text-sky-500 sm:h-8 sm:w-8"
           />
         </motion.div>
 
@@ -1657,13 +1619,14 @@ function GlobalSection() {
 
         <h2
           className="
-            text-5xl
+            text-3xl
             font-black
             leading-[0.92]
             tracking-[-0.05em]
             text-slate-950
-            sm:text-7xl
-            md:text-8xl
+            sm:text-5xl
+            md:text-6xl
+            lg:text-7xl
           "
         >
           From an idea
@@ -1688,13 +1651,14 @@ function GlobalSection() {
         <p
           className="
             mx-auto
-            mt-8
+            mt-2
             max-w-xl
-            text-base
-            leading-8
+            text-sm
+            leading-6
             text-slate-500
-            sm:mt-10
-            sm:text-lg
+            sm:mt-3
+            sm:text-base
+            sm:leading-7
           "
         >
           What began as a conversation between two people continues to
@@ -1721,7 +1685,7 @@ function FinalCTA() {
   const y = useTransform(
     scrollYProgress,
     [0, 1],
-    [50, -50]
+    [40, -40]
   );
 
   return (
@@ -1732,10 +1696,11 @@ function FinalCTA() {
         overflow-hidden
         bg-[#f8fbff]
         px-5
-        py-32
+        py-4
         text-center
         sm:px-6
-        sm:py-48
+        sm:py-8
+        lg:py-10
       "
     >
       <AmbientBackground variant="center" />
@@ -1770,15 +1735,16 @@ function FinalCTA() {
 
         <h2
           className="
-            mt-6
-            text-5xl
+            mt-2
+            text-3xl
             font-black
-            leading-[0.9]
+            leading-[0.92]
             tracking-[-0.055em]
             text-slate-950
-            sm:mt-7
-            sm:text-7xl
-            md:text-8xl
+            sm:mt-3
+            sm:text-5xl
+            md:text-6xl
+            lg:text-7xl
           "
         >
           This story
@@ -1803,13 +1769,14 @@ function FinalCTA() {
         <p
           className="
             mx-auto
-            mt-7
+            mt-2
             max-w-xl
-            text-base
-            leading-8
+            text-sm
+            leading-6
             text-slate-500
-            sm:mt-10
-            sm:text-lg
+            sm:mt-3
+            sm:text-base
+            sm:leading-7
           "
         >
           We&apos;re still asking the same question:
@@ -1829,27 +1796,30 @@ function FinalCTA() {
           }}
           className="
             mx-auto
-            mt-9
+            mt-4
             inline-flex
             items-center
             gap-3
             rounded-full
             bg-slate-950
-            px-7
-            py-4
-            text-sm
+            px-6
+            py-3
+            text-xs
             font-bold
             text-white
             shadow-xl
             shadow-slate-950/10
             transition-shadow
             hover:shadow-2xl
-            sm:mt-12
+            sm:mt-5
+            sm:px-7
+            sm:py-3.5
+            sm:text-sm
           "
         >
           Start a conversation
 
-          <ArrowRight size={17} />
+          <ArrowRight size={16} />
         </motion.a>
       </motion.div>
     </section>

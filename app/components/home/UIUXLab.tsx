@@ -162,6 +162,7 @@ const projects = [
     tag: "Mobile & Web",
     year: "2026",
     location: "London, UK",
+    url: "/projects",
   },
   {
     id: 2,
@@ -175,6 +176,7 @@ const projects = [
     tag: "Online Store",
     year: "2026",
     location: "Dubai, UAE",
+    url: "/projects",
   },
   {
     id: 3,
@@ -188,6 +190,7 @@ const projects = [
     tag: "AI Automation",
     year: "2025",
     location: "Singapore",
+    url: "/projects",
   },
   {
     id: 4,
@@ -201,6 +204,7 @@ const projects = [
     tag: "Smart IoT",
     year: "2026",
     location: "Berlin, Germany",
+    url: "/projects",
   },
   {
     id: 5,
@@ -214,6 +218,7 @@ const projects = [
     tag: "Medical App",
     year: "2025",
     location: "Toronto, Canada",
+    url: "/projects",
   },
   {
     id: 6,
@@ -227,6 +232,7 @@ const projects = [
     tag: "Enterprise System",
     year: "2025",
     location: "Amsterdam, NL",
+    url: "/projects",
   },
 ];
 
@@ -279,7 +285,7 @@ export default function UIUXLab() {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden bg-[#F8FBFF] text-[#0F172A] py-24 sm:py-32"
+      className="relative overflow-hidden bg-[#F8FBFF] text-[#0F172A] py-12 sm:py-16"
     >
       {/* SEAMLESS CONTINUATION FROM SERVICE SECTION */}
       <div className="pointer-events-none absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#F8FBFF] via-sky-50/40 to-transparent z-10" />
@@ -316,7 +322,7 @@ export default function UIUXLab() {
                 className="h-full w-full object-contain drop-shadow-[0_0_8px_rgba(14,165,233,0.8)]"
               />
             </div>
-            <RevealText text="NEIRAHTECH.LAB • INTERACTIVE STUDIO" mode="viewport" stagger={0.05} duration={0.4} blurAmount={3} />
+            <RevealText text="NEIRAH LAB • INTERACTIVE STUDIO" mode="viewport" stagger={0.05} duration={0.4} blurAmount={3} />
           </motion.div>
 
           <h2 className="text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl font-black leading-[1.08] tracking-tight text-slate-900 pb-1">
@@ -342,14 +348,14 @@ export default function UIUXLab() {
         {/* ===================================================
             1. VIBRANT & DRAGGABLE NEIRAHTECH.LAB STUDIO
         =================================================== */}
-        <div className="mt-14 sm:mt-20">
+        <div className="mt-10 sm:mt-14">
           <NeirahTechLabVisualStudio rotateX={isMobile ? 0 : rotateX} rotateY={isMobile ? 0 : rotateY} />
         </div>
 
         {/* ===================================================
             2. CLICK-TO-SPOTLIGHT BENTO SHOWCASE (CLICK TO EXPAND)
         =================================================== */}
-        <div className="mt-28 sm:mt-36">
+        <div className="mt-16 sm:mt-20">
           <CircularMotionBentoShowcaseUI />
         </div>
       </div>
@@ -408,12 +414,15 @@ function NeirahTechLabVisualStudio({
             </div>
             <div className="h-4 w-px bg-slate-200 hidden sm:block" />
             <div className="hidden sm:flex items-center gap-2 text-xs font-mono font-bold text-slate-500">
-              <Cpu size={14} className="text-sky-500" /> NEIRAH SHADER ENGINE v3.6
+              <Cpu size={14} style={{ color: currentAccent }} className="transition-colors duration-300" /> NEIRAH SHADER ENGINE v3.6
             </div>
           </div>
 
           {/* Prominent Neiro Brand Mark Badge */}
-          <div className="flex items-center gap-2.5 rounded-full border-2 border-sky-300/80 bg-white/95 px-5 py-1.5 text-xs font-black text-slate-900 shadow-[0_4px_20px_rgba(14,165,233,0.25)] backdrop-blur-md">
+          <div
+            style={{ borderColor: `${currentAccent}60`, boxShadow: `0 4px 20px ${currentAccent}25` }}
+            className="flex items-center gap-2.5 rounded-full border-2 bg-white/95 px-5 py-1.5 text-xs font-black text-slate-900 backdrop-blur-md transition-all duration-300"
+          >
             <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 p-1">
               <Image
                 src="/images/Neiro.png"
@@ -423,10 +432,10 @@ function NeirahTechLabVisualStudio({
                 className="h-full w-full object-contain drop-shadow-[0_0_10px_rgba(14,165,233,0.9)]"
               />
             </div>
-            <span className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
+            <span style={{ color: currentAccent }} className="font-mono font-black transition-colors duration-300">
               neirahtech.lab
             </span>
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="h-2 w-2 rounded-full animate-pulse transition-colors duration-300" style={{ background: currentAccent }} />
           </div>
 
           {/* Right Status & Drag Reset Button */}
@@ -456,20 +465,26 @@ function NeirahTechLabVisualStudio({
                 { name: "Pink", hex: "#F43F5E" },
                 { name: "Cyan", hex: "#06B6D4" },
                 { name: "Emerald", hex: "#10B981" },
-              ].map((c) => (
-                <button
-                  key={c.name}
-                  type="button"
-                  aria-label={`Select ${c.name} accent`}
-                  onClick={() => setAccentColor(c.hex)}
-                  className={`h-7 w-7 rounded-full transition-all border-2 cursor-pointer ${
-                    currentAccent === c.hex
-                      ? "scale-125 border-slate-900 shadow-md ring-4 ring-sky-400/30"
-                      : "border-white hover:scale-110"
-                  }`}
-                  style={{ background: c.hex }}
-                />
-              ))}
+              ].map((c) => {
+                const isSelected = currentAccent.toLowerCase() === c.hex.toLowerCase();
+                return (
+                  <button
+                    key={c.name}
+                    type="button"
+                    aria-label={`Select ${c.name} accent`}
+                    onClick={() => setAccentColor(c.hex)}
+                    className={`h-7 w-7 rounded-full transition-all border-2 cursor-pointer ${
+                      isSelected
+                        ? "scale-125 border-slate-900 ring-2 ring-slate-900/30 shadow-lg"
+                        : "border-white hover:scale-110 opacity-80 hover:opacity-100"
+                    }`}
+                    style={{
+                      background: c.hex,
+                      boxShadow: isSelected ? `0 0 14px ${c.hex}` : undefined,
+                    }}
+                  />
+                );
+              })}
             </div>
           </div>
 
@@ -477,7 +492,7 @@ function NeirahTechLabVisualStudio({
           <div className="flex items-center gap-1.5 bg-white rounded-full p-1 border border-slate-200 shadow-sm">
             <button
               type="button"
-              onClick={() => { setDeviceMode("desktop"); setActiveMode("visual"); }}
+              onClick={() => { setDeviceMode("desktop"); setActiveMode("visual"); setAccentColor(UX_MODES["visual"].accent); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                 deviceMode === "desktop" ? "bg-slate-900 text-white shadow" : "text-slate-500 hover:text-slate-900"
               }`}
@@ -486,7 +501,7 @@ function NeirahTechLabVisualStudio({
             </button>
             <button
               type="button"
-              onClick={() => { setDeviceMode("tablet"); setActiveMode("responsive"); }}
+              onClick={() => { setDeviceMode("tablet"); setActiveMode("responsive"); setAccentColor(UX_MODES["responsive"].accent); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                 deviceMode === "tablet" ? "bg-slate-900 text-white shadow" : "text-slate-500 hover:text-slate-900"
               }`}
@@ -495,7 +510,7 @@ function NeirahTechLabVisualStudio({
             </button>
             <button
               type="button"
-              onClick={() => { setDeviceMode("mobile"); setActiveMode("responsive"); }}
+              onClick={() => { setDeviceMode("mobile"); setActiveMode("responsive"); setAccentColor(UX_MODES["responsive"].accent); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                 deviceMode === "mobile" ? "bg-slate-900 text-white shadow" : "text-slate-500 hover:text-slate-900"
               }`}
@@ -516,7 +531,10 @@ function NeirahTechLabVisualStudio({
               <button
                 key={mKey}
                 type="button"
-                onClick={() => setActiveMode(mKey)}
+                onClick={() => {
+                  setActiveMode(mKey);
+                  setAccentColor(m.accent);
+                }}
                 className={`flex flex-col gap-2 rounded-2xl p-4 text-left transition-all border cursor-pointer ${
                   isSelected
                     ? "bg-slate-900 text-white border-slate-900 shadow-xl scale-[1.03]"
@@ -544,7 +562,7 @@ function NeirahTechLabVisualStudio({
         {/* Live Interactive Experience Canvas with DRAGGABLE IMAGE STICKERS */}
         <div
           ref={canvasBoundsRef}
-          className="relative min-h-[420px] sm:min-h-[460px] rounded-3xl border-2 border-slate-200/80 p-6 sm:p-8 transition-all duration-500 bg-gradient-to-br from-white via-sky-50/60 via-purple-50/30 to-pink-50/40 overflow-hidden flex items-center justify-center"
+          className="relative min-h-[440px] sm:min-h-[460px] rounded-3xl border-2 border-slate-200/80 p-4 pt-20 sm:p-8 transition-all duration-500 bg-gradient-to-br from-white via-sky-50/60 via-purple-50/30 to-pink-50/40 overflow-hidden flex items-center justify-center"
         >
           {/* Colorful Holographic Vector Beam */}
           <svg
@@ -564,8 +582,8 @@ function NeirahTechLabVisualStudio({
           </svg>
 
           {/* Floating Badges */}
-          <FloatingTag icon={Eye} text="User First Experience" className="top-6 left-6" delay={0} />
-          <FloatingTag icon={Sparkles} text={mode.metric} className="top-6 right-6" delay={0.8} />
+          <FloatingTag icon={Eye} text="User First Experience" className="top-3 left-3 sm:top-6 sm:left-6" delay={0} accentColor={currentAccent} />
+          <FloatingTag icon={Sparkles} text={mode.metric} className="top-12 right-3 sm:top-6 sm:right-6" delay={0.8} accentColor={currentAccent} />
 
           {/* ==================================================
               INTERACTIVE DRAGGABLE IMAGE CARDS / STICKERS!
@@ -599,9 +617,11 @@ function NeirahTechLabVisualStudio({
                 </div>
               </div>
 
-              <div className="px-1 flex items-center justify-between">
-                <span className="text-[10px] font-extrabold text-slate-800 truncate">{sticker.title}</span>
-                <span className={`text-[9px] font-black text-white px-2 py-0.5 rounded-full bg-gradient-to-r ${sticker.accent}`}>
+              <div className="px-1 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-1 text-center sm:text-left">
+                <span className="text-[10px] font-extrabold text-slate-800 truncate text-center sm:text-left max-w-full">
+                  {sticker.title}
+                </span>
+                <span className={`text-[9px] font-black text-white px-2.5 py-0.5 rounded-full bg-gradient-to-r ${sticker.accent} text-center flex items-center justify-center shrink-0`}>
                   {sticker.tag}
                 </span>
               </div>
@@ -612,13 +632,14 @@ function NeirahTechLabVisualStudio({
           <motion.div
             layout
             transition={{ type: "spring", stiffness: 220, damping: 22 }}
-            className="relative z-10 w-full max-w-xl mx-auto bg-white/95 rounded-3xl border-2 border-slate-200/90 p-6 shadow-2xl backdrop-blur-xl space-y-5 transition-all duration-500"
+            style={{ borderColor: `${currentAccent}50` }}
+            className="relative z-10 w-full max-w-xl mx-auto bg-white/95 rounded-3xl border-2 p-6 shadow-2xl backdrop-blur-xl space-y-5 transition-all duration-500"
           >
             {/* Inner Window Navigation with Neiro Logo */}
             <div className="flex justify-between items-center border-b border-slate-100 pb-4">
               <div className="flex items-center gap-3">
                 <div
-                  className="h-9 w-9 rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-md p-1.5"
+                  className="h-9 w-9 rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-md p-1.5 transition-colors duration-300"
                   style={{ background: currentAccent }}
                 >
                   <Image
@@ -671,7 +692,7 @@ function NeirahTechLabVisualStudio({
                         key={i}
                         animate={{ height: ["20%", `${h}%`, "30%"] }}
                         transition={{ duration: 0.8 + i * 0.15, repeat: Infinity, ease: "easeInOut" }}
-                        className="w-1 rounded-full"
+                        className="w-1 rounded-full transition-colors duration-300"
                         style={{ background: currentAccent }}
                       />
                     ))}
@@ -685,7 +706,7 @@ function NeirahTechLabVisualStudio({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setInteractiveClicks((c) => c + 1)}
-                    className="flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer"
+                    className="flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer transition-colors duration-300"
                     style={{ background: currentAccent }}
                   >
                     <span>Test Interaction</span>
@@ -694,7 +715,7 @@ function NeirahTechLabVisualStudio({
 
                   <div className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-100 px-4 py-2 rounded-full border border-slate-200">
                     <Check size={14} className="text-emerald-500" />
-                    Clicks Triggered: <span className="font-mono text-sky-600 font-extrabold">{interactiveClicks}</span>
+                    Clicks Triggered: <span className="font-mono font-extrabold transition-colors duration-300" style={{ color: currentAccent }}>{interactiveClicks}</span>
                   </div>
                 </div>
               </motion.div>
@@ -721,10 +742,10 @@ function NeirahTechLabVisualStudio({
         {/* Footer Summary */}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 border-t border-slate-200/60 pt-4">
           <span className="font-semibold flex items-center gap-1.5">
-            <Sparkles size={14} className="text-sky-500" />
+            <Sparkles size={14} style={{ color: currentAccent }} className="transition-colors duration-300" />
             ✋ Try dragging the colorful project image cards around the studio canvas above!
           </span>
-          <Link href="/projects" className="font-bold text-sky-600 hover:underline flex items-center gap-1">
+          <Link href="/projects" style={{ color: currentAccent }} className="font-bold hover:underline flex items-center gap-1 transition-colors duration-300">
             See Real Client Work <ArrowRight size={13} />
           </Link>
         </div>
@@ -771,7 +792,7 @@ function CircularMotionBentoShowcaseUI() {
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div>
           <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.25em] text-indigo-600">
-            <Compass size={14} /> CLICK TO SPOTLIGHT & EXPAND
+            <Compass size={14} /> FEATURED PORTFOLIO & PRODUCTS
           </span>
           <h3 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">
             Featured Digital Experiences
@@ -902,20 +923,18 @@ function CircularMotionBentoShowcaseUI() {
         </AnimatePresence>
 
         {/* ==================================================
-            RIGHT SIDE: CLICKABLE CARDS (CLICK TO EXPAND AS HERO)
+            RIGHT SIDE: FEATURED PROJECT CARDS (DIRECT LINK TO LIVE PRODUCT)
         =================================================== */}
         <div className="lg:col-span-5 space-y-6 flex flex-col justify-between">
           <div className="flex items-center justify-between px-1 text-xs font-black uppercase tracking-wider text-slate-400">
-            <span>Tap Card to Expand:</span>
-            <span className="text-sky-600 font-mono">Interactive Cards</span>
+            <span>Discover Featured Projects:</span>
+            <span className="text-sky-600 font-mono">Live Products</span>
           </div>
 
           {rightSideProjects.map((project) => (
-            <motion.div
+            <Link
               key={project.id}
-              onClick={() => setActiveHeroId(project.id)}
-              whileHover={{ scale: 1.02, y: -4 }}
-              whileTap={{ scale: 0.98 }}
+              href={project.url || "/projects"}
               className="group relative overflow-hidden rounded-[36px] border-2 border-white bg-white/90 p-5 sm:p-6 shadow-[0_20px_60px_rgba(15,23,42,0.07)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_30px_90px_rgba(15,23,42,0.16)] hover:border-sky-300 flex-1 flex flex-col justify-between cursor-pointer"
             >
               {/* CIRCULAR ORBITAL GLOW DISC */}
@@ -937,7 +956,7 @@ function CircularMotionBentoShowcaseUI() {
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors" />
                   <div className="absolute bottom-1 right-1 bg-slate-900/80 backdrop-blur-md text-white rounded-full p-1 shadow-sm">
-                    <Maximize2 size={10} />
+                    <ExternalLink size={10} />
                   </div>
                 </div>
 
@@ -967,11 +986,11 @@ function CircularMotionBentoShowcaseUI() {
 
               <div className="pt-2 flex items-center justify-between border-t border-slate-100 text-xs font-bold text-sky-600">
                 <span className="flex items-center gap-1 group-hover:underline">
-                  <Maximize2 size={12} /> Click to expand as Hero
+                  <ExternalLink size={12} /> Explore Project
                 </span>
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
               </div>
-            </motion.div>
+            </Link>
           ))}
         </div>
       </div>
@@ -988,20 +1007,28 @@ function FloatingTag({
   text,
   className,
   delay,
+  accentColor,
 }: {
   icon: LucideIcon;
   text: string;
   className: string;
   delay: number;
+  accentColor?: string;
 }) {
+  const accent = accentColor || "#0EA5E9";
   return (
     <motion.div
-      animate={{ y: [0, -8, 0] }}
+      animate={{ y: [0, -6, 0] }}
       transition={{ duration: 3.5, delay, repeat: Infinity, ease: "easeInOut" }}
-      className={`absolute z-30 flex items-center gap-2 rounded-full border border-sky-200 bg-white/90 px-3.5 py-1.5 text-xs font-bold text-sky-600 shadow-md backdrop-blur-md ${className}`}
+      style={{
+        color: accent,
+        borderColor: `${accent}60`,
+        boxShadow: `0 8px 25px ${accent}20`,
+      }}
+      className={`absolute z-30 flex items-center gap-1.5 sm:gap-2 rounded-full border bg-white/95 px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs font-extrabold backdrop-blur-md max-w-[calc(100%-1.5rem)] sm:max-w-none transition-all duration-300 ${className}`}
     >
-      <Icon size={14} className="text-sky-500" />
-      {text}
+      <Icon size={14} style={{ color: accent }} className="shrink-0 transition-colors duration-300" />
+      <span className="truncate">{text}</span>
     </motion.div>
   );
 }

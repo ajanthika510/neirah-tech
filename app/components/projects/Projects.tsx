@@ -661,7 +661,7 @@ function ProjectsHero({
                 will-change-transform
               "
             >
-              Work that holds
+              WORK THAT HOLDS
             </motion.span>
           </span>
 
@@ -706,7 +706,7 @@ function ProjectsHero({
                 color: "transparent",
               }}
             >
-              your attention.
+              YOUR ATTENTION.
             </motion.span>
           </span>
         </h1>

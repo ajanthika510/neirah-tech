@@ -358,7 +358,7 @@ export default function BookingEngine({
               ))}
             </div>
 
-            <div className="text-xs text-slate-600 font-semibold">Step {step} of 3</div>
+            <div className="text-xs text-slate-600 font-semibold mr-10 sm:mr-12">Step {step} of 3</div>
           </div>
         )}
 

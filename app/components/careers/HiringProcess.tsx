@@ -41,7 +41,7 @@ const steps = [
 
 export default function HiringProcess() {
   return (
-    <section className="relative overflow-hidden bg-white px-6 py-24 sm:px-8 lg:px-10">
+    <section className="relative overflow-hidden bg-white px-6 py-12 sm:py-16 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
 
         <motion.div

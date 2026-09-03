@@ -510,7 +510,7 @@ export default function Hero() {
             {/* CENTRAL NEIRAH CORE */}
             <div
               className="
-                absolute w-[80px] h-[80px] min-[380px]:w-[100px] min-[380px]:h-[100px] sm:w-40 sm:h-40 rounded-full
+                absolute w-[95px] h-[95px] min-[380px]:w-[115px] min-[380px]:h-[115px] sm:w-44 sm:h-44 rounded-full
                 bg-white border border-sky-200 flex items-center justify-center
                 shadow-[0_0_80px_rgba(14,165,233,.25)] backdrop-blur-xl select-none pointer-events-none
               "
@@ -531,9 +531,8 @@ export default function Hero() {
               <div
                 className="
                   relative z-10 flex items-center justify-center
-                  w-20 h-20 min-[380px]:w-24 min-[380px]:h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40
-                  rounded-full bg-white/80 border border-sky-200 backdrop-blur-md
-                  shadow-[0_0_40px_rgba(14,165,233,.25)] overflow-hidden
+                  w-full h-full rounded-full bg-white/90 border border-sky-200 backdrop-blur-md
+                  shadow-[0_0_40px_rgba(14,165,233,.25)] p-2.5 min-[380px]:p-3.5 sm:p-4 overflow-hidden
                 "
               >
                 <Image
@@ -543,8 +542,7 @@ export default function Hero() {
                   height={180}
                   priority
                   className="
-                    w-20 h-20 min-[380px]:w-28 min-[380px]:h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40
-                    object-contain drop-shadow-[0_0_25px_rgba(14,165,233,.5)]
+                    w-full h-full object-contain drop-shadow-[0_0_20px_rgba(14,165,233,.5)]
                   "
                 />
               </div>

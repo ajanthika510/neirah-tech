@@ -4,7 +4,6 @@ import {
   motion,
   useMotionValue,
   useSpring,
-  type Variants,
 } from "framer-motion";
 import {
   ArrowRight,
@@ -38,7 +37,10 @@ const services = [
 ];
 
 interface ContactInfo {
-  icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
+  icon: React.ComponentType<{
+    size?: number;
+    strokeWidth?: number;
+  }>;
   title: string;
   value: string;
   description: string;
@@ -98,9 +100,10 @@ export default function Contact() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     const form = e.currentTarget;
     const formData = new FormData(form);
-    
+
     setSubmitted(true);
 
     try {
@@ -111,6 +114,7 @@ export default function Contact() {
         service: selectedService,
         message: String(formData.get("message") || ""),
       });
+
       form.reset();
     } catch (err) {
       console.error("Failed to submit contact form:", err);
@@ -122,14 +126,36 @@ export default function Contact() {
   }
 
   return (
-    <main className="relative overflow-hidden bg-[#F7FCFF] text-[#0B1736]">
+    <main
+      className="
+        relative
+        overflow-hidden
+        bg-[#F7FCFF]
+        pt-16
+        text-[#0B1736]
+        sm:pt-20
+        lg:pt-24
+      "
+    >
       {/* ========================================================= */}
       {/* HERO */}
       {/* ========================================================= */}
 
       <section
         onMouseMove={handleMouseMove}
-        className="relative overflow-hidden px-5 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:px-10 lg:pb-24 lg:pt-24"
+        className="
+          relative
+          overflow-hidden
+          px-5
+          pb-16
+          pt-8
+          sm:px-6
+          sm:pb-20
+          sm:pt-10
+          lg:px-10
+          lg:pb-24
+          lg:pt-12
+        "
       >
         {/* Background grid */}
 
@@ -145,7 +171,15 @@ export default function Contact() {
         {/* Mouse glow */}
 
         <motion.div
-          className="pointer-events-none absolute h-72 w-72 rounded-full bg-cyan-300/20 blur-[100px]"
+          className="
+            pointer-events-none
+            absolute
+            h-72
+            w-72
+            rounded-full
+            bg-cyan-300/20
+            blur-[100px]
+          "
           style={{
             left: springX,
             top: springY,
@@ -154,7 +188,7 @@ export default function Contact() {
           }}
         />
 
-        {/* Large ambient glows */}
+        {/* Ambient glow left */}
 
         <motion.div
           animate={{
@@ -167,8 +201,22 @@ export default function Contact() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="pointer-events-none absolute -left-40 top-20 h-[380px] w-[380px] rounded-full bg-sky-400/15 blur-[120px] sm:h-[500px] sm:w-[500px]"
+          className="
+            pointer-events-none
+            absolute
+            -left-40
+            top-20
+            h-[380px]
+            w-[380px]
+            rounded-full
+            bg-sky-400/15
+            blur-[120px]
+            sm:h-[500px]
+            sm:w-[500px]
+          "
         />
+
+        {/* Ambient glow right */}
 
         <motion.div
           animate={{
@@ -181,10 +229,22 @@ export default function Contact() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-indigo-400/15 blur-[130px] sm:h-[520px] sm:w-[520px]"
+          className="
+            pointer-events-none
+            absolute
+            -right-40
+            bottom-0
+            h-[400px]
+            w-[400px]
+            rounded-full
+            bg-indigo-400/15
+            blur-[130px]
+            sm:h-[520px]
+            sm:w-[520px]
+          "
         />
 
-        {/* Floating dots */}
+        {/* Floating dot */}
 
         <motion.div
           animate={{
@@ -195,7 +255,15 @@ export default function Contact() {
             duration: 4,
             repeat: Infinity,
           }}
-          className="absolute left-[8%] top-[18%] h-2 w-2 rounded-full bg-[#0EA5E9]"
+          className="
+            absolute
+            left-[8%]
+            top-[18%]
+            h-2
+            w-2
+            rounded-full
+            bg-[#0EA5E9]
+          "
         />
 
         <motion.div
@@ -207,11 +275,27 @@ export default function Contact() {
             duration: 5,
             repeat: Infinity,
           }}
-          className="absolute right-[12%] top-[28%] h-3 w-3 rounded-full bg-[#4F46E5]"
+          className="
+            absolute
+            right-[12%]
+            top-[28%]
+            h-3
+            w-3
+            rounded-full
+            bg-[#4F46E5]
+          "
         />
 
         <div className="relative z-10 mx-auto max-w-7xl">
-          <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_.95fr] lg:gap-16">
+          <div
+            className="
+              grid
+              items-center
+              gap-14
+              lg:grid-cols-[1.05fr_.95fr]
+              lg:gap-16
+            "
+          >
             {/* ===================================================== */}
             {/* LEFT HERO CONTENT */}
             {/* ===================================================== */}
@@ -225,10 +309,48 @@ export default function Contact() {
               {/* Badge */}
 
               <motion.div variants={fadeUp}>
-                <div className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/80 px-4 py-2 text-sm font-bold text-[#2563EB] shadow-[0_10px_30px_rgba(37,99,235,.08)] backdrop-blur-xl">
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    border
+                    border-sky-200
+                    bg-white/80
+                    px-4
+                    py-2
+                    text-sm
+                    font-bold
+                    text-[#2563EB]
+                    shadow-[0_10px_30px_rgba(37,99,235,.08)]
+                    backdrop-blur-xl
+                  "
+                >
                   <span className="relative flex h-2.5 w-2.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#06B6D4] opacity-60" />
-                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#06B6D4]" />
+                    <span
+                      className="
+                        absolute
+                        inline-flex
+                        h-full
+                        w-full
+                        animate-ping
+                        rounded-full
+                        bg-[#06B6D4]
+                        opacity-60
+                      "
+                    />
+
+                    <span
+                      className="
+                        relative
+                        inline-flex
+                        h-2.5
+                        w-2.5
+                        rounded-full
+                        bg-[#06B6D4]
+                      "
+                    />
                   </span>
 
                   LET&apos;S START A CONVERSATION
@@ -237,19 +359,73 @@ export default function Contact() {
 
               {/* Heading */}
 
-              <h1 className="mt-7 max-w-3xl text-[2.65rem] font-black leading-[1.08] tracking-[-0.04em] text-[#0B1736] sm:text-5xl md:text-6xl lg:text-7xl">
-                <RevealText text="Let's build" mode="viewport" stagger={0.08} duration={0.6} blurAmount={8} />
-                <span className="block bg-gradient-to-r from-[#0EA5E9] via-[#2563EB] to-[#4F46E5] bg-clip-text pb-1 text-transparent">
-                  <RevealText text="something smart" mode="viewport" delay={0.2} stagger={0.08} duration={0.6} blurAmount={8} />
+              <h1
+                className="
+                  mt-7
+                  max-w-3xl
+                  text-[2.65rem]
+                  font-black
+                  leading-[1.08]
+                  tracking-[-0.04em]
+                  text-[#0B1736]
+                  sm:text-5xl
+                  md:text-6xl
+                  lg:text-7xl
+                "
+              >
+                <RevealText
+                  text="Let's build"
+                  mode="viewport"
+                  stagger={0.08}
+                  duration={0.6}
+                  blurAmount={8}
+                />
+
+                <span
+                  className="
+                    block
+                    bg-gradient-to-r
+                    from-[#0EA5E9]
+                    via-[#2563EB]
+                    to-[#4F46E5]
+                    bg-clip-text
+                    pb-1
+                    text-transparent
+                  "
+                >
+                  <RevealText
+                    text="something smart"
+                    mode="viewport"
+                    delay={0.2}
+                    stagger={0.08}
+                    duration={0.6}
+                    blurAmount={8}
+                  />
                 </span>
-                <RevealText text="together." mode="viewport" delay={0.4} stagger={0.08} duration={0.6} blurAmount={8} />
+
+                <RevealText
+                  text="together."
+                  mode="viewport"
+                  delay={0.4}
+                  stagger={0.08}
+                  duration={0.6}
+                  blurAmount={8}
+                />
               </h1>
 
               {/* Description */}
 
               <motion.p
                 variants={fadeUp}
-                className="mt-6 max-w-xl text-base leading-7 text-[#52627A] sm:text-lg sm:leading-8"
+                className="
+                  mt-6
+                  max-w-xl
+                  text-base
+                  leading-7
+                  text-[#52627A]
+                  sm:text-lg
+                  sm:leading-8
+                "
               >
                 Have an idea, a business challenge, or a digital product in
                 mind? Tell us what you are trying to achieve. We&apos;ll help
@@ -269,7 +445,16 @@ export default function Contact() {
                 ].map(([number, label]) => (
                   <div
                     key={label}
-                    className="rounded-2xl border border-white/80 bg-white/70 px-4 py-3 shadow-sm backdrop-blur-xl"
+                    className="
+                      rounded-2xl
+                      border
+                      border-white/80
+                      bg-white/70
+                      px-4
+                      py-3
+                      shadow-sm
+                      backdrop-blur-xl
+                    "
                   >
                     <div className="text-xl font-black text-[#0B1736]">
                       {number}
@@ -282,13 +467,30 @@ export default function Contact() {
                 ))}
               </motion.div>
 
-              {/* Small reassurance */}
+              {/* Reassurance */}
 
               <motion.div
                 variants={fadeUp}
-                className="mt-7 flex items-center gap-3 text-sm text-[#52627A]"
+                className="
+                  mt-7
+                  flex
+                  items-center
+                  gap-3
+                  text-sm
+                  text-[#52627A]
+                "
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50">
+                <div
+                  className="
+                    flex
+                    h-8
+                    w-8
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-emerald-50
+                  "
+                >
                   <CheckCircle2
                     size={17}
                     strokeWidth={2.5}
@@ -296,7 +498,9 @@ export default function Contact() {
                   />
                 </div>
 
-                <span>No pressure. Just a conversation about your idea.</span>
+                <span>
+                  No pressure. Just a conversation about your idea.
+                </span>
               </motion.div>
             </motion.div>
 
@@ -304,8 +508,15 @@ export default function Contact() {
             {/* RIGHT ANIMATED VISUAL */}
             {/* ===================================================== */}
 
-            <div className="relative min-h-[390px] sm:min-h-[470px] lg:min-h-[560px]">
-              {/* Connection rings */}
+            <div
+              className="
+                relative
+                min-h-[390px]
+                sm:min-h-[470px]
+                lg:min-h-[560px]
+              "
+            >
+              {/* Outer ring */}
 
               <motion.div
                 animate={{
@@ -316,8 +527,23 @@ export default function Contact() {
                   repeat: Infinity,
                   ease: "linear",
                 }}
-                className="absolute left-1/2 top-1/2 h-[270px] w-[270px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#0EA5E9]/15 sm:h-[390px] sm:w-[390px]"
+                className="
+                  absolute
+                  left-1/2
+                  top-1/2
+                  h-[270px]
+                  w-[270px]
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  rounded-full
+                  border
+                  border-[#0EA5E9]/15
+                  sm:h-[390px]
+                  sm:w-[390px]
+                "
               />
+
+              {/* Inner ring */}
 
               <motion.div
                 animate={{
@@ -328,12 +554,41 @@ export default function Contact() {
                   repeat: Infinity,
                   ease: "linear",
                 }}
-                className="absolute left-1/2 top-1/2 h-[190px] w-[190px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-[#4F46E5]/20 sm:h-[290px] sm:w-[290px]"
+                className="
+                  absolute
+                  left-1/2
+                  top-1/2
+                  h-[190px]
+                  w-[190px]
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  rounded-full
+                  border
+                  border-dashed
+                  border-[#4F46E5]/20
+                  sm:h-[290px]
+                  sm:w-[290px]
+                "
               />
 
               {/* Central glow */}
 
-              <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-400/20 blur-[70px] sm:h-64 sm:w-64" />
+              <div
+                className="
+                  absolute
+                  left-1/2
+                  top-1/2
+                  h-40
+                  w-40
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  rounded-full
+                  bg-sky-400/20
+                  blur-[70px]
+                  sm:h-64
+                  sm:w-64
+                "
+              />
 
               {/* Center */}
 
@@ -346,9 +601,48 @@ export default function Contact() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute left-1/2 top-1/2 z-20 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[28px] border border-white/80 bg-white/90 shadow-[0_25px_70px_rgba(37,99,235,.18)] backdrop-blur-xl sm:h-32 sm:w-32 sm:rounded-[34px]"
+                className="
+                  absolute
+                  left-1/2
+                  top-1/2
+                  z-20
+                  flex
+                  h-24
+                  w-24
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  items-center
+                  justify-center
+                  rounded-[28px]
+                  border
+                  border-white/80
+                  bg-white/90
+                  shadow-[0_25px_70px_rgba(37,99,235,.18)]
+                  backdrop-blur-xl
+                  sm:h-32
+                  sm:w-32
+                  sm:rounded-[34px]
+                "
               >
-                <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#0EA5E9] via-[#2563EB] to-[#4F46E5] text-white shadow-[0_15px_40px_rgba(37,99,235,.35)] sm:h-20 sm:w-20">
+                <div
+                  className="
+                    relative
+                    flex
+                    h-14
+                    w-14
+                    items-center
+                    justify-center
+                    rounded-2xl
+                    bg-gradient-to-br
+                    from-[#0EA5E9]
+                    via-[#2563EB]
+                    to-[#4F46E5]
+                    text-white
+                    shadow-[0_15px_40px_rgba(37,99,235,.35)]
+                    sm:h-20
+                    sm:w-20
+                  "
+                >
                   <MessageCircle size={30} strokeWidth={1.8} />
 
                   <motion.span
@@ -360,16 +654,52 @@ export default function Contact() {
                       duration: 2.2,
                       repeat: Infinity,
                     }}
-                    className="absolute inset-0 rounded-2xl border-2 border-sky-400"
+                    className="
+                      absolute
+                      inset-0
+                      rounded-2xl
+                      border-2
+                      border-sky-400
+                    "
                   />
                 </div>
               </motion.div>
 
               {/* Connection lines */}
 
-              <div className="absolute left-1/2 top-1/2 h-px w-[75%] -translate-x-1/2 -translate-y-1/2 rotate-[28deg] bg-gradient-to-r from-transparent via-[#0EA5E9]/40 to-transparent" />
+              <div
+                className="
+                  absolute
+                  left-1/2
+                  top-1/2
+                  h-px
+                  w-[75%]
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  rotate-[28deg]
+                  bg-gradient-to-r
+                  from-transparent
+                  via-[#0EA5E9]/40
+                  to-transparent
+                "
+              />
 
-              <div className="absolute left-1/2 top-1/2 h-px w-[75%] -translate-x-1/2 -translate-y-1/2 -rotate-[28deg] bg-gradient-to-r from-transparent via-[#4F46E5]/40 to-transparent" />
+              <div
+                className="
+                  absolute
+                  left-1/2
+                  top-1/2
+                  h-px
+                  w-[75%]
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  -rotate-[28deg]
+                  bg-gradient-to-r
+                  from-transparent
+                  via-[#4F46E5]/40
+                  to-transparent
+                "
+              />
 
               {/* Card 1 */}
 
@@ -383,10 +713,38 @@ export default function Contact() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute left-0 top-[10%] z-10 w-[190px] rounded-2xl border border-white/80 bg-white/85 p-4 shadow-[0_20px_50px_rgba(37,99,235,.12)] backdrop-blur-xl sm:left-[2%] sm:w-[220px] sm:rounded-3xl sm:p-5"
+                className="
+                  absolute
+                  left-0
+                  top-[10%]
+                  z-10
+                  w-[190px]
+                  rounded-2xl
+                  border
+                  border-white/80
+                  bg-white/85
+                  p-4
+                  shadow-[0_20px_50px_rgba(37,99,235,.12)]
+                  backdrop-blur-xl
+                  sm:left-[2%]
+                  sm:w-[220px]
+                  sm:rounded-3xl
+                  sm:p-5
+                "
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-[#0EA5E9]">
+                  <div
+                    className="
+                      flex
+                      h-10
+                      w-10
+                      items-center
+                      justify-center
+                      rounded-xl
+                      bg-sky-50
+                      text-[#0EA5E9]
+                    "
+                  >
                     <Lightbulb size={20} />
                   </div>
 
@@ -410,7 +768,13 @@ export default function Contact() {
                       duration: 5,
                       repeat: Infinity,
                     }}
-                    className="h-full rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#06B6D4]"
+                    className="
+                      h-full
+                      rounded-full
+                      bg-gradient-to-r
+                      from-[#0EA5E9]
+                      to-[#06B6D4]
+                    "
                   />
                 </div>
               </motion.div>
@@ -427,10 +791,38 @@ export default function Contact() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute bottom-[8%] right-0 z-10 w-[205px] rounded-2xl border border-white/80 bg-white/90 p-4 shadow-[0_20px_50px_rgba(79,70,229,.13)] backdrop-blur-xl sm:right-[1%] sm:w-[235px] sm:rounded-3xl sm:p-5"
+                className="
+                  absolute
+                  bottom-[8%]
+                  right-0
+                  z-10
+                  w-[205px]
+                  rounded-2xl
+                  border
+                  border-white/80
+                  bg-white/90
+                  p-4
+                  shadow-[0_20px_50px_rgba(79,70,229,.13)]
+                  backdrop-blur-xl
+                  sm:right-[1%]
+                  sm:w-[235px]
+                  sm:rounded-3xl
+                  sm:p-5
+                "
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-[#4F46E5]">
+                  <div
+                    className="
+                      flex
+                      h-10
+                      w-10
+                      items-center
+                      justify-center
+                      rounded-xl
+                      bg-indigo-50
+                      text-[#4F46E5]
+                    "
+                  >
                     <Rocket size={20} />
                   </div>
 
@@ -457,13 +849,19 @@ export default function Contact() {
                         delay: item * 0.12,
                         repeat: Infinity,
                       }}
-                      className="w-1.5 rounded-full bg-gradient-to-t from-[#2563EB] to-[#06B6D4]"
+                      className="
+                        w-1.5
+                        rounded-full
+                        bg-gradient-to-t
+                        from-[#2563EB]
+                        to-[#06B6D4]
+                      "
                     />
                   ))}
                 </div>
               </motion.div>
 
-              {/* Small floating chip */}
+              {/* Connected chip */}
 
               <motion.div
                 animate={{
@@ -473,7 +871,26 @@ export default function Contact() {
                   duration: 3.5,
                   repeat: Infinity,
                 }}
-                className="absolute right-[5%] top-[8%] flex items-center gap-2 rounded-full border border-white/80 bg-white/80 px-3 py-2 text-xs font-semibold text-[#2563EB] shadow-lg backdrop-blur-xl sm:right-[8%]"
+                className="
+                  absolute
+                  right-[5%]
+                  top-[8%]
+                  flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  border
+                  border-white/80
+                  bg-white/80
+                  px-3
+                  py-2
+                  text-xs
+                  font-semibold
+                  text-[#2563EB]
+                  shadow-lg
+                  backdrop-blur-xl
+                  sm:right-[8%]
+                "
               >
                 <Sparkles size={14} />
                 Connected
@@ -490,7 +907,16 @@ export default function Contact() {
                   duration: 2.5,
                   repeat: Infinity,
                 }}
-                className="absolute bottom-[20%] left-[12%] h-3 w-3 rounded-full bg-[#06B6D4] shadow-[0_0_20px_rgba(6,182,212,.7)]"
+                className="
+                  absolute
+                  bottom-[20%]
+                  left-[12%]
+                  h-3
+                  w-3
+                  rounded-full
+                  bg-[#06B6D4]
+                  shadow-[0_0_20px_rgba(6,182,212,.7)]
+                "
               />
             </div>
           </div>
@@ -501,29 +927,74 @@ export default function Contact() {
       {/* CONTACT FORM */}
       {/* ========================================================= */}
 
-      <section className="relative px-5 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-28">
-        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.72fr_1.28fr] lg:gap-16">
+      <section
+        className="
+          relative
+          px-5
+          py-16
+          sm:px-6
+          sm:py-20
+          lg:px-10
+          lg:py-28
+        "
+      >
+        <div
+          className="
+            mx-auto
+            grid
+            max-w-7xl
+            gap-10
+            lg:grid-cols-[.72fr_1.28fr]
+            lg:gap-16
+          "
+        >
           {/* LEFT INFO */}
 
           <motion.div
             variants={stagger}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
           >
             <motion.div variants={fadeUp}>
-              <span className="text-sm font-black tracking-[0.2em] text-[#0EA5E9]">
+              <span
+                className="
+                  text-sm
+                  font-black
+                  tracking-[0.2em]
+                  text-[#0EA5E9]
+                "
+              >
                 GET IN TOUCH
               </span>
 
-              <h2 className="mt-4 text-3xl font-black tracking-tight text-[#0B1736] sm:text-4xl">
+              <h2
+                className="
+                  mt-4
+                  text-3xl
+                  font-black
+                  tracking-tight
+                  text-[#0B1736]
+                  sm:text-4xl
+                "
+              >
                 Tell us what you&apos;re
                 <span className="block text-[#2563EB]">
                   thinking about.
                 </span>
               </h2>
 
-              <p className="mt-5 max-w-md leading-7 text-[#52627A]">
+              <p
+                className="
+                  mt-5
+                  max-w-md
+                  leading-7
+                  text-[#52627A]
+                "
+              >
                 You don&apos;t need to know exactly what you need. Give us the
                 situation, the problem, or simply the idea. We&apos;ll help
                 make sense of it together.
@@ -544,9 +1015,39 @@ export default function Contact() {
                     whileHover={{
                       x: 6,
                     }}
-                    className="group flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-4 shadow-[0_12px_40px_rgba(11,23,54,.05)] transition-shadow hover:shadow-[0_18px_50px_rgba(37,99,235,.1)] sm:p-5"
+                    className="
+                      group
+                      flex
+                      items-center
+                      gap-4
+                      rounded-2xl
+                      border
+                      border-slate-100
+                      bg-white
+                      p-4
+                      shadow-[0_12px_40px_rgba(11,23,54,.05)]
+                      transition-shadow
+                      hover:shadow-[0_18px_50px_rgba(37,99,235,.1)]
+                      sm:p-5
+                    "
                   >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-50 to-indigo-50 text-[#2563EB] transition-transform group-hover:scale-105">
+                    <div
+                      className="
+                        flex
+                        h-12
+                        w-12
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-xl
+                        bg-gradient-to-br
+                        from-sky-50
+                        to-indigo-50
+                        text-[#2563EB]
+                        transition-transform
+                        group-hover:scale-105
+                      "
+                    >
                       <Icon size={21} strokeWidth={2} />
                     </div>
 
@@ -566,7 +1067,14 @@ export default function Contact() {
 
                     <ArrowRight
                       size={17}
-                      className="ml-auto shrink-0 text-slate-300 transition-all group-hover:translate-x-1 group-hover:text-[#2563EB]"
+                      className="
+                        ml-auto
+                        shrink-0
+                        text-slate-300
+                        transition-all
+                        group-hover:translate-x-1
+                        group-hover:text-[#2563EB]
+                      "
                     />
                   </motion.a>
                 );
@@ -577,7 +1085,17 @@ export default function Contact() {
 
             <motion.div
               variants={fadeUp}
-              className="mt-5 flex items-center gap-3 rounded-2xl border border-sky-100 bg-sky-50/70 p-4"
+              className="
+                mt-5
+                flex
+                items-center
+                gap-3
+                rounded-2xl
+                border
+                border-sky-100
+                bg-sky-50/70
+                p-4
+              "
             >
               <Clock3
                 size={20}
@@ -618,18 +1136,48 @@ export default function Contact() {
             }}
             className="relative"
           >
-            <div className="absolute -inset-4 rounded-[36px] bg-gradient-to-br from-sky-200/30 via-transparent to-indigo-200/30 blur-2xl" />
+            <div
+              className="
+                absolute
+                -inset-4
+                rounded-[36px]
+                bg-gradient-to-br
+                from-sky-200/30
+                via-transparent
+                to-indigo-200/30
+                blur-2xl
+              "
+            />
 
             <form
               id="contact-form"
               onSubmit={handleSubmit}
-              className="relative scroll-mt-28 rounded-[28px] border border-white bg-white p-5 shadow-[0_25px_80px_rgba(11,23,54,.08)] sm:rounded-[32px] sm:p-8 lg:p-10"
+              className="
+                relative
+                scroll-mt-24
+                rounded-[28px]
+                border
+                border-white
+                bg-white
+                p-5
+                shadow-[0_25px_80px_rgba(11,23,54,.08)]
+                sm:rounded-[32px]
+                sm:p-8
+                lg:p-10
+              "
             >
               {/* Form heading */}
 
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="text-xl font-black text-[#0B1736] sm:text-2xl">
+                  <div
+                    className="
+                      text-xl
+                      font-black
+                      text-[#0B1736]
+                      sm:text-2xl
+                    "
+                  >
                     Start a conversation
                   </div>
 
@@ -638,7 +1186,21 @@ export default function Contact() {
                   </p>
                 </div>
 
-                <div className="hidden h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-sky-50 to-indigo-50 text-[#2563EB] sm:flex">
+                <div
+                  className="
+                    hidden
+                    h-11
+                    w-11
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-gradient-to-br
+                    from-sky-50
+                    to-indigo-50
+                    text-[#2563EB]
+                    sm:flex
+                  "
+                >
                   <Send size={19} />
                 </div>
               </div>
@@ -649,7 +1211,13 @@ export default function Contact() {
                 <div>
                   <label
                     htmlFor="name"
-                    className="mb-2 block text-sm font-bold text-[#0B1736]"
+                    className="
+                      mb-2
+                      block
+                      text-sm
+                      font-bold
+                      text-[#0B1736]
+                    "
                   >
                     Your name
                   </label>
@@ -660,14 +1228,37 @@ export default function Contact() {
                     type="text"
                     required
                     placeholder="John Smith"
-                    className="h-12 w-full rounded-xl border border-slate-200 bg-[#FAFCFF] px-4 text-sm text-[#0B1736] outline-none transition placeholder:text-slate-400 focus:border-[#0EA5E9] focus:bg-white focus:ring-4 focus:ring-sky-100"
+                    className="
+                      h-12
+                      w-full
+                      rounded-xl
+                      border
+                      border-slate-200
+                      bg-[#FAFCFF]
+                      px-4
+                      text-sm
+                      text-[#0B1736]
+                      outline-none
+                      transition
+                      placeholder:text-slate-400
+                      focus:border-[#0EA5E9]
+                      focus:bg-white
+                      focus:ring-4
+                      focus:ring-sky-100
+                    "
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="email"
-                    className="mb-2 block text-sm font-bold text-[#0B1736]"
+                    className="
+                      mb-2
+                      block
+                      text-sm
+                      font-bold
+                      text-[#0B1736]
+                    "
                   >
                     Email address
                   </label>
@@ -678,17 +1269,43 @@ export default function Contact() {
                     type="email"
                     required
                     placeholder="you@company.com"
-                    className="h-12 w-full rounded-xl border border-slate-200 bg-[#FAFCFF] px-4 text-sm text-[#0B1736] outline-none transition placeholder:text-slate-400 focus:border-[#0EA5E9] focus:bg-white focus:ring-4 focus:ring-sky-100"
+                    className="
+                      h-12
+                      w-full
+                      rounded-xl
+                      border
+                      border-slate-200
+                      bg-[#FAFCFF]
+                      px-4
+                      text-sm
+                      text-[#0B1736]
+                      outline-none
+                      transition
+                      placeholder:text-slate-400
+                      focus:border-[#0EA5E9]
+                      focus:bg-white
+                      focus:ring-4
+                      focus:ring-sky-100
+                    "
                   />
                 </div>
               </div>
 
+              {/* Company */}
+
               <div className="mt-5">
                 <label
                   htmlFor="company"
-                  className="mb-2 block text-sm font-bold text-[#0B1736]"
+                  className="
+                    mb-2
+                    block
+                    text-sm
+                    font-bold
+                    text-[#0B1736]
+                  "
                 >
                   Company
+
                   <span className="ml-1 font-normal text-slate-400">
                     (optional)
                   </span>
@@ -699,14 +1316,38 @@ export default function Contact() {
                   name="company"
                   type="text"
                   placeholder="Your company name"
-                  className="h-12 w-full rounded-xl border border-slate-200 bg-[#FAFCFF] px-4 text-sm text-[#0B1736] outline-none transition placeholder:text-slate-400 focus:border-[#0EA5E9] focus:bg-white focus:ring-4 focus:ring-sky-100"
+                  className="
+                    h-12
+                    w-full
+                    rounded-xl
+                    border
+                    border-slate-200
+                    bg-[#FAFCFF]
+                    px-4
+                    text-sm
+                    text-[#0B1736]
+                    outline-none
+                    transition
+                    placeholder:text-slate-400
+                    focus:border-[#0EA5E9]
+                    focus:bg-white
+                    focus:ring-4
+                    focus:ring-sky-100
+                  "
                 />
               </div>
 
               {/* Services */}
 
               <div className="mt-7">
-                <div className="mb-3 text-sm font-bold text-[#0B1736]">
+                <div
+                  className="
+                    mb-3
+                    text-sm
+                    font-bold
+                    text-[#0B1736]
+                  "
+                >
                   What can we help with?
                 </div>
 
@@ -719,22 +1360,48 @@ export default function Contact() {
                         key={service}
                         type="button"
                         onClick={() => setSelectedService(service)}
-                        className={`rounded-xl border px-3 py-3 text-left text-sm font-medium transition-all ${
-                          active
-                            ? "border-[#0EA5E9] bg-sky-50 text-[#2563EB] shadow-sm"
-                            : "border-slate-200 bg-white text-[#52627A] hover:border-sky-200 hover:bg-sky-50/50"
-                        }`}
+                        className={`
+                          rounded-xl
+                          border
+                          px-3
+                          py-3
+                          text-left
+                          text-sm
+                          font-medium
+                          transition-all
+                          ${
+                            active
+                              ? "border-[#0EA5E9] bg-sky-50 text-[#2563EB] shadow-sm"
+                              : "border-slate-200 bg-white text-[#52627A] hover:border-sky-200 hover:bg-sky-50/50"
+                          }
+                        `}
                       >
                         <span className="flex items-center gap-2">
                           <span
-                            className={`flex h-4 w-4 items-center justify-center rounded-full border ${
-                              active
-                                ? "border-[#0EA5E9] bg-[#0EA5E9]"
-                                : "border-slate-300"
-                            }`}
+                            className={`
+                              flex
+                              h-4
+                              w-4
+                              items-center
+                              justify-center
+                              rounded-full
+                              border
+                              ${
+                                active
+                                  ? "border-[#0EA5E9] bg-[#0EA5E9]"
+                                  : "border-slate-300"
+                              }
+                            `}
                           >
                             {active && (
-                              <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                              <span
+                                className="
+                                  h-1.5
+                                  w-1.5
+                                  rounded-full
+                                  bg-white
+                                "
+                              />
                             )}
                           </span>
 
@@ -751,7 +1418,13 @@ export default function Contact() {
               <div className="mt-6">
                 <label
                   htmlFor="message"
-                  className="mb-2 block text-sm font-bold text-[#0B1736]"
+                  className="
+                    mb-2
+                    block
+                    text-sm
+                    font-bold
+                    text-[#0B1736]
+                  "
                 >
                   Tell us a little about it
                 </label>
@@ -762,7 +1435,25 @@ export default function Contact() {
                   required
                   rows={5}
                   placeholder="What are you trying to build, improve, or solve?"
-                  className="w-full resize-none rounded-xl border border-slate-200 bg-[#FAFCFF] p-4 text-sm leading-6 text-[#0B1736] outline-none transition placeholder:text-slate-400 focus:border-[#0EA5E9] focus:bg-white focus:ring-4 focus:ring-sky-100"
+                  className="
+                    w-full
+                    resize-none
+                    rounded-xl
+                    border
+                    border-slate-200
+                    bg-[#FAFCFF]
+                    p-4
+                    text-sm
+                    leading-6
+                    text-[#0B1736]
+                    outline-none
+                    transition
+                    placeholder:text-slate-400
+                    focus:border-[#0EA5E9]
+                    focus:bg-white
+                    focus:ring-4
+                    focus:ring-sky-100
+                  "
                 />
               </div>
 
@@ -776,7 +1467,28 @@ export default function Contact() {
                 whileTap={{
                   scale: 0.98,
                 }}
-                className="mt-6 flex h-13 w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-[#0EA5E9] via-[#2563EB] to-[#4F46E5] px-6 py-4 text-sm font-bold text-white shadow-[0_14px_35px_rgba(37,99,235,.25)] transition-shadow hover:shadow-[0_18px_45px_rgba(37,99,235,.35)]"
+                className="
+                  mt-6
+                  flex
+                  h-13
+                  w-full
+                  items-center
+                  justify-center
+                  gap-3
+                  rounded-xl
+                  bg-gradient-to-r
+                  from-[#0EA5E9]
+                  via-[#2563EB]
+                  to-[#4F46E5]
+                  px-6
+                  py-4
+                  text-sm
+                  font-bold
+                  text-white
+                  shadow-[0_14px_35px_rgba(37,99,235,.25)]
+                  transition-shadow
+                  hover:shadow-[0_18px_45px_rgba(37,99,235,.35)]
+                "
               >
                 {submitted ? (
                   <>
@@ -791,7 +1503,15 @@ export default function Contact() {
                 )}
               </motion.button>
 
-              <p className="mt-4 text-center text-xs leading-5 text-slate-400">
+              <p
+                className="
+                  mt-4
+                  text-center
+                  text-xs
+                  leading-5
+                  text-slate-400
+                "
+              >
                 By sending this message, you&apos;re simply starting a
                 conversation with our team.
               </p>
@@ -804,8 +1524,33 @@ export default function Contact() {
       {/* WHAT HAPPENS NEXT */}
       {/* ========================================================= */}
 
-      <section className="relative overflow-hidden bg-white px-5 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
-        <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-sky-100/60 blur-[100px]" />
+      <section
+        className="
+          relative
+          overflow-hidden
+          bg-white
+          px-5
+          py-16
+          sm:px-6
+          sm:py-20
+          lg:px-10
+          lg:py-24
+        "
+      >
+        <div
+          className="
+            pointer-events-none
+            absolute
+            left-1/2
+            top-0
+            h-72
+            w-72
+            -translate-x-1/2
+            rounded-full
+            bg-sky-100/60
+            blur-[100px]
+          "
+        />
 
         <div className="relative mx-auto max-w-7xl">
           <motion.div
@@ -822,13 +1567,32 @@ export default function Contact() {
             }}
             className="mx-auto max-w-2xl text-center"
           >
-            <span className="text-sm font-black tracking-[0.2em] text-[#0EA5E9]">
+            <span
+              className="
+                text-sm
+                font-black
+                tracking-[0.2em]
+                text-[#0EA5E9]
+              "
+            >
               WHAT HAPPENS NEXT
             </span>
 
-            <h2 className="mt-4 text-3xl font-black tracking-tight text-[#0B1736] sm:text-4xl">
+            <h2
+              className="
+                mt-4
+                text-3xl
+                font-black
+                tracking-tight
+                text-[#0B1736]
+                sm:text-4xl
+              "
+            >
               Simple from the
-              <span className="text-[#2563EB]"> first conversation.</span>
+              <span className="text-[#2563EB]">
+                {" "}
+                first conversation.
+              </span>
             </h2>
 
             <p className="mt-4 leading-7 text-[#52627A]">
@@ -840,7 +1604,21 @@ export default function Contact() {
           <div className="relative mt-14 grid gap-6 md:grid-cols-3">
             {/* Connecting line */}
 
-            <div className="absolute left-[16%] right-[16%] top-14 hidden h-px bg-gradient-to-r from-[#0EA5E9]/20 via-[#2563EB]/40 to-[#4F46E5]/20 md:block" />
+            <div
+              className="
+                absolute
+                left-[16%]
+                right-[16%]
+                top-14
+                hidden
+                h-px
+                bg-gradient-to-r
+                from-[#0EA5E9]/20
+                via-[#2563EB]/40
+                to-[#4F46E5]/20
+                md:block
+              "
+            />
 
             {[
               {
@@ -882,21 +1660,81 @@ export default function Contact() {
                     delay: index * 0.12,
                     duration: 0.6,
                   }}
-                  className="relative rounded-3xl border border-slate-100 bg-[#FAFCFF] p-6 text-center shadow-sm sm:p-8"
+                  className="
+                    relative
+                    rounded-3xl
+                    border
+                    border-slate-100
+                    bg-[#FAFCFF]
+                    p-6
+                    text-center
+                    shadow-sm
+                    sm:p-8
+                  "
                 >
-                  <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-50 to-indigo-50 text-[#2563EB]">
-                    <Icon size={29} strokeWidth={1.8} />
+                  <div
+                    className="
+                      relative
+                      mx-auto
+                      flex
+                      h-20
+                      w-20
+                      items-center
+                      justify-center
+                      rounded-2xl
+                      bg-gradient-to-br
+                      from-sky-50
+                      to-indigo-50
+                      text-[#2563EB]
+                    "
+                  >
+                    <Icon
+                      size={29}
+                      strokeWidth={1.8}
+                    />
 
-                    <span className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#0B1736] text-[10px] font-black text-white">
+                    <span
+                      className="
+                        absolute
+                        -right-2
+                        -top-2
+                        flex
+                        h-7
+                        w-7
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-[#0B1736]
+                        text-[10px]
+                        font-black
+                        text-white
+                      "
+                    >
                       {step.number}
                     </span>
                   </div>
 
-                  <h3 className="mt-6 text-xl font-bold text-[#0B1736]">
+                  <h3
+                    className="
+                      mt-6
+                      text-xl
+                      font-bold
+                      text-[#0B1736]
+                    "
+                  >
                     {step.title}
                   </h3>
 
-                  <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#52627A]">
+                  <p
+                    className="
+                      mx-auto
+                      mt-3
+                      max-w-xs
+                      text-sm
+                      leading-6
+                      text-[#52627A]
+                    "
+                  >
                     {step.text}
                   </p>
                 </motion.div>
@@ -910,12 +1748,48 @@ export default function Contact() {
       {/* FINAL CTA */}
       {/* ========================================================= */}
 
-      <section className="relative overflow-hidden px-5 py-16 sm:px-6 lg:px-10 lg:py-24">
+      <section
+        className="
+          relative
+          overflow-hidden
+          px-5
+          py-16
+          sm:px-6
+          lg:px-10
+          lg:py-24
+        "
+      >
         <div className="mx-auto max-w-7xl">
-          <div className="relative overflow-hidden rounded-[32px] bg-[#0B1736] px-6 py-12 text-center shadow-[0_30px_90px_rgba(11,23,54,.18)] sm:rounded-[40px] sm:px-10 sm:py-16">
+          <div
+            className="
+              relative
+              overflow-hidden
+              rounded-[32px]
+              bg-[#0B1736]
+              px-6
+              py-12
+              text-center
+              shadow-[0_30px_90px_rgba(11,23,54,.18)]
+              sm:rounded-[40px]
+              sm:px-10
+              sm:py-16
+            "
+          >
             {/* CTA glow */}
 
-            <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-[#0EA5E9]/25 blur-[100px]" />
+            <div
+              className="
+                absolute
+                left-1/2
+                top-0
+                h-72
+                w-72
+                -translate-x-1/2
+                rounded-full
+                bg-[#0EA5E9]/25
+                blur-[100px]
+              "
+            />
 
             <motion.div
               animate={{
@@ -926,38 +1800,130 @@ export default function Contact() {
                 duration: 5,
                 repeat: Infinity,
               }}
-              className="absolute right-0 top-0 h-52 w-52 rounded-full bg-[#4F46E5]/20 blur-[80px]"
+              className="
+                absolute
+                right-0
+                top-0
+                h-52
+                w-52
+                rounded-full
+                bg-[#4F46E5]/20
+                blur-[80px]
+              "
             />
 
             <div className="relative z-10 mx-auto max-w-2xl">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-[#67E8F9] backdrop-blur-xl">
+              <div
+                className="
+                  mx-auto
+                  flex
+                  h-14
+                  w-14
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-white/10
+                  text-[#67E8F9]
+                  backdrop-blur-xl
+                "
+              >
                 <Globe2 size={26} />
               </div>
 
-              <h2 className="mt-6 text-3xl font-black text-white sm:text-4xl lg:text-5xl">
+              <h2
+                className="
+                  mt-6
+                  text-3xl
+                  font-black
+                  text-white
+                  sm:text-4xl
+                  lg:text-5xl
+                "
+              >
                 Your next idea could be
-                <span className="block bg-gradient-to-r from-[#38BDF8] via-[#67E8F9] to-[#818CF8] bg-clip-text text-transparent">
+
+                <span
+                  className="
+                    block
+                    bg-gradient-to-r
+                    from-[#38BDF8]
+                    via-[#67E8F9]
+                    to-[#818CF8]
+                    bg-clip-text
+                    text-transparent
+                  "
+                >
                   the next big thing.
                 </span>
               </h2>
 
-              <p className="mx-auto mt-5 max-w-xl leading-7 text-slate-300">
+              <p
+                className="
+                  mx-auto
+                  mt-5
+                  max-w-xl
+                  leading-7
+                  text-slate-300
+                "
+              >
                 Neirah Tech Solutions brings together hardware experience,
                 software expertise, and more than a decade of problem-solving
                 to help businesses move forward.
               </p>
 
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <div
+                className="
+                  mt-8
+                  flex
+                  flex-col
+                  items-center
+                  justify-center
+                  gap-3
+                  sm:flex-row
+                "
+              >
                 <a
                   href="#contact-form"
-                  className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-[#0B1736] shadow-lg transition-transform hover:-translate-y-0.5"
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-xl
+                    bg-white
+                    px-6
+                    py-3.5
+                    text-sm
+                    font-bold
+                    text-[#0B1736]
+                    shadow-lg
+                    transition-transform
+                    hover:-translate-y-0.5
+                  "
                 >
                   Start a conversation
                   <ArrowRight size={17} />
                 </a>
 
-                <div className="flex items-center gap-2 rounded-xl border border-white/10 px-5 py-3.5 text-sm font-medium text-slate-300">
-                  <Headphones size={17} className="text-[#67E8F9]" />
+                <div
+                  className="
+                    flex
+                    items-center
+                    gap-2
+                    rounded-xl
+                    border
+                    border-white/10
+                    px-5
+                    py-3.5
+                    text-sm
+                    font-medium
+                    text-slate-300
+                  "
+                >
+                  <Headphones
+                    size={17}
+                    className="text-[#67E8F9]"
+                  />
+
                   We&apos;re here to help
                 </div>
               </div>

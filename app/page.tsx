@@ -7,6 +7,7 @@ import Hero from "./components/home/Hero";
 import Footer from "./components/layout/Footer";
 import ServiceSection from "./components/home/ServiceSection";
 import FeaturedProjects from "./components/home/FeaturedProjects";
+import EcosystemSynergySection from "./components/home/EcosystemSynergySection";
 import ProjectCTA from "./components/home/ProjectCTA";
 import UIUXLab from "./components/home/UIUXLab";
 import Testimonials from "./components/home/Testimonials";
@@ -51,6 +52,8 @@ export default function Home() {
           <UIUXLab />
 
           <FeaturedProjects />
+
+          <EcosystemSynergySection />
 
           <CaseStudiesShowcase />
 

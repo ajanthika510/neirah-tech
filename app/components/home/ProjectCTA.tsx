@@ -226,10 +226,11 @@ export default function ProjectCTA() {
       ref={sectionRef}
       className="
         relative
-        min-h-[1100px]
+        min-h-[900px]
         overflow-hidden
         bg-[#F8FBFF]
-        py-32
+        py-16
+        sm:py-20
         flex
         items-center
       "
