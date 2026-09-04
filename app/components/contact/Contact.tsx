@@ -19,6 +19,8 @@ import {
   Headphones,
   Lightbulb,
   Rocket,
+  AlertCircle,
+  Loader2,
 } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { sendContactMessage } from "../../actions/contactActions";
@@ -76,7 +78,18 @@ export default function Contact() {
     "Software Development"
   );
 
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -98,31 +111,110 @@ export default function Contact() {
     mouseY.set(e.clientY - rect.top);
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  const validate = (): boolean => {
+    const errs: Record<string, string> = {};
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    setSubmitted(true);
-
-    try {
-      await sendContactMessage({
-        name: String(formData.get("name") || ""),
-        email: String(formData.get("email") || ""),
-        company: String(formData.get("company") || ""),
-        service: selectedService,
-        message: String(formData.get("message") || ""),
-      });
-
-      form.reset();
-    } catch (err) {
-      console.error("Failed to submit contact form:", err);
+    // 1. Name validation
+    const nameVal = formData.name.trim();
+    if (!nameVal) {
+      errs.name = "Full name is required";
+    } else if (nameVal.length < 2) {
+      errs.name = "Name must be at least 2 characters";
     }
 
-    setTimeout(() => {
-      setSubmitted(false);
-    }, 4000);
+    // 2. Email validation (@ and domain like .com)
+    const emailVal = formData.email.trim();
+    if (!emailVal) {
+      errs.email = "Email address is required";
+    } else if (!emailVal.includes("@")) {
+      errs.email = "Email address must contain '@' symbol";
+    } else {
+      const domain = emailVal.split("@")[1] || "";
+      if (!domain.includes(".") || !/\.[a-zA-Z]{2,}$/.test(domain)) {
+        errs.email = "Email domain must include '.' and extension like .com";
+      }
+    }
+
+    // 3. Phone validation (10 digit number)
+    const cleanPhone = formData.phone.replace(/\D/g, "");
+    if (!formData.phone.trim()) {
+      errs.phone = "Phone number is required";
+    } else if (cleanPhone.length !== 10) {
+      errs.phone = "Phone number must be exactly 10 digits (e.g., 0712345678)";
+    }
+
+    // 4. Message validation
+    const msgVal = formData.message.trim();
+    if (!msgVal) {
+      errs.message = "Message is required";
+    } else if (msgVal.length < 5) {
+      errs.message = "Message must be at least 5 characters";
+    }
+
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    const digitsOnly = raw.replace(/\D/g, "").slice(0, 10);
+    setFormData((prev) => ({ ...prev, phone: digitsOnly }));
+    if (errors.phone) {
+      setErrors((prev) => ({ ...prev, phone: "" }));
+    }
+  };
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setServerError(null);
+
+    if (!validate()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const res = await sendContactMessage({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        service: selectedService,
+        message: formData.message,
+      });
+
+      if (res.success) {
+        setSubmitSuccess(true);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          message: "",
+        });
+        setErrors({});
+      } else {
+        setServerError(
+          res.error || "Failed to submit form. Please check your details and try again."
+        );
+      }
+    } catch (err) {
+      console.error("Failed to submit contact form:", err);
+      setServerError("An unexpected network error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -1149,373 +1241,522 @@ export default function Contact() {
               "
             />
 
-            <form
-              id="contact-form"
-              onSubmit={handleSubmit}
-              className="
-                relative
-                scroll-mt-24
-                rounded-[28px]
-                border
-                border-white
-                bg-white
-                p-5
-                shadow-[0_25px_80px_rgba(11,23,54,.08)]
-                sm:rounded-[32px]
-                sm:p-8
-                lg:p-10
-              "
-            >
-              {/* Form heading */}
-
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div
-                    className="
-                      text-xl
-                      font-black
-                      text-[#0B1736]
-                      sm:text-2xl
-                    "
-                  >
-                    Start a conversation
-                  </div>
-
-                  <p className="mt-1 text-sm text-[#52627A]">
-                    A few details are enough to get started.
-                  </p>
+            {submitSuccess ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="
+                  relative
+                  scroll-mt-24
+                  rounded-[28px]
+                  border
+                  border-emerald-100
+                  bg-white
+                  p-8
+                  text-center
+                  shadow-[0_25px_80px_rgba(11,23,54,.08)]
+                  sm:rounded-[32px]
+                  sm:p-12
+                "
+              >
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-inner">
+                  <CheckCircle2 size={36} />
                 </div>
 
-                <div
+                <h3 className="mt-6 text-2xl font-black text-[#0B1736]">
+                  Message Sent Successfully!
+                </h3>
+
+                <p className="mt-3 text-base text-[#52627A] max-w-md mx-auto leading-relaxed">
+                  Thank you for reaching out to us. We have received your inquiry and our team will get back to you within 24 hours.
+                </p>
+
+                <motion.button
+                  type="button"
+                  onClick={() => setSubmitSuccess(false)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   className="
-                    hidden
-                    h-11
-                    w-11
+                    mt-8
+                    inline-flex
                     items-center
                     justify-center
+                    gap-2
                     rounded-xl
-                    bg-gradient-to-br
-                    from-sky-50
-                    to-indigo-50
-                    text-[#2563EB]
-                    sm:flex
-                  "
-                >
-                  <Send size={19} />
-                </div>
-              </div>
-
-              {/* Inputs */}
-
-              <div className="mt-8 grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-bold
-                      text-[#0B1736]
-                    "
-                  >
-                    Your name
-                  </label>
-
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    placeholder="John Smith"
-                    className="
-                      h-12
-                      w-full
-                      rounded-xl
-                      border
-                      border-slate-200
-                      bg-[#FAFCFF]
-                      px-4
-                      text-sm
-                      text-[#0B1736]
-                      outline-none
-                      transition
-                      placeholder:text-slate-400
-                      focus:border-[#0EA5E9]
-                      focus:bg-white
-                      focus:ring-4
-                      focus:ring-sky-100
-                    "
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="
-                      mb-2
-                      block
-                      text-sm
-                      font-bold
-                      text-[#0B1736]
-                    "
-                  >
-                    Email address
-                  </label>
-
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="you@company.com"
-                    className="
-                      h-12
-                      w-full
-                      rounded-xl
-                      border
-                      border-slate-200
-                      bg-[#FAFCFF]
-                      px-4
-                      text-sm
-                      text-[#0B1736]
-                      outline-none
-                      transition
-                      placeholder:text-slate-400
-                      focus:border-[#0EA5E9]
-                      focus:bg-white
-                      focus:ring-4
-                      focus:ring-sky-100
-                    "
-                  />
-                </div>
-              </div>
-
-              {/* Company */}
-
-              <div className="mt-5">
-                <label
-                  htmlFor="company"
-                  className="
-                    mb-2
-                    block
+                    bg-gradient-to-r
+                    from-[#0EA5E9]
+                    to-[#2563EB]
+                    px-6
+                    py-3.5
                     text-sm
                     font-bold
-                    text-[#0B1736]
+                    text-white
+                    shadow-md
+                    transition-shadow
+                    hover:shadow-lg
                   "
                 >
-                  Company
-
-                  <span className="ml-1 font-normal text-slate-400">
-                    (optional)
-                  </span>
-                </label>
-
-                <input
-                  id="company"
-                  name="company"
-                  type="text"
-                  placeholder="Your company name"
-                  className="
-                    h-12
-                    w-full
-                    rounded-xl
-                    border
-                    border-slate-200
-                    bg-[#FAFCFF]
-                    px-4
-                    text-sm
-                    text-[#0B1736]
-                    outline-none
-                    transition
-                    placeholder:text-slate-400
-                    focus:border-[#0EA5E9]
-                    focus:bg-white
-                    focus:ring-4
-                    focus:ring-sky-100
-                  "
-                />
-              </div>
-
-              {/* Services */}
-
-              <div className="mt-7">
-                <div
-                  className="
-                    mb-3
-                    text-sm
-                    font-bold
-                    text-[#0B1736]
-                  "
-                >
-                  What can we help with?
-                </div>
-
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {services.map((service) => {
-                    const active = selectedService === service;
-
-                    return (
-                      <button
-                        key={service}
-                        type="button"
-                        onClick={() => setSelectedService(service)}
-                        className={`
-                          rounded-xl
-                          border
-                          px-3
-                          py-3
-                          text-left
-                          text-sm
-                          font-medium
-                          transition-all
-                          ${
-                            active
-                              ? "border-[#0EA5E9] bg-sky-50 text-[#2563EB] shadow-sm"
-                              : "border-slate-200 bg-white text-[#52627A] hover:border-sky-200 hover:bg-sky-50/50"
-                          }
-                        `}
-                      >
-                        <span className="flex items-center gap-2">
-                          <span
-                            className={`
-                              flex
-                              h-4
-                              w-4
-                              items-center
-                              justify-center
-                              rounded-full
-                              border
-                              ${
-                                active
-                                  ? "border-[#0EA5E9] bg-[#0EA5E9]"
-                                  : "border-slate-300"
-                              }
-                            `}
-                          >
-                            {active && (
-                              <span
-                                className="
-                                  h-1.5
-                                  w-1.5
-                                  rounded-full
-                                  bg-white
-                                "
-                              />
-                            )}
-                          </span>
-
-                          {service}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Message */}
-
-              <div className="mt-6">
-                <label
-                  htmlFor="message"
-                  className="
-                    mb-2
-                    block
-                    text-sm
-                    font-bold
-                    text-[#0B1736]
-                  "
-                >
-                  Tell us a little about it
-                </label>
-
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={5}
-                  placeholder="What are you trying to build, improve, or solve?"
-                  className="
-                    w-full
-                    resize-none
-                    rounded-xl
-                    border
-                    border-slate-200
-                    bg-[#FAFCFF]
-                    p-4
-                    text-sm
-                    leading-6
-                    text-[#0B1736]
-                    outline-none
-                    transition
-                    placeholder:text-slate-400
-                    focus:border-[#0EA5E9]
-                    focus:bg-white
-                    focus:ring-4
-                    focus:ring-sky-100
-                  "
-                />
-              </div>
-
-              {/* Submit */}
-
-              <motion.button
-                type="submit"
-                whileHover={{
-                  scale: 1.01,
-                }}
-                whileTap={{
-                  scale: 0.98,
-                }}
+                  Send another message
+                  <ArrowRight size={17} />
+                </motion.button>
+              </motion.div>
+            ) : (
+              <form
+                id="contact-form"
+                onSubmit={handleSubmit}
+                noValidate
                 className="
-                  mt-6
-                  flex
-                  h-13
-                  w-full
-                  items-center
-                  justify-center
-                  gap-3
-                  rounded-xl
-                  bg-gradient-to-r
-                  from-[#0EA5E9]
-                  via-[#2563EB]
-                  to-[#4F46E5]
-                  px-6
-                  py-4
-                  text-sm
-                  font-bold
-                  text-white
-                  shadow-[0_14px_35px_rgba(37,99,235,.25)]
-                  transition-shadow
-                  hover:shadow-[0_18px_45px_rgba(37,99,235,.35)]
+                  relative
+                  scroll-mt-24
+                  rounded-[28px]
+                  border
+                  border-white
+                  bg-white
+                  p-5
+                  shadow-[0_25px_80px_rgba(11,23,54,.08)]
+                  sm:rounded-[32px]
+                  sm:p-8
+                  lg:p-10
                 "
               >
-                {submitted ? (
-                  <>
-                    <CheckCircle2 size={19} />
-                    Message ready to send
-                  </>
-                ) : (
-                  <>
-                    Send your message
-                    <ArrowRight size={18} />
-                  </>
+                {/* Form heading */}
+
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div
+                      className="
+                        text-xl
+                        font-black
+                        text-[#0B1736]
+                        sm:text-2xl
+                      "
+                    >
+                      Start a conversation
+                    </div>
+
+                    <p className="mt-1 text-sm text-[#52627A]">
+                      A few details are enough to get started.
+                    </p>
+                  </div>
+
+                  <div
+                    className="
+                      hidden
+                      h-11
+                      w-11
+                      items-center
+                      justify-center
+                      rounded-xl
+                      bg-gradient-to-br
+                      from-sky-50
+                      to-indigo-50
+                      text-[#2563EB]
+                      sm:flex
+                    "
+                  >
+                    <Send size={19} />
+                  </div>
+                </div>
+
+                {/* Server Error Alert */}
+                {serverError && (
+                  <div className="mt-5 flex items-center gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-700">
+                    <AlertCircle size={20} className="shrink-0 text-rose-500" />
+                    <span>{serverError}</span>
+                  </div>
                 )}
-              </motion.button>
 
-              <p
-                className="
-                  mt-4
-                  text-center
-                  text-xs
-                  leading-5
-                  text-slate-400
-                "
-              >
-                By sending this message, you&apos;re simply starting a
-                conversation with our team.
-              </p>
-            </form>
+                {/* Inputs */}
+
+                <div className="mt-8 grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="
+                        mb-2
+                        block
+                        text-sm
+                        font-bold
+                        text-[#0B1736]
+                      "
+                    >
+                      Your name <span className="text-rose-500">*</span>
+                    </label>
+
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="John Smith"
+                      className={`
+                        h-12
+                        w-full
+                        rounded-xl
+                        border
+                        bg-[#FAFCFF]
+                        px-4
+                        text-sm
+                        text-[#0B1736]
+                        outline-none
+                        transition
+                        placeholder:text-slate-400
+                        ${
+                          errors.name
+                            ? "border-rose-400 focus:border-rose-500 focus:ring-4 focus:ring-rose-100"
+                            : "border-slate-200 focus:border-[#0EA5E9] focus:bg-white focus:ring-4 focus:ring-sky-100"
+                        }
+                      `}
+                    />
+                    {errors.name && (
+                      <p className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-rose-500">
+                        <AlertCircle size={13} />
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="
+                        mb-2
+                        block
+                        text-sm
+                        font-bold
+                        text-[#0B1736]
+                      "
+                    >
+                      Email address <span className="text-rose-500">*</span>
+                    </label>
+
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="you@company.com"
+                      className={`
+                        h-12
+                        w-full
+                        rounded-xl
+                        border
+                        bg-[#FAFCFF]
+                        px-4
+                        text-sm
+                        text-[#0B1736]
+                        outline-none
+                        transition
+                        placeholder:text-slate-400
+                        ${
+                          errors.email
+                            ? "border-rose-400 focus:border-rose-500 focus:ring-4 focus:ring-rose-100"
+                            : "border-slate-200 focus:border-[#0EA5E9] focus:bg-white focus:ring-4 focus:ring-sky-100"
+                        }
+                      `}
+                    />
+                    {errors.email && (
+                      <p className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-rose-500">
+                        <AlertCircle size={13} />
+                        {errors.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Phone & Company */}
+
+                <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="
+                        mb-2
+                        block
+                        text-sm
+                        font-bold
+                        text-[#0B1736]
+                      "
+                    >
+                      Phone number (10 digits) <span className="text-rose-500">*</span>
+                    </label>
+
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      maxLength={10}
+                      value={formData.phone}
+                      onChange={handlePhoneChange}
+                      placeholder="0712345678"
+                      className={`
+                        h-12
+                        w-full
+                        rounded-xl
+                        border
+                        bg-[#FAFCFF]
+                        px-4
+                        text-sm
+                        text-[#0B1736]
+                        outline-none
+                        transition
+                        placeholder:text-slate-400
+                        ${
+                          errors.phone
+                            ? "border-rose-400 focus:border-rose-500 focus:ring-4 focus:ring-rose-100"
+                            : "border-slate-200 focus:border-[#0EA5E9] focus:bg-white focus:ring-4 focus:ring-sky-100"
+                        }
+                      `}
+                    />
+                    {errors.phone ? (
+                      <p className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-rose-500">
+                        <AlertCircle size={13} />
+                        {errors.phone}
+                      </p>
+                    ) : (
+                      <p className="mt-1 text-[11px] text-slate-400">
+                        Enter 10 numeric digits without country code or spaces.
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="company"
+                      className="
+                        mb-2
+                        block
+                        text-sm
+                        font-bold
+                        text-[#0B1736]
+                      "
+                    >
+                      Company
+                      <span className="ml-1 font-normal text-slate-400">
+                        (optional)
+                      </span>
+                    </label>
+
+                    <input
+                      id="company"
+                      name="company"
+                      type="text"
+                      value={formData.company}
+                      onChange={handleChange}
+                      placeholder="Your company name"
+                      className="
+                        h-12
+                        w-full
+                        rounded-xl
+                        border
+                        border-slate-200
+                        bg-[#FAFCFF]
+                        px-4
+                        text-sm
+                        text-[#0B1736]
+                        outline-none
+                        transition
+                        placeholder:text-slate-400
+                        focus:border-[#0EA5E9]
+                        focus:bg-white
+                        focus:ring-4
+                        focus:ring-sky-100
+                      "
+                    />
+                  </div>
+                </div>
+
+                {/* Services */}
+
+                <div className="mt-7">
+                  <div
+                    className="
+                      mb-3
+                      text-sm
+                      font-bold
+                      text-[#0B1736]
+                    "
+                  >
+                    What can we help with?
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {services.map((service) => {
+                      const active = selectedService === service;
+
+                      return (
+                        <button
+                          key={service}
+                          type="button"
+                          onClick={() => setSelectedService(service)}
+                          className={`
+                            rounded-xl
+                            border
+                            px-3
+                            py-3
+                            text-left
+                            text-sm
+                            font-medium
+                            transition-all
+                            ${
+                              active
+                                ? "border-[#0EA5E9] bg-sky-50 text-[#2563EB] shadow-sm"
+                                : "border-slate-200 bg-white text-[#52627A] hover:border-sky-200 hover:bg-sky-50/50"
+                            }
+                          `}
+                        >
+                          <span className="flex items-center gap-2">
+                            <span
+                              className={`
+                                flex
+                                h-4
+                                w-4
+                                items-center
+                                justify-center
+                                rounded-full
+                                border
+                                ${
+                                  active
+                                    ? "border-[#0EA5E9] bg-[#0EA5E9]"
+                                    : "border-slate-300"
+                                }
+                              `}
+                            >
+                              {active && (
+                                <span
+                                  className="
+                                    h-1.5
+                                    w-1.5
+                                    rounded-full
+                                    bg-white
+                                  "
+                                />
+                              )}
+                            </span>
+
+                            {service}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Message */}
+
+                <div className="mt-6">
+                  <label
+                    htmlFor="message"
+                    className="
+                      mb-2
+                      block
+                      text-sm
+                      font-bold
+                      text-[#0B1736]
+                    "
+                  >
+                    Tell us a little about it <span className="text-rose-500">*</span>
+                  </label>
+
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="What are you trying to build, improve, or solve?"
+                    className={`
+                      w-full
+                      resize-none
+                      rounded-xl
+                      border
+                      bg-[#FAFCFF]
+                      p-4
+                      text-sm
+                      leading-6
+                      text-[#0B1736]
+                      outline-none
+                      transition
+                      placeholder:text-slate-400
+                      ${
+                        errors.message
+                          ? "border-rose-400 focus:border-rose-500 focus:ring-4 focus:ring-rose-100"
+                          : "border-slate-200 focus:border-[#0EA5E9] focus:bg-white focus:ring-4 focus:ring-sky-100"
+                      }
+                    `}
+                  />
+                  {errors.message && (
+                    <p className="mt-1.5 flex items-center gap-1 text-xs font-semibold text-rose-500">
+                      <AlertCircle size={13} />
+                      {errors.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Submit */}
+
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  whileHover={{
+                    scale: isSubmitting ? 1 : 1.01,
+                  }}
+                  whileTap={{
+                    scale: isSubmitting ? 1 : 0.98,
+                  }}
+                  className={`
+                    mt-6
+                    flex
+                    h-13
+                    w-full
+                    items-center
+                    justify-center
+                    gap-3
+                    rounded-xl
+                    bg-gradient-to-r
+                    from-[#0EA5E9]
+                    via-[#2563EB]
+                    to-[#4F46E5]
+                    px-6
+                    py-4
+                    text-sm
+                    font-bold
+                    text-white
+                    shadow-[0_14px_35px_rgba(37,99,235,.25)]
+                    transition-all
+                    hover:shadow-[0_18px_45px_rgba(37,99,235,.35)]
+                    ${isSubmitting ? "opacity-75 cursor-not-allowed" : ""}
+                  `}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={19} className="animate-spin" />
+                      Sending message...
+                    </>
+                  ) : (
+                    <>
+                      Send your message
+                      <ArrowRight size={18} />
+                    </>
+                  )}
+                </motion.button>
+
+                <p
+                  className="
+                    mt-4
+                    text-center
+                    text-xs
+                    leading-5
+                    text-slate-400
+                  "
+                >
+                  By sending this message, you&apos;re simply starting a
+                  conversation with our team.
+                </p>
+              </form>
+            )}
           </motion.div>
         </div>
       </section>

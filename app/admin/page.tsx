@@ -25,16 +25,18 @@ import Link from "next/link";
 import { getProjects, createProject, updateProject, deleteProject, Project } from "../actions/projectActions";
 import { getCaseStudies, createCaseStudy, updateCaseStudy, deleteCaseStudy, CaseStudy } from "../actions/caseStudyActions";
 import { getBookings, updateBookingStatus, deleteBooking, Booking } from "../actions/bookingActions";
+import { getContactMessages, ContactMessage } from "../actions/contactActions";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState("");
-  const [activeTab, setActiveTab] = useState<"bookings" | "projects" | "caseStudies">("bookings");
+  const [activeTab, setActiveTab] = useState<"bookings" | "messages" | "projects" | "caseStudies">("bookings");
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
 
@@ -77,14 +79,16 @@ export default function AdminPage() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [projs, cases, bks] = await Promise.all([
+      const [projs, cases, bks, msgs] = await Promise.all([
         getProjects(),
         getCaseStudies(),
         getBookings(password).catch(() => []),
+        getContactMessages(password).catch(() => []),
       ]);
       setProjects(projs);
       setCaseStudies(cases);
       setBookings(bks);
+      setContactMessages(msgs);
     } catch (err) {
       console.error(err);
       showMsg("error", "Failed to fetch data from backend");
@@ -368,6 +372,26 @@ export default function AdminPage() {
 
             <button
               onClick={() => {
+                setActiveTab("messages");
+                setEditingId(null);
+              }}
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === "messages"
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <Mail size={14} />
+              <span>Contact Messages</span>
+              {contactMessages.length > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-700 text-[10px]">
+                  {contactMessages.length}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => {
                 setActiveTab("projects");
                 setEditingId(null);
               }}
@@ -606,7 +630,80 @@ export default function AdminPage() {
         )}
 
         {/* ========================================================
-            TAB 2 & 3: PROJECTS & CASE STUDIES VIEW
+            TAB 2: CONTACT MESSAGES VIEW
+        ======================================================== */}
+        {activeTab === "messages" && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+              <div>
+                <h2 className="text-xl font-extrabold text-slate-900">
+                  Contact Form Inquiries ({contactMessages.length})
+                </h2>
+                <p className="text-xs text-slate-500 mt-1">
+                  Messages submitted by visitors via the Contact Us page.
+                </p>
+              </div>
+            </div>
+
+            {contactMessages.length === 0 ? (
+              <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center">
+                <Mail className="mx-auto h-12 w-12 text-slate-300 mb-3" />
+                <h3 className="text-lg font-bold text-slate-700">No contact messages yet</h3>
+                <p className="text-sm text-slate-500 mt-1">
+                  Inquiries submitted via the Contact Us form will appear here.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                {contactMessages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-slate-100">
+                      <div>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                          {msg.type || "Contact Form"}
+                        </span>
+                        <h3 className="text-lg font-bold text-slate-900 mt-2">{msg.name}</h3>
+                      </div>
+                      <div className="text-xs text-slate-400 font-medium">
+                        {new Date(msg.createdAt).toLocaleString()}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-sm text-slate-600">
+                      <div className="flex items-center gap-2">
+                        <Mail size={16} className="text-blue-500 shrink-0" />
+                        <a href={`mailto:${msg.email}`} className="text-blue-600 font-semibold hover:underline">
+                          {msg.email}
+                        </a>
+                      </div>
+                      {msg.phone && (
+                        <div className="flex items-center gap-2">
+                          <Phone size={16} className="text-emerald-500 shrink-0" />
+                          <a href={`tel:${msg.phone}`} className="font-semibold text-slate-800 hover:underline">
+                            {msg.phone}
+                          </a>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-slate-100 bg-slate-50/80 p-4 rounded-2xl">
+                      <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Message Content</div>
+                      <p className="text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">
+                        {msg.message}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ========================================================
+            TAB 3 & 4: PROJECTS & CASE STUDIES VIEW
         ======================================================== */}
         {(activeTab === "projects" || activeTab === "caseStudies") && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
