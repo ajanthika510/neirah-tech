@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 
 import { getProjects, type Project } from "../../actions/projectActions";
+import DroneSection from "./DroneSection";
 
 /* =========================================================
    FALLBACK PROJECTS
@@ -422,6 +423,8 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
         onExplore={scrollToArchive}
       />
 
+      <DroneSection />
+
       <ScrollGallery projects={featuredProjects} />
 
       <CuriosityCTA
@@ -458,6 +461,12 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
    - Stronger visual hierarchy
 ========================================================= */
 
+/* =========================================================
+   HERO (MATCHING SERVICE PAGE IMAGE-FREE CENTERED DESIGN)
+========================================================= */
+
+const heroWords = ["Work", "that", "holds", "your", "attention."];
+
 function ProjectsHero({
   count,
   loading,
@@ -467,402 +476,172 @@ function ProjectsHero({
   loading: boolean;
   onExplore: () => void;
 }) {
-  const { scrollY } = useScroll();
+  const ref = useRef<HTMLDivElement>(null);
 
-  const heroOpacity = useTransform(
-    scrollY,
-    [0, 500],
-    [1, 0.15]
-  );
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
 
-  const heroY = useTransform(
-    scrollY,
-    [0, 500],
-    [0, -35]
-  );
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 60,
+    damping: 20,
+    restDelta: 0.001,
+  });
+
+  const heroOpacity = useTransform(smoothProgress, [0, 0.6], [1, 0]);
+  const heroY = useTransform(smoothProgress, [0, 0.6], [0, -60]);
+  const bgScale = useTransform(smoothProgress, [0, 1], [1, 1.08]);
+  const scrollIndicatorOpacity = useTransform(smoothProgress, [0, 0.15], [1, 0]);
 
   return (
     <section
-      className="
-        relative
-        overflow-hidden
-        pt-28
-        sm:pt-32
-        md:pt-36
-        lg:pt-40
-      "
-      style={{
-        backgroundColor: pageBackground,
-      }}
+      ref={ref}
+      className="relative min-h-[90svh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-sky-50/60 to-indigo-50/80 pt-28 pb-20 sm:pt-36 sm:pb-24 lg:pt-40"
     >
       {/* =====================================================
-          AMBIENT BACKGROUND
+          AMBIENT BACKGROUND LIGHTING
       ===================================================== */}
+      <motion.div style={{ scale: bgScale }} className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <motion.div
+          animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-sky-200/30 blur-[120px]"
+        />
+        <motion.div
+          animate={{ x: [0, -50, 0], y: [0, 40, 0] }}
+          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-40 -right-40 w-[700px] h-[700px] rounded-full bg-indigo-200/25 blur-[140px]"
+        />
+        <motion.div
+          animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/3 right-1/4 w-[400px] h-[400px] rounded-full bg-violet-100/30 blur-[100px]"
+        />
+      </motion.div>
 
+      {/* =====================================================
+          SUBTLE GRID PATTERN
+      ===================================================== */}
       <div
-        className="
-          pointer-events-none
-          absolute
-          -right-40
-          top-0
-          h-[420px]
-          w-[420px]
-          rounded-full
-          blur-3xl
-        "
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
-          background:
-            "radial-gradient(circle, rgba(14,165,233,0.10), transparent 68%)",
+          backgroundImage:
+            "linear-gradient(rgba(99,102,241,1) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,1) 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
         }}
-      />
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -left-40
-          bottom-0
-          h-[360px]
-          w-[360px]
-          rounded-full
-          blur-3xl
-        "
-        style={{
-          background:
-            "radial-gradient(circle, rgba(99,102,241,0.07), transparent 68%)",
-        }}
+        aria-hidden="true"
       />
 
       {/* =====================================================
-          HERO CONTENT
+          CENTERED HERO CONTENT
       ===================================================== */}
-
       <motion.div
-        style={{
-          opacity: heroOpacity,
-          y: heroY,
-        }}
-        className="
-          relative
-          z-10
-          mx-auto
-          flex
-          min-h-[72vh]
-          max-w-[1400px]
-          flex-col
-          justify-center
-          px-6
-          pb-20
-          sm:px-10
-          sm:pb-24
-          lg:px-16
-        "
+        style={{ opacity: heroOpacity, y: heroY }}
+        className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center"
       >
-        {/* =====================================================
-            EYEBROW
-        ===================================================== */}
-
+        {/* EYEBROW / CATEGORY LABEL */}
         <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.9,
-            delay: 0.15,
-            ease: easePremium,
-          }}
-          className="
-            mb-8
-            flex
-            items-center
-            gap-3
-          "
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-8 flex items-center justify-center gap-3"
         >
-          <span
-            className="
-              h-px
-              w-8
-              sm:w-10
-            "
-            style={{
-              background: gradient,
-            }}
-          />
-
-          <span
-            className="
-              text-[10px]
-              font-bold
-              uppercase
-              tracking-[0.3em]
-            "
-            style={{
-              color: sky,
-              fontFamily: fontSans,
-            }}
-          >
-            Neirah — Selected Work
+          <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-sky-400" />
+          <span className="text-[11px] font-mono font-bold tracking-[0.3em] uppercase text-sky-500">
+            SELECTED WORKS — THE COLLECTION
           </span>
+          <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-sky-400 to-transparent" />
         </motion.div>
 
-        {/* =====================================================
-            MAIN TITLE
-        ===================================================== */}
+        {/* MAIN HEADLINE WITH WORD-BY-WORD ANIMATION */}
+        <div className="overflow-hidden">
+          <h1
+            className="text-[2.6rem] xs:text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-[1.08] sm:leading-none text-slate-900"
+            style={{ fontFamily: fontDisplay }}
+          >
+            {heroWords.map((word, i) => (
+              <motion.span
+                key={word}
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: "0%", opacity: 1 }}
+                transition={{
+                  duration: 1,
+                  delay: 0.35 + i * 0.12,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className={`inline-block mr-[0.2em] ${
+                  word === "holds" || word === "your" || word === "attention."
+                    ? "bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-500 bg-clip-text text-transparent"
+                    : ""
+                }`}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </h1>
+        </div>
 
-        <h1
-          className="
-            font-extrabold
-            tracking-[-0.04em]
-            leading-[1.08]
-            sm:leading-[1.04]
-            pb-2
-          "
-          style={{
-            fontFamily: fontDisplay,
-            color: primaryText,
-            fontSize:
-              "clamp(2.5rem, 7.5vw, 6.8rem)",
-          }}
+        {/* SUPPORTING TEXT */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-8 sm:mt-10 text-base sm:text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-light px-2"
         >
-          {/* -------------------------------------------------
-              LINE 1
-          ------------------------------------------------- */}
+          Not a grid of screenshots — a curated collection of digital applications, platforms, and web experiences presented one piece at a time.
+        </motion.p>
 
-          <span
-            className="
-              block
-              overflow-hidden
-            "
-            style={{
-              paddingBottom: "0.15em",
-            }}
-          >
-            <motion.span
-              initial={{
-                y: "110%",
-                opacity: 0,
-              }}
-              animate={{
-                y: "0%",
-                opacity: 1,
-              }}
-              transition={{
-                duration: 1.05,
-                delay: 0.35,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="
-                block
-                will-change-transform
-              "
-            >
-              WORK THAT HOLDS
-            </motion.span>
-          </span>
-
-          {/* -------------------------------------------------
-              LINE 2
-          ------------------------------------------------- */}
-
-          <span
-            className="
-              block
-              overflow-hidden
-              pb-3
-              sm:pb-4
-              -mb-3
-              sm:-mb-4
-            "
-          >
-            <motion.span
-              initial={{
-                y: "110%",
-                opacity: 0,
-              }}
-              animate={{
-                y: "0%",
-                opacity: 1,
-              }}
-              transition={{
-                duration: 1.05,
-                delay: 0.48,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="
-                block
-                will-change-transform
-                pb-2
-                sm:pb-3
-              "
-              style={{
-                backgroundImage: gradientText,
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                color: "transparent",
-              }}
-            >
-              YOUR ATTENTION.
-            </motion.span>
-          </span>
-        </h1>
-
-        {/* =====================================================
-            DESCRIPTION / COUNT / CTA
-        ===================================================== */}
-
+        {/* BRAND TAG & METRIC PILL */}
         <motion.div
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.9,
-            delay: 0.95,
-            ease: easePremium,
-          }}
-          className="
-            mt-12
-            flex
-            flex-col
-            gap-8
-            sm:mt-14
-            sm:gap-10
-            sm:flex-row
-            sm:items-end
-            sm:justify-between
-          "
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1.15 }}
+          className="mt-8 flex flex-wrap items-center justify-center gap-3"
         >
-          {/* -------------------------------------------------
-              DESCRIPTION
-          ------------------------------------------------- */}
-
-          <p
-            className="
-              max-w-md
-              text-base
-              leading-8
-            "
-            style={{
-              color: secondaryText,
-            }}
-          >
-            Not a grid of screenshots — a small
-            collection, presented one piece at a
-            time.
-          </p>
-
-          {/* -------------------------------------------------
-              COUNT + BUTTON
-          ------------------------------------------------- */}
-
-          <div
-            className="
-              flex
-              items-center
-              gap-5
-              sm:gap-6
-            "
-          >
-            {/* PROJECT COUNT */}
-
-            <div className="shrink-0">
-              <span
-                className="
-                  block
-                  text-3xl
-                  font-extrabold
-                  tracking-[-0.04em]
-                "
-                style={{
-                  color: primaryText,
-                  fontFamily: fontDisplay,
-                }}
-              >
-                {loading ? "—" : count}
-              </span>
-
-              <span
-                className="
-                  block
-                  text-[10px]
-                  font-bold
-                  uppercase
-                  tracking-[0.2em]
-                "
-                style={{
-                  color: mutedText,
-                }}
-              >
-                projects
-              </span>
-            </div>
-
-            {/* ARCHIVE BUTTON */}
-
-            <button
-              onClick={onExplore}
-              className="
-                group
-                flex
-                items-center
-                gap-3
-                rounded-full
-                border
-                bg-white
-                px-4
-                py-2.5
-                text-xs
-                font-bold
-                transition-all
-                duration-500
-                hover:-translate-y-1
-                sm:px-5
-                sm:py-3
-              "
-              style={{
-                borderColor: border,
-                color: primaryText,
-                boxShadow:
-                  "0 10px 30px -20px rgba(15,23,42,0.3)",
-              }}
-            >
-              <span>
-                Explore the archive
-              </span>
-
-              <span
-                className="
-                  flex
-                  h-8
-                  w-8
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-full
-                  text-white
-                  transition-transform
-                  duration-500
-                  group-hover:translate-y-1
-                "
-                style={{
-                  background: gradient,
-                }}
-              >
-                <ArrowDown size={13} />
-              </span>
-            </button>
-          </div>
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-sky-200/80 bg-white/70 backdrop-blur-md text-xs font-mono font-bold tracking-widest text-sky-600 uppercase shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+            Neirah Tech Portfolio // {loading ? "—" : `${count}+`} Projects Built
+          </span>
         </motion.div>
       </motion.div>
+
+      {/* =====================================================
+          SCROLL INDICATOR (MOUSE PILL)
+      ===================================================== */}
+      <motion.div
+        style={{ opacity: scrollIndicatorOpacity }}
+        onClick={onExplore}
+        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5 cursor-pointer select-none transition-transform hover:scale-105"
+      >
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 1 }}
+          className="text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400"
+        >
+          Scroll to explore
+        </motion.span>
+
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="w-5 h-8 rounded-full border border-slate-300 flex items-start justify-center pt-1.5"
+        >
+          <div className="w-1 h-2 rounded-full bg-gradient-to-b from-sky-400 to-indigo-400" />
+        </motion.div>
+      </motion.div>
+
+      {/* BOTTOM SEPARATOR SVG */}
+      <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none pointer-events-none z-20 opacity-60">
+        <svg
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+          className="relative block w-full h-8 sm:h-12 fill-[#f5faff]"
+        >
+          <path d="M0,0 C200,80 450,-30 650,50 C850,130 1050,20 1200,40 L1200,120 L0,120 Z" />
+        </svg>
+      </div>
     </section>
   );
 }
